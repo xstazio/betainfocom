@@ -1,0 +1,59 @@
+.content ul {
+    li {
+        &.icon {
+            position: relative;
+
+            &::before {
+                --height: 1.4em;
+                position: absolute;
+                left: -1.2em;
+                top: -0.1em;
+                content: '';
+                background-image: url(../images/icons__small.svg);
+                width: var(--height);
+                height: var(--height);
+                background-repeat: no-repeat;
+                background-size: cover;
+                vertical-align: middle;
+            }
+
+            &.icon__location::before {
+                background-position-x: 0;
+            }
+
+            &.icon__phone::before {
+                background-position-x: 10.8%;
+            }
+
+            &.icon__email::before {
+                background-position-x: 5.5%;
+            }
+
+            &.icon__document::before {
+                background-position-x: 16.1%;
+            }
+
+            &.icon__time::before {
+                background-position-x: 21%;
+            }
+
+            &.icon__check::before {
+                background-position-x: 41.9%;
+            }
+
+            &.icon__step_complete::before {
+                background-position-x: 47.3%;
+            }
+
+            &.icon__step_complete:not(:last-child)::after {
+                content: "";
+                position: absolute;
+                width: 2px;
+                top: 1.1em;
+                bottom: -0.9em;
+                left: -1.51em;
+                background: $color_blue;
+            }
+        }
+    }
+}

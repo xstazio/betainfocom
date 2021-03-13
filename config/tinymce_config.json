@@ -1,0 +1,39 @@
+{
+    "image_dimensions": "false",
+    "style_formats": [
+        {
+            "title": "Containers",
+            "items": [
+                {
+                    "title": "section",
+                    "block": "section",
+                    "wrapper": true,
+                    "merge_siblings": false
+                },
+                {
+                    "title": "article",
+                    "block": "article",
+                    "wrapper": true,
+                    "merge_siblings": false
+                },
+                {
+                    "title": "blockquote",
+                    "block": "blockquote",
+                    "wrapper": true
+                },
+                {
+                    "title": "aside",
+                    "block": "aside",
+                    "wrapper": true
+                },
+                {
+                    "title": "figure",
+                    "block": "figure",
+                    "wrapper": true
+                }
+            ]
+        }
+    ],
+    "plugins": "advcode",
+    "toolbar": "code"
+}

@@ -1,0 +1,40 @@
+.instructions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.3em;
+    justify-content: center;
+    counter-reset: article-number;
+
+    h1, h2, h3, h4, h5, h6 {
+        flex-grow: 1;
+        flex-basis: 100%;
+    }
+
+    article {
+        max-width: 11em;
+        counter-increment: article-number;
+
+        &::before {
+            --width: 1.6em;
+            content: counter(article-number);
+            display: inline-block;
+            width: var(--width);
+            height: var(--width);
+            text-align: center;
+            padding-top: 0.22em;
+            color: $color_red;
+            font-size: 1.5em;
+            border: 1px solid $color_blue;
+            border-radius: .4em;
+            font-weight: 500;
+        }
+
+        p {
+            font-style: italic;
+        }
+
+        @media screen and (max-width: 655px) {
+            max-width: 15em;
+        }
+    }
+}

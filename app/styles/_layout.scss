@@ -1,0 +1,36 @@
+.col-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 1.5em;
+
+    h1, h2, h3, h4, h5, h6, p, blockquote {
+        grid-column: 1 / -1;
+    }
+
+    @media screen and (max-width: 849px) {
+        grid-template-columns: 1fr;
+
+        figure {
+            display: none;
+        }
+    }
+}
+
+.section__border {
+    border-left: 1em solid;
+    border-radius: .6em;
+    padding: 1em;
+    margin: 1em 0;
+    background-color: $color_darkwhite;
+
+    &.border {
+        &--red {
+            border-color: $color_red;
+        }
+    
+        &--blue {
+            border-color: $color_blue;
+        }
+    }
+}
+

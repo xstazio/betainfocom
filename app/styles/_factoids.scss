@@ -1,0 +1,29 @@
+.factoids {
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    column-gap: 45px;
+    row-gap: 15px;
+    font-size: $base_font_size * .9;
+    margin: 3em auto;
+    flex-wrap: wrap;
+    // max-width: 749px;
+
+    li {
+        list-style: none;
+        text-align: center;
+        max-width: 9em;
+        margin: 0;
+        flex-basis: 28%;
+
+        &::before {
+            width: 6em;
+            display: block;
+            content: var(--factoid_image);
+        }
+
+        @media screen and (max-width: 400px) {
+            max-width: 6em;
+        }
+    }
+}

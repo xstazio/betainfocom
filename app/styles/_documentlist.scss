@@ -1,0 +1,38 @@
+.content .document__list {
+    li a {
+        // display: inline-block;
+
+        &:hover::before {
+            transform: scale(1.1);
+        }
+
+        &::before {
+            --height: 55px;
+            content: "";
+            transform: scale(1, 1);
+            position: relative;
+            border: none;
+            background-image: url(../images/icons__small.svg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            width: var(--height);
+            height: var(--height);
+            display: inline-block;
+            vertical-align: bottom;
+        }
+
+        &[href$=".xls"], &[href$=".pdf"] {
+            border: none;
+            font-size: 0;
+            line-height: 0;
+        }
+
+        &[href$=".xls"]::before {
+            background-position-x: 26.4%;
+        }
+
+        &[href$=".pdf"]::before {
+            background-position-x: 31.7%;
+        }
+    }
+}

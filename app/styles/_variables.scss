@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 $color_red: #B82719;
 $color_black: #1A1312;
 $color_lightgray: #484241;
@@ -7,3 +9,17 @@ $color_white: #fff;
 $color_darkwhite: #F8F8F8;
 
 $base_font_size: 16pt;
+
+$breakpoints: (
+    small: 400px,
+    medium: 655px,
+    large: 850px
+);
+
+@mixin mq($key) {
+    $size: map-get($breakpoints, $key);
+
+    @media (min-width: $size) {
+        @content;
+    }
+}

@@ -11,7 +11,8 @@
     }
 
     article {
-        max-width: 11em;
+        
+        max-width: 15em;
         counter-increment: article-number;
 
         &::before {
@@ -33,8 +34,8 @@
             font-style: italic;
         }
 
-        @media screen and (max-width: 655px) {
-            max-width: 15em;
+        @include mq(medium) {
+            max-width: 11em;
         }
     }
 }

@@ -35,7 +35,7 @@
     display: grid;
     font-weight: 700;
     align-items: center;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto;
     font-size: 12pt;
     place-self: center;
     column-gap: 1em;
@@ -52,15 +52,14 @@
       background-position-x: 43%;
       height: var(--height);
       width: var(--height);
-      // grid-column: 1;
     }
 
     a {
       border-bottom: 1px dotted;
     }
 
-    @media screen and (max-width: 450px) {
-      grid-template-columns: auto;
+    @include mq(medium) {
+      grid-template-columns: auto auto;
     }
   }
 
@@ -221,7 +220,7 @@ nav {
 }
 
 
-@media screen and (min-width: 850px) {
+@include mq(large) {
   #header {
     grid-template-columns: 10em auto auto;
     grid-template-areas:

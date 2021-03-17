@@ -1,17 +1,21 @@
 .col-2 {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
     column-gap: 1.5em;
+    grid-template-columns: 1fr;
 
     h1, h2, h3, h4, h5, h6, p, blockquote {
         grid-column: 1 / -1;
     }
 
-    @media screen and (max-width: 849px) {
-        grid-template-columns: 1fr;
+    figure {
+        display: none;
+    }
+
+    @include mq(large) {
+        grid-template-columns: repeat(2, 1fr);
 
         figure {
-            display: none;
+            display: block;
         }
     }
 }

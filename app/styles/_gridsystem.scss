@@ -1,0 +1,59 @@
+.row {
+    --gap: 1em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--gap);
+
+    & > :is(h1, h2, h3, h4, p) {
+        flex: 0 0 100%;
+    }
+
+    & > :is(section, div, article) {
+        margin: 0;
+        padding: .4em 0 !important;
+    }
+}
+
+$columns: 12;
+
+[class^="col-"] {
+    // padding-left: 1em !important;
+    // padding-right: 1em !important;
+}
+
+
+@for $i from 1 through $columns {
+    @media screen and (min-width: 850px) {
+        .col-large-#{$i} {
+            flex: 0 0 ((100% / (12 / $i)) - 2);
+        }
+        .col-large-offset-#{$i} {
+            margin-left: 100% / (($columns / $i)) !important;
+        }
+    }
+    @media screen and (min-width: 665px) and (max-width: 849px) {
+        .col-medium-#{$i} {
+            flex: 0 0 ((100% / (12 / $i)) - 2);
+        }
+        .col-medium-offset-#{$i} {
+            margin-left: 100% / (($columns / $i)) !important;
+        }
+    }
+    @media screen and (min-width: 400px) and (max-width: 664px) {
+        .col-small-#{$i} {
+            flex: 0 0 ((100% / (12 / $i)) - 2);
+        }
+        .col-small-offset-#{$i} {
+            margin-left: 100% / (($columns / $i)) !important;
+        }
+    }
+    @media screen and (min-width: 20px) and (max-width: 399px) {
+        .col-xsmall-#{$i} {
+            flex: 0 0 ((100% / (12 / $i)) - 2);
+        }
+        .col-xsmall-offset-#{$i} {
+            margin-left: 100% / (($columns / $i)) !important;
+        }
+    }
+
+}

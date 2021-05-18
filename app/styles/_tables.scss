@@ -1,5 +1,5 @@
 table {
-    background-color: $color_darkwhite;
+    
     border-radius: 16px;
     font-size: $base_font_size * .9;
     border: 0;
@@ -7,9 +7,24 @@ table {
     border-spacing: 0;
     margin: 1em 0;
 
+    &.table--bg {
+        background-color: $color_darkwhite;
+    }
+
     th, td {
         border: 0;
-        border-bottom: 1px solid rgba($color_blue, .2);
+    }
+
+    &.table--border {
+        th, td {
+            border-bottom: 1px solid rgba($color_blue, .2);
+        }
+    }
+
+    &.table--small {
+        th, td {
+            padding: 0.3em;
+        }
     }
 
     th {

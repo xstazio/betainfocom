@@ -1,7 +1,8 @@
 .instructions {
+    --gap: 20px;
     display: flex;
     flex-wrap: wrap;
-    gap: 1.3em;
+    gap: var(--gap);
     justify-content: center;
     counter-reset: article-number;
 
@@ -11,8 +12,7 @@
     }
 
     article {
-        
-        max-width: 15em;
+        // max-width: 15em;
         counter-increment: article-number;
 
         &::before {
@@ -24,18 +24,23 @@
             text-align: center;
             padding-top: 0.22em;
             color: $color_red;
-            font-size: 1.5em;
+            font-size: 24px;
             border: 1px solid $color_blue;
             border-radius: .4em;
             font-weight: 500;
+            margin-bottom:  0.8em;
         }
 
-        p {
-            font-style: italic;
+        @include mq(small) {
+            flex: 0 0 100%;
         }
 
         @include mq(medium) {
-            max-width: 11em;
+            flex: 0 0 calc(50% - var(--gap));
+        }
+
+        @include mq(large) {
+            flex: 0 0 calc(25% - var(--gap));
         }
     }
 }

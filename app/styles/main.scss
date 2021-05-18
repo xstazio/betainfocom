@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'gridsystem';
 @import 'typography';
 @import 'nav';
 @import 'footer';
@@ -43,7 +44,15 @@ body {
   grid-template-rows: 1fr auto;
   grid-template-columns: 100%;
   color: $color_blue;
-  font-family: 'Ubuntu script', sans-serif;
+  font-family: 'Ubuntu', sans-serif;
+  overflow-x: hidden;
+
+  &.dark_ellipse {
+    background-image: url(../images/dark_ellipse.svg);
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    background-position: -80% center;
+  }
 }
 
 .container {

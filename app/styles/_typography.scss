@@ -6,12 +6,14 @@ body {
     font-size: $base_font_size;
 
     a {
-        border-bottom: 1px solid rgba($color_red, 0.3);
+        border-bottom: 1px solid rgba($color_blue, 0.3);
         transition: all 0.2s ease-in-out;
         position: relative;
+        color: inherit;
+        font-weight: 500;
 
-        &:hover {
-            color: lighten($color_red, 20%);
+        &:hover, &:focus {
+            color: lighten($color_blue, 20%);
         }
 
         &::before {
@@ -21,7 +23,7 @@ body {
             top: 0;
             width: 100%;
             height: 100%;
-            border-bottom: 1px solid rgba($color_red, 0.8);
+            border-bottom: 1px solid rgba($color_blue, 0.8);
             transform: scaleX(0);
             transition: all 0.2s ease-in-out;
         }
@@ -30,8 +32,10 @@ body {
             transform: scaleX(1);
         }
 
-        &[href^="tel:"] {
-            border-bottom-style: dotted;
+        &[href^="tel:"], &.no-decoration {
+            font-weight: inherit;
+            color: inherit;
+            border-bottom: none;
         }
     }
 
@@ -42,42 +46,37 @@ body {
     h5,
     h6 {
         font-weight: 700;
-        margin: 0.6em 0;
-        line-height: 0.97em;
+        margin: 0.1em 0;
+        line-height: 1.15em;
     }
 
     h1 {
-        font-size: 1.6em;
+        font-size: 48px;
     }
 
     h2 {
-        font-size: 1.15em;
+        font-size: 32px;
     }
 
     h3 {
-        font-size: 1em;
+        font-size: 24px;
     }
 
     h4 {
-        font-size: 0.8em;
+        font-size: 18px;
     }
 
-    h5 {
-        font-size: 0.7em;
-    }
+    // h5 {
+    //     font-size: 0.7em;
+    // }
 
-    h6 {
-        font-size: 0.6em;
-    }
+    // h6 {
+    //     font-size: 0.6em;
+    // }
 
     p, li {
         margin: 0.8em 0;
-        line-height: 1.3em;
-    }
-
-    a {
-        color: $color_red;
-        font-weight: 500;
+        line-height: 20.68px;
     }
 
     ul:not(.factoids) {
@@ -90,21 +89,27 @@ body {
             display: inline-block; /* Needed to add space between the bullet and the text */
             width: 1em; /* Also needed for space (tweak if needed) */
             margin-left: -1em; /* Also needed for space (tweak if needed) */
+            font-size: 1.4em;
+            vertical-align: -0.09em;
         }
     }
 
-    @media screen and (max-width: 849px) {
-        font-size: $base_font_size * 0.8;
-    }
+    // @media screen and (max-width: 849px) {
+    //     font-size: $base_font_size * 0.8;
+    // }
 
-    @media screen and (max-width: 640px) {
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            line-height: 0.9em;
-        }
-    }
+    // @media screen and (max-width: 640px) {
+    //     h1,
+    //     h2,
+    //     h3,
+    //     h4,
+    //     h5,
+    //     h6 {
+    //         line-height: 0.9em;
+    //     }
+    // }
+}
+
+.text-center {
+    text-align: center;
 }

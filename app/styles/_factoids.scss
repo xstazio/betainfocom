@@ -1,20 +1,37 @@
 .factoids {
+    --gap: 15px;
     padding: 0;
     display: flex;
     justify-content: center;
     column-gap: 45px;
-    row-gap: 15px;
+    row-gap: var(--gap);
     font-size: $base_font_size * .9;
     margin: 3em auto;
     flex-wrap: wrap;
-    // max-width: 749px;
+    
+    &-6 {
+        max-width: 811px;
+        @media screen and (max-width: 863px) {
+            max-width: 652px;
+        }
+    }
+
+    &-4 {
+        @media screen and (max-width: 863px) {
+            max-width: 420px;
+        }
+    }
 
     li {
         list-style: none;
         text-align: center;
-        max-width: 9em;
+        // max-width: 9em;
         margin: 0;
-        flex-basis: 28%;
+        flex-basis: 170px;
+
+        @media screen and (max-width: 863px) {
+            max-width: 138px;
+        }
 
         &::before {
             width: 6em;
@@ -22,8 +39,20 @@
             content: var(--factoid_image);
         }
 
-        @media screen and (max-width: 400px) {
-            max-width: 6em;
+        @include mq(xsmall) {
+            // flex: 0 0 50%;
+        }
+
+        @include mq(small) {
+            // flex: 0 0 50%;
+        }
+
+        @include mq(medium) {
+            // flex: 0 0 calc(33% - 20px);
+        }
+
+        @include mq(large) {
+            // flex: 0 0 calc(33% - 20px);
         }
     }
 }

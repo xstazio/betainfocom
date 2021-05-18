@@ -36,14 +36,13 @@
     font-weight: 700;
     align-items: center;
     grid-template-columns: auto;
-    font-size: 12pt;
+    font-size: $base_font_size;
     place-self: center;
     column-gap: 1em;
-    font-size: $base_font_size * .9;
 
     &::before {
       display: none;
-      --height: 2.8em;
+      --height: 2.0em;
       content: "";
       overflow: hidden;
       background: url(../images/icons__header.svg);
@@ -55,7 +54,7 @@
     }
 
     a {
-      border-bottom: 1px dotted;
+      // border-bottom: 1px solid;
     }
 
     @include mq(medium) {
@@ -65,8 +64,9 @@
 
   .actions {
     grid-area: actions;
-    column-gap: .5em;
+    column-gap: 1em;
     justify-content: flex-end;
+    align-items: center;
     padding: .2em;
     display: none;
 
@@ -78,7 +78,7 @@
         display: inline-block;
 
         &::before {
-          --height: 2.3em;
+          --height: 1.8em;
           content: "";
           background: url(../images/icons__header.svg);
           width: calc(var(--height) - 0.1em);
@@ -181,9 +181,9 @@ nav {
   }
 
   li {
-    background-color: $color_lightestgray;
-    padding: 12px 24px;
-    font-weight: 500;
+    background-color: $color_lightestgrey;
+    padding: 8px 20px;
+    font-weight: 700;
     transition: background-color .3s ease-in-out;
   
     &.active {
@@ -222,7 +222,7 @@ nav {
 
 @include mq(large) {
   #header {
-    grid-template-columns: 10em auto auto;
+    grid-template-columns: 6em auto auto;
     grid-template-areas:
       "logo contacts actions"
       "nav nav nav";
@@ -255,8 +255,8 @@ nav {
       ul {
         display: flex;
         flex-wrap: wrap;
-        column-gap: .3em;
-        row-gap: 0.3em;
+        column-gap: .9em;
+        row-gap: 0.5em;
       }
   
       li {
@@ -276,8 +276,8 @@ nav {
   
     .contacts {
       grid-template-columns: 42px auto;
-      font-size: $base_font_size * .7;
-      column-gap: 0.4em;
+      // font-size: $base_font_size * .7;
+      column-gap: 0em;
   
       &::before {
         grid-row: 1 / 3;

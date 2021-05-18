@@ -1,38 +1,85 @@
-.content .document__list {
-    li a {
-        // display: inline-block;
-
-        &:hover::before {
-            transform: scale(1.1);
+.content {
+    .section__border {
+        border-left: 1em solid;
+        border-radius: .6em;
+        padding-left: 2em;
+        padding-right: 2em;
+        margin: 1em 0;
+        background-color: $color_darkwhite;
+    
+        &.border {
+            &--red {
+                border-color: $color_red;
+            }
+        
+            &--blue {
+                border-color: $color_blue;
+            }
+    
+            &--grey {
+                border-color: $color_mediumgrey;
+            }
         }
+    }
+}
+
+.document__list {
+    padding-left: 0;
+    // display: table;
+    border-collapse: separate;
+    width: fit-content;
+
+
+    li {
+        display: flex;
+        width: 100%;
+        justify-content: left;
 
         &::before {
-            --height: 55px;
-            content: "";
-            transform: scale(1, 1);
-            position: relative;
-            border: none;
-            background-image: url(../images/icons__small.svg);
-            background-repeat: no-repeat;
-            background-size: cover;
-            width: var(--height);
-            height: var(--height);
-            display: inline-block;
-            vertical-align: bottom;
+            display: none !important;
         }
 
-        &[href$=".xls"], &[href$=".pdf"] {
-            border: none;
-            font-size: 0;
-            line-height: 0;
-        }
+        a {
+            display: block;
+            align-self: flex-end;
+        
+            &:first-child {
+                margin-left: auto;
+            }
 
-        &[href$=".xls"]::before {
-            background-position-x: 26.4%;
-        }
-
-        &[href$=".pdf"]::before {
-            background-position-x: 31.7%;
+            &:hover::before {
+                transform: scale(1.1);
+            }
+    
+            &::before {
+                --height: 40px;
+                content: "";
+                transform: scale(1, 1);
+                position: relative;
+                border: none;
+                background-image: url(../images/icons__small.svg);
+                background-repeat: no-repeat;
+                background-size: cover;
+                width: var(--height);
+                height: var(--height);
+                display: inline-block;
+                margin-left: 8px;
+            }
+    
+            &[href$=".xls"], &[href$=".pdf"] {
+                border: none;
+                font-size: 0;
+                margin-top: -6px;
+                line-height: 0;
+            }
+    
+            &[href$=".xls"]::before {
+                background-position-x: 26.4%;
+            }
+    
+            &[href$=".pdf"]::before {
+                background-position-x: 31.7%;
+            }
         }
     }
 }

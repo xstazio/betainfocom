@@ -61,6 +61,7 @@
 
             calcParams.cityTo = selectTo.options[selectTo.selectedIndex].value
     
+            // Если это большой калькулятор (TBD)
             if (shipmentTerminalInput) shipmentTerminalInput.value = getShipmentTerminal(dataObj, calcParams)
         })
     
@@ -85,10 +86,7 @@
             totalPrice = calculateTotalPrice(dataObj, calcParams) 
             totalPriceOutput.innerText = `${totalPrice} ₽`
         })
-
     }
-
-    
 })()
 
 // Готови список городов From
@@ -182,14 +180,14 @@ function calculateTotalPrice(dataObj, calcParams) {
     // totalPrice = cityToObj['Мин стоимость']
     console.log(
         `Мин. стоимость: ${parseInt(cityToObj['Мин стоимость'])}`,
-        `По весу: ${parseFloat(calcParams.weight) * getWeightPrice(cityToObj, calcParams.weight)}`,
-        `По объему: ${parseFloat(calcParams.volume) * getVolumePrice(cityToObj, calcParams.volume)}` 
+        `По весу: ${parseFloat(calcParams.weight) * getWeightPrice(cityToObj, calcParams)}`,
+        `По объему: ${parseFloat(calcParams.volume) * getVolumePrice(cityToObj, calcParams)}` 
     )
     
     return Math.max(
         parseInt(cityToObj['Мин стоимость']),
-        parseFloat(calcParams.weight) * getWeightPrice(cityToObj, calcParams.weight),
-        parseFloat(calcParams.volume) * getVolumePrice(cityToObj, calcParams.volume)
+        parseFloat(calcParams.weight) * getWeightPrice(cityToObj, calcParams),
+        parseFloat(calcParams.volume) * getVolumePrice(cityToObj, calcParams)
         )
         + calculateExpedition(dataObj['экспедирование'], calcParams)
 }
@@ -251,12 +249,12 @@ function calculateExpedition(expeditionObj, calcParams) {
     // console.log(weight, volume, expeditionWeight, expeditionVolume)
 }
 
-function getWeightPrice(cityToObj, weight = 0) { // Какой минимальный вес
-    if (weight <= 500) {
+function getWeightPrice(cityToObj, calcParams) { // Какой минимальный вес
+    if (calcParams.weight <= 500) {
         return parseFloat(cityToObj['До 500 кг'])
-    } else if (weight <= 1000) {
+    } else if (calcParams.weight <= 1000) {
         return parseFloat(cityToObj['До 1000 кг'])
-    } else if (weight <= 3000) {
+    } else if (calcParams.weight <= 3000) {
         return parseFloat(cityToObj['До 3000 кг'])
     } else {
         return parseFloat(cityToObj['До 5000 кг'])

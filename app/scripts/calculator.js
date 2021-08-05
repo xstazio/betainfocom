@@ -2,10 +2,8 @@
     const calculator = document.getElementById('calculation')
     const filePath = '/files/SPB_price_Beta_2021.json'
     
-    let citiesFrom = [''] // Пока не используется
     const datalistFromInput = document.getElementById('address_from_input')
     const datalistFrom = document.getElementById('address_from')
-    let citiesTo = [''] // Пока не используется
     const selectTo = document.getElementById('address_to')
     const pickDateInput = document.getElementById('pick_date')
 

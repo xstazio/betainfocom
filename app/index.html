@@ -14,7 +14,7 @@
     <script src="scripts/modernizr.js"></script>
     <!-- endbuild -->
   </head>
-  <body class="dark_ellipse">
+  <body class="">
     <!--[if IE]>
       <p class="browserupgrade">Вы используете <strong>устаревший</strong> браузер. Пожалуйста, <a href="http://browsehappy.com/">обновите его</a> для правильного отображения сайта.</p>
     <![endif]-->
@@ -27,7 +27,7 @@
           <a href="tel: +78125559717">+7 (812) 555-97-17</a>
         </div>
         <ul class="actions">
-          <li class="calculator"><a href=""></a></li>
+          <li class="calculator"><a href="calculation.html"></a></li>
           <li class="tracking"><a href=""></a></li>
           <li class="call"><a href=""></a></li>
         </ul>
@@ -41,7 +41,7 @@
               <li class="nav__item"><a href="#">География</a></li>
               <li class="nav__item"><a href="#">Адреса терминалов</a></li>
               <li class="nav__item"><a href="#">Услуги</a></li>
-              <li class="nav__item"><a href="#">Расчет стоимости</a></li>
+              <li class="nav__item"><a href="calculation.html">Расчет стоимости</a></li>
               <li class="nav__item"><a href="#">Как отправить груз</a></li>
               <li class="nav__item"><a href="#">Документы</a></li>
               <li class="nav__item"><a href="#">О компании</a></li>
@@ -55,6 +55,114 @@
 
 
       <main id="content" class="content" data-fred-rte="">
+
+        <section class="row">
+          <section class="col-large-6 col-medium-12">
+            <section class="border border--rounded">
+              <h3 class="color--red">Расчет стоимости</h3>
+              <form id="calculation">
+                <div class="row">
+                  <div class="col-large-6 col-medium-12">
+
+                    <!-- Откуда -->
+                    <div class="form-group">
+                      <label class="control-label font-weight--bold" for="address_from">Откуда</label>
+                      <div class="controls">
+                        <input list="address_from" name="address_from" id="address_from_input" onfocus="this.value=''"
+                          onchange="this.blur();" placeholder="Выберите город"></input>
+                        <datalist id="address_from"></datalist>
+                        <span class="error_name"></span>
+                      </div>
+                    </div>
+    
+                    <div class="form-group">
+                      <input type="hidden" name="expedition_from" value="">
+                      <input type="radio" id="get_at_address" name="expedition_from">
+                      <label for="get_at_address">Забрать груз по адресу</label>
+                    </div>
+                    <div class="form-group">
+                      <input type="hidden" name="expedition_from" value="">
+                      <input type="radio" id="deliver_to_terminal" name="expedition_from" checked>
+                      <label for="deliver_to_terminal">Сдать груз на терминал</label>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label" for="weight">Вес, кг</label>
+                      <div class="controls">
+                        <input type="number" min="1" value="1" id="weight" name="weight" value="" placeholder=""
+                          class="form-control">
+                        <span class="error_name"></span>
+                      </div>
+                    </div>
+    
+                  </div>
+                  
+                  
+                  <div class="col-large-6 col-medium-12">
+
+                    <!-- Куда -->
+                    <div class="form-group">
+                      <label class="control-label font-weight--bold" for="address_to">Куда</label>
+                      <div class="controls">
+                        <select id="address_to" name="address_to"></select>
+                        <span class="error_name"></span>
+                      </div>
+                    </div>
+    
+                    <div class="form-group">
+                      <input type="hidden" name="expedition_to" value="">
+                      <input type="radio" id="deliver_to_address" name="expedition_to">
+                      <label for="deliver_to_address">Доставка по адресу</label>
+                    </div>
+
+                    <div class="form-group">
+                      <input type="hidden" name="expedition_to" value="">
+                      <input type="radio" id="get_at_terminal" name="expedition_to" checked>
+                      <label for="get_at_terminal">Забрать груз на терминале</label>
+                    </div>
+    
+                    <div class="form-group">
+                      <label class="control-label" for="volume">Объем, м³</label>
+                      <div class="controls">
+                        <input type="number" min="1" value="1" id="volume" name="volume" value="" placeholder="" class="form-control">
+                        <span class="error_name"></span>
+                      </div>
+                    </div>
+    
+                  </div>
+                </div>
+
+                <!-- Цена -->
+                <div id="total_price" class="color--red font-size--bigger font-weight--bold">-</div>
+
+                <p class="font-size--smaller">Рассчитана примерная стоимость доставки груза. Точная стоимость рассчитывается после взвешивания и измерения груза на терминале</p>
+
+                <div class="form-group">
+                  <div class="controls">
+                    <button type="submit" class="btn btn-primary">Отправить заявку</button>
+                  </div>
+                </div>
+              </form>
+            </section>
+          </section>
+
+          <!-- Проверка треков -->
+          <!-- <section class="col-large-6 col-medium-12">
+            <form id="track_shipment" action="">
+              <div class="form-group">
+                <h3 class="color--red">Введите трек-номер</h3>
+                <div class="controls inline">
+                  <input type="text" id="track_number" name="track_number" value="" placeholder=""
+                    class="form-control">
+                  <button type="submit" class="btn btn-primary">Отследить груз</button>
+                  <span class="error_name"></span>
+                </div>
+              </div>
+            </form>
+          </section> -->
+          <!-- Проверка треков -->
+          
+        </section>
 
         <section class="row">
           <h1>Сборные грузы</h1>
@@ -170,6 +278,24 @@
         <section class="section__border border--red"> <h2>Образцы документов</h2> <ul class="document__list"> <li>Экспедиторская / складская расписка <a href=".xls">xls</a> <a href=".pdf">pdf</a></li> <li>Поручение экспедитору <a href=".xls">xls</a> <a href=".pdf">pdf</a></li> </ul> </section>
         <section class="section__border border--grey"> <h2>Бланки договоров транспортной экспедиции</h2> </section>
         <section class="row"> <figure class="col-large-7 col-medium-12 figure--left"><img src="images/pages/glavnaya_sklad.svg"></figure> <section class="col-large-5 col-medium-12"> <h2>Почему выбирают нашу компанию?</h2> <ul> <li>Возможность льготной пробной перевозки для новых клиентов</li> <li>Перевозка грузов без потерь и&nbsp;задержек</li> <li>Индивидуальные цепочки сбора и&nbsp;распределения груза, выстроенные под постоянных клиентов</li> <li>Штатные водители, обученные работать с&nbsp;документами</li> <li>20 лет на&nbsp;рынке транспортных услуг</li> <li>Стоимость доставки ниже среднерыночной на&nbsp;5−20% за&nbsp;счет собственного автопарка, продуманных маршрутов и&nbsp;индивидуальных тарифных планов для разных типов грузов</li> </ul> </section> </section>
+
+        <section class="accordeon accordeon--open">
+          <h3 class="accordeon__header">Образцы документов</h3>
+          <ul class="accordeon__list document__list">
+            <li>Экспедиторская / складская расписка <a href=".xls">xls</a> <a href=".pdf">pdf</a></li>
+            <li>Поручение экспедитору <a href=".xls">xls</a> <a href=".pdf">pdf</a></li>
+          </ul>
+        </section>
+        
+        <section class="accordeon">
+          <h3 class="accordeon__header">Бланки договоров транспортной экспедиции</h3>
+          <ul class="accordeon__list document__list">
+            <li>Экспедиторская / складская расписка <a href=".xls">xls</a> <a href=".pdf">pdf</a></li>
+            <li>Поручение экспедитору <a href=".xls">xls</a> <a href=".pdf">pdf</a></li>
+          </ul>
+        </section>
+
+
       </main><!--main-->
 
 
@@ -219,11 +345,14 @@
     </footer>
     
     <!-- build:js scripts/vendor.js -->
+    <script type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script>
     <!-- endbuild -->
     <!-- build:js scripts/main.js -->
-    <script src="scripts/main.js"></script>
-    <script src="scripts/tables.js"></script>
-    <script src="scripts/nav.js"></script>
+    <script type="text/javascript" src="scripts/main.js"></script>
+    <script type="text/javascript" src="scripts/tables.js"></script>
+    <script type="text/javascript" src="scripts/nav.js"></script>
+    <script type="text/javascript" src="scripts/calculator.js"></script>
+    <script type="text/javascript" src="scripts/accordeon.js"></script>
     <!-- endbuild -->
   </body>
 </html>

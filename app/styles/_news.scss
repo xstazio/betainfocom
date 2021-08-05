@@ -1,0 +1,33 @@
+.news {
+    display: grid; 
+    grid-auto-columns: 1fr; 
+    grid-template-columns: 1fr 1fr; 
+    grid-template-rows: auto 1fr 1fr; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+      "heading heading"
+      "first second"
+      "first third"; 
+
+    h2 {
+        grid-area: heading;
+    }
+
+    &__item {
+        padding: 1.5em;
+
+        &:nth-of-type(1) {
+            grid-area: first;
+            background-color: #F9F9F9;
+        }
+        &:nth-of-type(2) {
+            grid-area: second;
+            background-color: #DFDFDF;
+        }
+        &:nth-of-type(3) {
+            grid-area: third;
+        }
+    }
+
+
+}

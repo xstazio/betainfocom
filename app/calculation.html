@@ -1,0 +1,438 @@
+<!doctype html>
+<html class="no-js" lang="ru">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>betainfocom</title>
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <!-- Place favicon.ico in the root directory -->
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild -->
+  <!-- build:js scripts/modernizr.js -->
+  <script src="scripts/modernizr.js"></script>
+  <!-- endbuild -->
+</head>
+
+<body class="">
+  <!--[if IE]>
+      <p class="browserupgrade">Вы используете <strong>устаревший</strong> браузер. Пожалуйста, <a href="http://browsehappy.com/">обновите его</a> для правильного отображения сайта.</p>
+    <![endif]-->
+
+  <div class="container">
+    <header id="header">
+      <div class="logo"><a href=""><img src="images/logo.svg"></a></div>
+      <div class="contacts">
+        <span>Санкт-Петербург</span>
+        <a href="tel: +78125559717">+7 (812) 555-97-17</a>
+      </div>
+      <ul class="actions">
+        <li class="calculator"><a href="calculation"></a></li>
+        <li class="tracking"><a href=""></a></li>
+        <li class="call"><a href=""></a></li>
+      </ul>
+
+      <div class="nav__wrapper">
+        <input type="checkbox" id="nav-toggle" class="nav-toggle">
+        <nav>
+          <ul>
+            <li class="first active"><a href="#">Доставка сборных грузов</a></li>
+            <li class="nav__item"><a href="#">Сборные грузы по России</a></li>
+            <li class="nav__item"><a href="#">География</a></li>
+            <li class="nav__item"><a href="#">Адреса терминалов</a></li>
+            <li class="nav__item"><a href="#">Услуги</a></li>
+            <li class="nav__item"><a href="calculation.html">Расчет стоимости</a></li>
+            <li class="nav__item"><a href="#">Как отправить груз</a></li>
+            <li class="nav__item"><a href="#">Документы</a></li>
+            <li class="nav__item"><a href="#">О компании</a></li>
+          </ul>
+        </nav>
+        <label for="nav-toggle" class="nav-toggle-label">
+          <span></span>
+        </label>
+      </div>
+    </header>
+
+
+    <main id="content" class="content" data-fred-rte="">
+      <form action="" method="post" class="ajax_form af_calculation" id="calculation" name="calculation">
+
+        <section class="row">
+          <h1>Расчет стоимости</h1>
+          <section class="col-large-8 col-medium-12">
+
+            <div class="row">
+              <div class="col-large-6 col-medium-12">
+                <div class="form-group">
+                  <label class="control-label font-weight--bold" for="address_from">Откуда</label>
+                  <div class="controls">
+                    <input list="address_from" name="address_from" id="address_from_input" onfocus="this.value=''"
+                      onchange="this.blur();" placeholder="Выберите город"></input>
+                    <datalist id="address_from"></datalist>
+                    <span class="error_name"></span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <input type="hidden" name="how_to_send" value="">
+                  <input type="radio" id="get_at_address" name="how_to_send">
+                  <label for="get_at_address">Забрать груз по адресу</label>
+                </div>
+                <div class="form-group">
+                  <input type="hidden" name="how_to_send" value="">
+                  <input type="radio" id="deliver_to_terminal" name="how_to_send">
+                  <label for="deliver_to_terminal">Сдать груз на терминал</label>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label font-weight--bold" for="pick_date">Дата забора груза</label>
+                  <div class="controls">
+                    <input type="date" id="pick_date" name="name" value="" placeholder="" class="form-control">
+                    <span class="error_name"></span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="" class="control-label font-weight--bold">
+                    Дата доставки груза (ориентировочно)
+                  </label>
+                  <div id="shipment_date"></div>
+                </div>
+
+              </div>
+
+              <div class="col-large-6 col-medium-12">
+                <div class="form-group">
+                  <label class="control-label font-weight--bold" for="address_to">Куда</label>
+                  <div class="controls">
+                    <select id="address_to" name="address_to"></select>
+                    <span class="error_name"></span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <input type="hidden" name="where_to_deliver" value="">
+                  <input type="radio" id="deliver_to_address" name="where_to_deliver">
+                  <label for="deliver_to_address">Доставка по адресу</label>
+                </div>
+                <div class="form-group">
+                  <input type="hidden" name="where_to_deliver" value="">
+                  <input type="radio" id="get_at_terminal" name="where_to_deliver">
+                  <label for="get_at_terminal">Забрать груз на терминале</label>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label font-weight--bold" for="shipment_terminal">Адрес терминала</label>
+                  <div class="controls">
+                    <input type="text" id="shipment_terminal" name="name" value="" placeholder="" class="form-control"
+                      readonly>
+                    <span class="error_name"></span>
+                  </div>
+                </div>
+
+
+
+              </div>
+            </div>
+
+            <h3>Параметры груза</h3>
+            <div class="row">
+              <div class="col-large-6 col-medium-12">
+                <div class="form-group">
+                  <input type="hidden" name="volume_or_size" value="">
+                  <input type="radio" id="volume_or_weight" name="volume_or_size">
+                  <label for="volume_or_weight">Указать общий объем/вес</label>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label" for="weight_volume">Вес, кг</label>
+                  <div class="controls">
+                    <input type="number" id="weight_volume" name="weight_volume" value="" placeholder=""
+                      class="form-control">
+                    <span class="error_name"></span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label" for="volume">Объем</label>
+                  <div class="controls">
+                    <input type="number" id="volume" name="volume" value="" placeholder="" class="form-control">
+                    <span class="error_name"></span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label" for="number_of_items_volume">Количество мест, шт.</label>
+                  <div class="controls">
+                    <input type="number" id="number_of_items_volume" name="number_of_items_volume" value=""
+                      placeholder="" class="form-control" style="max-width: 8em;">
+                    <span class="error_name"></span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <input type="hidden" name="oversize" value="">
+                  <input type="checkbox" id="oversize" name="oversize">
+                  <label for="oversize">Негабарит</label>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label font-weight--bold" for="type_of_shipment">Характер груза</label>
+                  <div class="controls">
+                    <input type="number" id="type_of_shipment" name="type_of_shipment" value="" placeholder=""
+                      class="form-control">
+                    <span class="error_name"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-large-6 col-medium-12">
+                <div class="form-group">
+                  <input type="hidden" name="volume_or_size" value="">
+                  <input type="radio" id="size" name="volume_or_size">
+                  <label for="size">Указать габариты</label>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label" for="length">Длина, м</label>
+                  <div class="controls">
+                    <input type="number" id="length" name="length" value="" placeholder="" class="form-control">
+                    <span class="error_name"></span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label" for="width">Ширина, м</label>
+                  <div class="controls">
+                    <input type="number" id="width" name="width" value="" placeholder="" class="form-control">
+                    <span class="error_name"></span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label" for="height">Высота, м</label>
+                  <div class="controls">
+                    <input type="number" id="height" name="height" value="" placeholder="" class="form-control">
+                    <span class="error_name"></span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="control-label" for="weight_size">Вес, кг</label>
+                  <div class="controls">
+                    <input type="number" id="weight_size" name="weight_size" value="" placeholder=""
+                      class="form-control">
+                    <span class="error_name"></span>
+                  </div>
+                </div>
+
+
+
+
+
+              </div>
+            </div>
+
+
+          </section>
+
+
+          <section class="col-large-4 col-medium-12 border border--red">
+            <table class="table--small table--wide">
+              <tr>
+                <td>Объем</td>
+                <td class="font-weight--bold" style="width: 1%; white-space: nowrap;"><span id="volume_final"></span></td>
+              </tr>
+              <tr>
+                <td>Вес</td>
+                <td class="font-weight--bold" style="width: 1%; white-space: nowrap;"><span id="weight_final"></span></td>
+              </tr>
+            </table>
+            <h4 class="color--red">Предварительный расчет</h4>
+            <table class="table--small table--wide">
+              <tr>
+                <td>Межтерминальная перевозка</td>
+                <td class="font-weight--bold" style="width: 1%; white-space: nowrap;"><span id="terminal_to_terminal_price_final"></span></td>
+              </tr>
+            </table>
+
+
+            <table class="table--small table--wide">
+              <tr>
+                <td>Забор груза от адреса</td>
+                <td class="font-weight--bold" style="width: 1%; white-space: nowrap;"><span id="from_address_price_final"></span></td>
+              </tr>
+              <tr>
+                <td>Доставка до терминала</td>
+                <td class="font-weight--bold" style="width: 1%; white-space: nowrap;"><span id="to_terminal_price_final"></span></td>
+              </tr>
+            </table>
+
+            <h5 class="color--red">Дополнительные услуги</h5>
+            <table class="table--small table--wide">
+              <tr>
+                <td>Страхование груза</td>
+                <td class="font-weight--bold" style="width: 1%; white-space: nowrap;"><span id="from_address_price_final"></span></td>
+              </tr>
+              <tr>
+                <td>Паллетирование груза</td>
+                <td class="font-weight--bold" style="width: 1%; white-space: nowrap;"><span id="to_terminal_price_final"></span></td>
+              </tr>
+              <tr>
+                <td>Упаковка груза</td>
+                <td class="font-weight--bold" style="width: 1%; white-space: nowrap;"><span id="to_terminal_price_final"></span></td>
+              </tr>
+              <tr>
+                <td>Возврат документов</td>
+                <td class="font-weight--bold" style="width: 1%; white-space: nowrap;"><span id="to_terminal_price_final"></span></td>
+              </tr>
+            </table>
+
+            <hr class="color--red">
+
+            <div class="form-group">
+              <label class="control-label" for="name">Имя</label>
+              <div class="controls">
+                <input type="number" id="name" name="name" value="" placeholder="" class="form-control">
+                <span class="error_name"></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="control-label" for="phone">Телефон</label>
+              <div class="controls">
+                <input type="number" id="phone" name="phone" value="" placeholder="" class="form-control">
+                <span class="error_name"></span>
+              </div>
+            </div>
+
+            
+          </section>
+        </section>
+
+        <section class="row">
+          <section class="col-large-5 col-medium-12">
+            <h3>Упаковка</h3>
+            <!-- <div class="form-group">
+              <input type="hidden" name="packing" value="">
+              <input type="checkbox" id="packing" name="packing">
+              <label for="packing">Дополнительная упаковка груза</label>
+            </div> -->
+            <div class="form-group">
+              <input type="hidden" name="palleting" value="">
+              <input type="checkbox" id="palleting" name="palleting">
+              <label for="palleting">Паллетирование</label>
+            </div>
+            <div class="form-group">
+              <label class="control-label" for="number_of_packages">Количество, шт.</label>
+              <div class="controls">
+                <input type="number" id="number_of_packages" name="number_of_packages" value=""
+                  placeholder="" class="form-control" style="max-width: 8em;">
+                <span class="error_name"></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="hidden" name="soft_package" value="">
+              <input type="checkbox" id="soft_package" name="soft_package">
+              <label for="soft_package">Мягкая упаковка</label>
+            </div>
+            <div class="form-group">
+              <input type="hidden" name="wooden_lathing" value="">
+              <input type="checkbox" id="wooden_lathing" name="wooden_lathing">
+              <label for="wooden_lathing">Деревянная обрешетка</label>
+            </div>
+            <h3>Страхование</h3>
+            <div class="form-group">
+              <input type="hidden" name="insurance" value="">
+              <input type="checkbox" id="insurance" name="insurance">
+              <label for="insurance">Застраховать груз</label>
+            </div>
+            <div class="form-group">
+              <label class="control-label font-weight--bold" for="cost">Объявленная стоимость груза, руб.</label>
+              <div class="controls">
+                <input type="number" id="cost" name="cost" value=""
+                  placeholder="" class="form-control" style="max-width: 8em;">
+                <span class="error_name"></span>
+              </div>
+            </div>
+            <h3>Дополнительно</h3>
+            <div class="form-group">
+              <input type="hidden" name="receiver_note" value="">
+              <input type="checkbox" id="receiver_note" name="receiver_note">
+              <label for="receiver_note">Вернуть документы с отметкой получателя</label>
+            </div>
+          </section>
+
+          <section class="col-large-7 col-medium-12">
+
+          </section>
+          
+        </section>
+      </form>
+
+    </main>
+    <!--main-->
+
+
+  </div>
+  <!--container-->
+
+  <footer id="footer">
+    <div class="container">
+      <div class="services">
+        <h4>Перевозка грузов</h4>
+        <p><a href="">Перевозка сборных грузов</a></p>
+        <p><a href="">Доставка в торговые сети</a></p>
+        <p><a href="">Доставка в маркетплейсы</a></p>
+        <p><a href="">Логистика для снабжения</a></p>
+        <p><a href="">Индивидуальные решения</a></p>
+        <h4>Дополнительные услуги</h4>
+        <p><a href="">Складские услуги</a></p>
+        <p><a href="">Упаковка груза</a></p>
+        <p><a href="">Страхование</a></p>
+      </div>
+      <div class="information">
+        <h4>Информация</h4>
+        <p><a href="">Адреса терминалов</a></p>
+        <p><a href="">Новости</a></p>
+        <p><a href="">О компании</a></p>
+        <p><a href="">Как получить груз</a></p>
+        <p><a href="">Как отправить груз</a></p>
+        <p><a href="">Документы</a></p>
+        <p><a href="">Заключить договор</a></p>
+      </div>
+      <div class="online-services">
+        <h4>Онлайн сервисы</h4>
+        <p><a href="">Калькулятор</a></p>
+        <p><a href="">Заказ перевозки</a></p>
+        <p><a href="">Отслеживание груза</a></p>
+      </div>
+      <div class="requisites">
+        <img class="logo" src="images/logo--white.svg">
+        <p>ООО «Бета Инфоком»</p>
+        <p>ИНН 7811096761</p>
+      </div>
+      <div class="contacts">
+        <p><a href="tel: +78125559717">+7 (812) 555-97-17</a></p>
+        <p><a href="mailto:inbox@betainfocom.spb.ru">inbox@betainfocom.spb.ru</a></p>
+        <p><a
+            href="https://yandex.ru/maps/2/saint-petersburg/?ll=30.423486%2C59.944224&mode=whatshere&rtext=~59.944116%2C30.423422&rtt=auto&ruri=~&whatshere%5Bpoint%5D=30.423465%2C59.943901&whatshere%5Bzoom%5D=16&z=16">г.
+            Санкт-Петербург ул. Партизанская д. 25 № 3</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- build:js scripts/vendor.js -->
+  <script type="text/javascript" src="/node_modules/jquery/dist/jquery.js"></script>
+  <!-- endbuild -->
+  <!-- build:js scripts/main.js -->
+  <script type="text/javascript" src="scripts/main.js"></script>
+  <script type="text/javascript" src="scripts/tables.js"></script>
+  <script type="text/javascript" src="scripts/nav.js"></script>
+  <script type="text/javascript" src="scripts/calculator.js"></script>
+  <!-- endbuild -->
+</body>
+
+</html>

@@ -24,5 +24,18 @@
     section {
         padding: 2em 0;
     }
-}
 
+    .border {
+        // border: 2px solid;
+        padding: 1em !important;
+        box-shadow: 0 0 4px rgba(#000, .25);
+    
+        &--red {
+            border: 2px solid $color-red;
+        }
+
+        &--rounded {
+            border-radius: 12px;
+        }
+    }
+}

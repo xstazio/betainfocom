@@ -57,7 +57,7 @@
         datalistFromInput.addEventListener('change', (event) => {
             calcParams.cityFrom = event.target.value.trim()
             
-            populateSelect(selectTo, getCitiesTo(dataObj, calcParams.cityFrom))
+            populateSelect(selectTo, getCitiesTo(dataObj, calcParams))
 
             calcParams.cityTo = selectTo.options[selectTo.selectedIndex].value
     
@@ -102,12 +102,12 @@ function getCitiesFrom(dataObj){
 }
 
 // Готови список городов To
-function getCitiesTo(dataObj, cityFrom) {
+function getCitiesTo(dataObj, calcParams) {
     let citiesToFiltered = []
 
     dataObj['направления перевозки'].forEach(obj => {
 
-        if (obj['город отправления по горизонтали&#10;Город назначения по вертикали'].trim() == cityFrom) { // trim() нужен на случай ошибки в Excel
+        if (obj['город отправления по горизонтали&#10;Город назначения по вертикали'].trim() == calcParams.cityFrom) { // trim() нужен на случай ошибки в Excel
             let objectFiltered = Object.assign({}, obj) // не забываем про клонирование объекта!
             delete objectFiltered['город отправления по горизонтали&#10;Город назначения по вертикали']
             // console.log(objectFiltered)

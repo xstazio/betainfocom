@@ -12,4 +12,5 @@ document.addEventListener('click', e => {
     } while (targetElement)
 
     if (navToggle) navToggle.checked = false
+    
 })

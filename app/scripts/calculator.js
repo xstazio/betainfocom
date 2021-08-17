@@ -25,7 +25,7 @@
         cityFrom: '',
         cityTo: '',
         weight: 1,
-        volume: 1, 
+        volume: .1, 
         expeditionFrom: false,
         expeditionTo: false
     }
@@ -53,14 +53,29 @@
         
         // Заполняем селект citiesFrom
         populateDatalist(datalistFrom, getCitiesFrom(dataObj))
+
+        calculator.addEventListener('change', event => {
+            calcParams.expeditionFrom = expeditionFromRadio[1].checked // Переписать с учетом возможности смены места
+            calcParams.expeditionTo = expeditionToRadio[1].checked // Переписать с учетом возможности смены места
+            calcParams.weight = weightInput.value || 1
+            calcParams.volume = volumeInput.value || 0.1
+
+            totalPrice = calculateTotalPrice(dataObj, calcParams)
+            totalPriceOutput.innerText = `${totalPrice} ₽`
+        })
     
         datalistFromInput.addEventListener('change', (event) => {
             calcParams.cityFrom = event.target.value.trim()
+            // console.log('datalistFromInput', datalistFromInput.value)
             
             populateSelect(selectTo, getCitiesTo(dataObj, calcParams))
 
             calcParams.cityTo = selectTo.options[selectTo.selectedIndex].value
-    
+            
+            // Разблокируем selectTo
+            selectTo.disabled = calcParams.cityFrom ? false : true
+            console.log('calcParams.cityFrom', calcParams.cityFrom)
+            
             // Если это большой калькулятор (TBD)
             if (shipmentTerminalInput) shipmentTerminalInput.value = getShipmentTerminal(dataObj, calcParams)
         })
@@ -75,26 +90,6 @@
             totalPriceOutput.innerText = `${totalPrice} ₽`
         })
 
-        weightInput.addEventListener('change', event => {
-            calcParams.weight = event.target.value
-            totalPrice = calculateTotalPrice(dataObj, calcParams) 
-            totalPriceOutput.innerText = `${totalPrice} ₽`
-        })
-
-        volumeInput.addEventListener('change', event => {
-            calcParams.volume = event.target.value
-            totalPrice = calculateTotalPrice(dataObj, calcParams) 
-            totalPriceOutput.innerText = `${totalPrice} ₽`
-        })
-
-        // !!!!!!!!!!!!! Все это объединить для формы !!!!!!!!!!!!!!!
-        calculator.addEventListener('change', event => {
-            calcParams.expeditionFrom = expeditionFromRadio[1].checked
-            calcParams.expeditionTo = expeditionToRadio[1].checked
-
-            totalPrice = calculateTotalPrice(dataObj, calcParams)
-            totalPriceOutput.innerText = `${totalPrice} ₽`
-        })
     }
 })()
 
@@ -103,7 +98,7 @@ function getCitiesFrom(dataObj){
     let citiesFromFiltered = []
 
     dataObj['направления перевозки'].forEach(element => {
-        citiesFromFiltered.push(element['город отправления по горизонтали&#10;Город назначения по вертикали'])
+        citiesFromFiltered.push(element['город отправления по вертикали&#10;Город назначения по горизонтали'])
     });
     return citiesFromFiltered
 }
@@ -114,9 +109,9 @@ function getCitiesTo(dataObj, calcParams) {
 
     dataObj['направления перевозки'].forEach(obj => {
 
-        if (obj['город отправления по горизонтали&#10;Город назначения по вертикали'].trim() == calcParams.cityFrom) { // trim() нужен на случай ошибки в Excel
+        if (obj['город отправления по вертикали&#10;Город назначения по горизонтали'].trim() == calcParams.cityFrom) { // trim() нужен на случай ошибки в Excel
             let objectFiltered = Object.assign({}, obj) // не забываем про клонирование объекта!
-            delete objectFiltered['город отправления по горизонтали&#10;Город назначения по вертикали']
+            delete objectFiltered['город отправления по вертикали&#10;Город назначения по горизонтали']
             // console.log(objectFiltered)
             citiesToFiltered = Object.keys(objectFiltered)
         }
@@ -192,17 +187,11 @@ function calculateTotalPrice(dataObj, calcParams) {
         `По весу: ${parseFloat(calcParams.weight) * getWeightPrice(cityToObj, calcParams)}`,
         `По объему: ${parseFloat(calcParams.volume) * getVolumePrice(cityToObj, calcParams)}` 
     )
-
-    console.log(Math.max(
-        parseInt(cityToObj['Мин стоимость']),
-        parseFloat(calcParams.weight) * getWeightPrice(cityToObj, calcParams),
-        parseFloat(calcParams.volume) * getVolumePrice(cityToObj, calcParams)
-    ), calculateExpedition(dataObj['экспедирование'], calcParams))
     
     return Math.max(
             parseInt(cityToObj['Мин стоимость']),
-            parseFloat(calcParams.weight) * getWeightPrice(cityToObj, calcParams),
-            parseFloat(calcParams.volume) * getVolumePrice(cityToObj, calcParams)
+            (parseFloat(calcParams.weight) * getWeightPrice(cityToObj, calcParams) || 0),
+            (parseFloat(calcParams.volume) * getVolumePrice(cityToObj, calcParams) || 0)
         )
         + calculateExpedition(dataObj['экспедирование'], calcParams)
 }
@@ -226,7 +215,7 @@ function calculateExpedition(expeditionObj, calcParams) {
     }
 
     if (!cityFromObj || !cityToObj) {
-        console.warn('Город экспедирования From не найден!')
+        console.warn('Город экспедирования не найден!')
         return
     }
 
@@ -243,9 +232,11 @@ function getExpeditionData(cityObj, calcParams) {
         expeditionWeight = parseFloat(cityObj['До 500 кг'])
     } else if (calcParams.weight <= 1000) {
         expeditionWeight = parseFloat(cityObj['До 1000 кг'])
+    } else if (calcParams.weight <= 2000) {
+        expeditionWeight = parseFloat(cityObj['До 2000 кг'])
     } else if (calcParams.weight <= 3000) {
         expeditionWeight = parseFloat(cityObj['До 3000 кг'])
-    } else if (calcParams.weight <= 4000) {
+    }  else if (calcParams.weight <= 4000) {
         expeditionWeight = parseFloat(cityObj['До 4000 кг'])
     } else if (calcParams.weight <= 5000) {
         expeditionWeight = parseFloat(cityObj['До 5000 кг'])
@@ -256,19 +247,19 @@ function getExpeditionData(cityObj, calcParams) {
     if (calcParams.volume <= 1) {
         expeditionVolume = parseFloat(cityObj['До 1 м3'])
     } else if (calcParams.volume <= 2) {
-        expeditionVolume = parseFloat(cityObj['До 500 кг'])
+        expeditionVolume = parseFloat(cityObj['До 2 м3'])
     } else if (calcParams.volume <= 4) {
-        expeditionVolume = parseFloat(cityObj['До 1000 кг'])
+        expeditionVolume = parseFloat(cityObj['До 4 м3'])
     } else if (calcParams.volume <= 10) {
-        expeditionVolume = parseFloat(cityObj['До 3000 кг'])
+        expeditionVolume = parseFloat(cityObj['До 10 м3'])
     } else if (calcParams.volume <= 15) {
-        expeditionVolume = parseFloat(cityObj['До 4000 кг'])
+        expeditionVolume = parseFloat(cityObj['До 15 м3'])
     } else if (calcParams.volume <= 20) {
-        expeditionVolume = parseFloat(cityObj['До 5000 кг'])
+        expeditionVolume = parseFloat(cityObj['До 20 м3'])
     } else if (calcParams.volume <= 25) {
-        expeditionVolume = parseFloat(cityObj['До 5000 кг'])
+        expeditionVolume = parseFloat(cityObj['До 25 м3'])
     } else {
-        expeditionVolume = parseFloat(cityObj['До 20000 кг'])
+        expeditionVolume = parseFloat(cityObj['До 90 м3'])
     }
 
     return Math.max(expeditionWeight, expeditionVolume)

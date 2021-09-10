@@ -74,20 +74,18 @@
             
             // Разблокируем selectTo
             selectTo.disabled = calcParams.cityFrom ? false : true
-            console.log('calcParams.cityFrom', calcParams.cityFrom)
             
             // Если это большой калькулятор (TBD)
-            if (shipmentTerminalInput) shipmentTerminalInput.value = getShipmentTerminal(dataObj, calcParams)
+            // if (shipmentTerminalInput) shipmentTerminalInput.value = getShipmentTerminal(dataObj, calcParams)
         })
     
         selectTo.addEventListener('change', event => {
             calcParams.cityTo = event.target.value.trim()
-            // console.log(cityTo)
-    
-            if (shipmentTerminalInput) shipmentTerminalInput.value = getShipmentTerminal(dataObj, calcParams)
+
+            if (!getShipmentTerminal(dataObj, calcParams)) expeditionToRadio[1].checked = true
             
-            totalPrice = calculateTotalPrice(dataObj, calcParams) 
-            totalPriceOutput.innerText = `${totalPrice} ₽`
+            // Если это большой калькулятор (TBD)
+            // if (shipmentTerminalInput) shipmentTerminalInput.value = getShipmentTerminal(dataObj, calcParams)
         })
 
     }
@@ -114,6 +112,7 @@ function getCitiesTo(dataObj, calcParams) {
             delete objectFiltered['город отправления по вертикали&#10;Город назначения по горизонтали']
             // console.log(objectFiltered)
             citiesToFiltered = Object.keys(objectFiltered)
+            citiesToFiltered.push('')
         }
     })
 
@@ -157,6 +156,7 @@ function getShipmentTerminal(dataObj, calcParams) {
             // console.warn('Адрес терминала не найден!')
         }
     })
+    console.log('shipmentTerminal', shipmentTerminal)
     return shipmentTerminal
 }
 
@@ -181,11 +181,11 @@ function calculateTotalPrice(dataObj, calcParams) {
         return 0
     }
 
-    // totalPrice = cityToObj['Мин стоимость']
     console.log(
         `Мин. стоимость: ${parseInt(cityToObj['Мин стоимость'])}`,
         `По весу: ${parseFloat(calcParams.weight) * getWeightPrice(cityToObj, calcParams)}`,
-        `По объему: ${parseFloat(calcParams.volume) * getVolumePrice(cityToObj, calcParams)}` 
+        `По объему: ${parseFloat(calcParams.volume) * getVolumePrice(cityToObj, calcParams)}`,
+        calculateExpedition(dataObj['экспедирование'], calcParams) 
     )
     
     return Math.max(
@@ -214,10 +214,10 @@ function calculateExpedition(expeditionObj, calcParams) {
         }
     }
 
-    if (!cityFromObj || !cityToObj) {
-        console.warn('Город экспедирования не найден!')
-        return
-    }
+    // if (!cityFromObj || !cityToObj) {
+    //     console.warn('Город экспедирования не найден!')
+    //     return
+    // }
 
     return (calcParams.expeditionFrom ? getExpeditionData(cityFromObj, calcParams) : 0)
         + (calcParams.expeditionTo ? getExpeditionData(cityToObj, calcParams) : 0)

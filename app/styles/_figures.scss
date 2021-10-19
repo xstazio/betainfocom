@@ -1,5 +1,6 @@
 figure {
-    // position: relative;
+    --transform-value: 1.15;
+    position: relative;
     display: none;
     // height: 480px;
     align-items: center;
@@ -7,15 +8,14 @@ figure {
     // margin: 2em 0;
     object-fit: contain;
 
-    &.figure--right img {
-        // left: 0;
-        // transform: translateX(16.6%);
+    &.figure--right.figure--bleed img {
+        transform: scale(var(--transform-value));
+        transform-origin: top left;
     }
 
-    &.figure--left img {
-        // right: 0;
-        // width: 120%;
-        transform: translateX(-16.6%);
+    &.figure--left.figure--bleed img {
+        transform: scale(var(--transform-value));
+        transform-origin: top right;
     }
 
     @include mq(large) {
@@ -23,9 +23,9 @@ figure {
     }
 
     img {
-        // position: absolute;
-        width: 120%;
-        // top: 0;
+        position: relative;
+        width: 100%;
+        top: 0;
         height: auto;
         // width: calc(100% + 37px);
         // max-width: 600px;

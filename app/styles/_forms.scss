@@ -112,21 +112,21 @@ form {
             }
         }
     }
+}
 
-    button, input[type=submit] {
-        all: unset;
-        background-color: $color_red;
-        color: $color_white;
-        padding: 3px 13px;
-        outline: none;
-        border: none;
-        border-radius: 5px;
-        font-weight: 500;
-        font-family: inherit;
-        cursor: pointer;
-        white-space: nowrap;
-        height: 36.1px;
-    }
+a.button, button, input[type=submit] {
+    all: unset;
+    background-color: $color_red;
+    color: $color_white;
+    padding: 9px 13px;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    // height: 36.1px;
 }
 
 .controls {

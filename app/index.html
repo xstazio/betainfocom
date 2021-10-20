@@ -55,19 +55,178 @@
 
 
       <main id="content" class="content" data-fred-rte="">
+        
+<form id="calculation">
+  <div class="row">
+    <section class="col-large-7 col-medium-12">
+      <div class="row">
+        <div class="col-large-6 col-medium-12">
+          <!-- Откуда -->
+          <div class="form-group">
+            <label class="control-label" for="address_from">Откуда</label>
+            <input list="address_from" name="address_from" id="address_from_input" onfocus="this.value=''" onchange="" placeholder="Выберите город">
+            <datalist id="address_from"></datalist>
+            <span class="error_name"></span>
+          </div>
+          <div class="form-group">
+            <input type="hidden" name="expedition_from">
+            <input type="radio" id="get_at_address" name="expedition_from">
+            <label for="get_at_address">Забрать груз по адресу</label>
+          </div>
+          <div class="form-group">
+            <input type="hidden" name="expedition_from" value="">
+            <input type="radio" id="deliver_to_terminal" name="expedition_from" checked="">
+            <label for="deliver_to_terminal">Сдать груз на терминал</label>
+          </div>
 
-        <h1>Мы любим что-то там</h1>
-        <div class="page__options">
-          <ul>
-            <li><a href="">Рассчитать стоимость</a></li>
-            <li><a href="">Заключить договор</a></li>
-            <li><a href="">Заказать обратный звонок</a></li>
-          </ul>
+          <div class="form-group">
+            <label class="control-label" for="shipment_terminal">Адрес терминала отправки</label>
+            <input type="text" id="shipment_terminal_from" name="shipment_terminal_from" readonly>
+            <span class="error_name"></span>
+          </div>
         </div>
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Esse mollitia at voluptate consequuntur eum facere vel possimus sapiente eligendi voluptatum dolore, unde reprehenderit exercitationem explicabo id animi harum. Nobis id adipisci, alias nihil aliquam necessitatibus mollitia voluptas! Perspiciatis autem veritatis corporis voluptatem, ut rem ratione illo sed sint eos inventore enim ipsa! Totam modi consequatur error ex saepe ducimus deserunt dolorum dicta corrupti aperiam harum minima ratione, maxime ad tenetur, quaerat sunt amet aliquam atque voluptatem. Ad placeat doloribus blanditiis provident ducimus voluptates molestiae, corrupti eum pariatur in hic voluptate fuga perferendis magnam ipsum iste ut ab! Nisi, repellat inventore.</p>
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Esse mollitia at voluptate consequuntur eum facere vel possimus sapiente eligendi voluptatum dolore, unde reprehenderit exercitationem explicabo id animi harum. Nobis id adipisci, alias nihil aliquam necessitatibus mollitia voluptas! Perspiciatis autem veritatis corporis voluptatem, ut rem ratione illo sed sint eos inventore enim ipsa! Totam modi consequatur error ex saepe ducimus deserunt dolorum dicta corrupti aperiam harum minima ratione, maxime ad tenetur, quaerat sunt amet aliquam atque voluptatem. Ad placeat doloribus blanditiis provident ducimus voluptates molestiae, corrupti eum pariatur in hic voluptate fuga perferendis magnam ipsum iste ut ab! Nisi, repellat inventore.</p>
 
-      </main><!--main-->
+        <div class="col-large-6 col-medium-12">
+          <div class="form-group">
+            <label class="control-label" for="address_to">Куда</label>
+            <select id="address_to" name="address_to" disabled="true"></select>
+            <span class="error_name"></span>
+          </div>
+          <div class="form-group">
+            <input type="hidden" name="expedition_to" value="">
+            <input type="radio" id="deliver_to_address" name="expedition_to">
+            <label for="deliver_to_address">Доставка по адресу</label>
+          </div>
+          <div class="form-group">
+            <input type="hidden" name="expedition_to" value="">
+            <input type="radio"
+              id="get_at_terminal" name="expedition_to" checked="">
+            <label for="get_at_terminal">Забрать груз на терминале</label>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="shipment_terminal">Адрес терминала доставки</label>
+            <input type="text" id="shipment_terminal_to" name="shipment_terminal_to" readonly>
+            <span class="error_name"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-large-6 col-medium-12">
+          <div class="form-group">
+            <label class="control-label" for="pick_date">Дата забора груза</label>
+            <input type="date" id="pick_date" name="name" value="" placeholder="" class="form-control" required>
+            <span class="error_name"></span>
+          </div>
+        </div>
+        <div class="form-group col-large-6 col-medium-12">
+          <div class="form-group">
+            <label for="" class="control-label">Дата доставки (ориентировочно)</label>
+            <input type="date" id="shipment_date" name="name" value="" placeholder="" class="form-control" readonly>
+          </div>
+        </div>
+      </div>
+
+      <h4>Параметры груза</h4>
+      <div class="row">
+        <div class="form-group col-large-6 col-medium-12">
+          <input type="hidden" name="shipment_options" value="">
+          <input type="radio" id="weight_or_volume" name="shipment_options" checked="">
+          <label for="weight_or_volume">Указать общий объем/вес</label>
+        </div>
+        <div class="form-group col-large-6 col-medium-12">
+          <input type="hidden" name="shipment_options" value="">
+          <input type="radio" id="dimensions" name="shipment_options"> <label for="dimensions">Указать габариты</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-large-6 col-medium-12">
+          <div class="form-group">
+            <label class="control-label" for="weight">Вес, кг</label>
+            <input type="number" min="1" value="1" id="weight" name="weight" placeholder="" class="form-control">
+            <span class="error_name"></span>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="volume">Объем, м³</label>
+            <input type="number" min="1" value="0.1" id="volume" name="volume" placeholder="" class="form-control">
+            <span class="error_name"></span>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="items_count">Кол-во мест, шт.</label>
+            <input type="number" min="1" value="1" id="items_count" name="items_count" placeholder="" class="form-control">
+            <span class="error_name"></span>
+          </div>
+          <div class="form-group">
+            <input type="hidden" name="oversize" value="">
+            <input type="checkbox" id="oversize" name="oversize">
+            <label for="oversize">Негабарит</label>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="shipment_description">Характер груза</label>
+            <input type="text" id="shipment_description" name="shipment_description" placeholder="" class="form-control">
+            <span class="error_name"></span>
+          </div>
+        </div>
+        <div class="col-large-6 col-medium-12">
+
+        </div>
+        <h4>Упаковка</h4>
+        <div class="row">
+          <div class="col-large-7 col-medium-12">
+            <div class="form-group">
+              <input type="hidden" name="return_documents" value="">
+              <input type="checkbox" id="packing" name="packing">
+              <label for="packing">Дополнительная упаковка</label>
+            </div>
+            <div class="col-large-7 col-medium-12">
+              <div class="form-group">
+                <input type="hidden" name="paletting" value="">
+                <input type="checkbox" id="paletting" name="paletting">
+                <label for="paletting">Паллетирование</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h4>Страхование</h4>
+        <div class="row">
+          <div class="col-large-7 col-medium-12">
+            <div class="form-group">
+              <input type="hidden" name="ensurance" value="">
+              <input type="checkbox" id="ensurance" name="ensurance">
+              <label for="ensurance">Страхование</label>
+            </div>
+            <div class="form-group">
+              <label class="control-label" for="shipment_cost">Объявленная стоимость груза, руб.</label>
+              <input type="text" id="shipment_cost" name="shipment_cost" placeholder="" class="form-control">
+              <span class="error_name"></span>
+            </div>
+          </div>
+        </div>
+        <h4>Документы</h4>
+        <div class="row">
+          <div class="col-large-7 col-medium-12">
+            <div class="form-group">
+              <input type="hidden" name="return_documents" value="">
+              <input type="checkbox" id="return_documents" name="return_documents">
+              <label for="return_documents">Вернуть документы с отметкой получателя</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+    <section class="col-large-5 col-medium-12 border border--rounded">
+      <!-- Цена -->
+      <div id="total_price" class="color--red font-size--bigger font-weight--bold">— ₽</div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary">Оформить заявку</button>
+      </div>
+    </section>
+  </div>
+</form>
+      
+      </main>
+      <!--main-->
 
 
     </div><!--container-->

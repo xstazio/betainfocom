@@ -6,8 +6,10 @@
     const datalistFrom = document.getElementById('address_from')
     const selectTo = document.getElementById('address_to')
     const pickDateInput = document.getElementById('pick_date')
+    const deliveryDateInput = document.getElementById('pick_date')
 
-    const shipmentTerminalInput = document.getElementById('shipment_terminal') // readonly
+    const shipmentTerminalFromInput = document.getElementById('shipment_terminal_from') // readonly
+    const shipmentTerminalToInput = document.getElementById('shipment_terminal_to') // readonly
     let shipmentTerminal ='' // Название терминала (from или to?)
 
     const expeditionFromRadio = document.getElementsByName('expedition_from')
@@ -50,6 +52,8 @@
     
     // Запускаем калькулятор
     function initCalculator(dataObj) {
+
+        if (pickDateInput && pickDateInput.value != null) pickDateInput.value = getTomorrowDate()
         
         // Заполняем селект citiesFrom
         populateDatalist(datalistFrom, getCitiesFrom(dataObj))
@@ -59,6 +63,22 @@
             calcParams.expeditionTo = expeditionToRadio[1].checked // Переписать с учетом возможности смены места
             calcParams.weight = weightInput.value || 1
             calcParams.volume = volumeInput.value || 0.1
+
+            if (shipmentTerminalFromInput && expeditionFromRadio[3].checked) {
+                shipmentTerminalFromInput.value = getShipmentTerminal(dataObj, calcParams.cityFrom)
+            } else {
+                if (shipmentTerminalFromInput) shipmentTerminalFromInput.value = ''
+            }
+
+            if (shipmentTerminalToInput && expeditionToRadio[3].checked && calcParams.cityFrom) {
+                if (!getShipmentTerminal(dataObj, calcParams.cityTo)) {
+                    // expeditionToRadio[1].checked = true
+                }
+
+                shipmentTerminalToInput.value = getShipmentTerminal(dataObj, calcParams.cityTo)
+            } else {
+                if (shipmentTerminalToInput) shipmentTerminalToInput.value = ''
+            }
 
             totalPrice = calculateTotalPrice(dataObj, calcParams)
             totalPriceOutput.innerText = `${totalPrice} ₽`
@@ -82,7 +102,14 @@
         selectTo.addEventListener('change', event => {
             calcParams.cityTo = event.target.value.trim()
 
-            if (!getShipmentTerminal(dataObj, calcParams)) expeditionToRadio[1].checked = true
+            if (!getShipmentTerminal(dataObj, calcParams.cityTo)) {
+                expeditionToRadio[3].parentNode.classList.add('hidden')
+                if (shipmentTerminalToInput) shipmentTerminalToInput.parentNode.classList.add('hidden')
+                expeditionToRadio[1].checked = true
+            } else {
+                expeditionToRadio[3].parentNode.classList.remove('hidden')
+                if (shipmentTerminalToInput) shipmentTerminalToInput.parentNode.classList.remove('hidden')
+            }
             
             // Если это большой калькулятор (TBD)
             // if (shipmentTerminalInput) shipmentTerminalInput.value = getShipmentTerminal(dataObj, calcParams)
@@ -145,22 +172,21 @@ function populateSelect(select, array) {
     })
 }
 
-function getShipmentTerminal(dataObj, calcParams) {
+function getShipmentTerminal(dataObj, city) {
     let shipmentTerminal = ''
 
-    dataObj['адреса региональных складов'].forEach(city => {
-        if (city['Город'].trim() == calcParams.cityTo) { // trim() нужен на случай ошибки в Excel
-            shipmentTerminal = city['Адрес склада']
+    dataObj['адреса региональных складов'].forEach(item => {
+        if (item['Город'].trim() == city) { // trim() нужен на случай ошибки в Excel
+            shipmentTerminal = item['Адрес склада']
         } else {
             // shipmentTerminal = '' // если в таблице его не было. такого не должно случаться
             // console.warn('Адрес терминала не найден!')
         }
     })
-    console.log('shipmentTerminal', shipmentTerminal)
     return shipmentTerminal
 }
 
-function calculateShipmentTime(dataObj, cityFrom, cityTo) {
+function calculateShipmentTime(dataObj, calcParams) {
     // TBD
 }
 
@@ -287,4 +313,13 @@ function getVolumePrice(cityToObj, calcParams) { // Какой минималь�
     } else {
         return parseFloat(parseFloat(cityToObj['До 20 м3'].replace(/,/g, '')))
     }
+}
+
+function getTomorrowDate() {
+    const date = new Date()
+     return (`${date.getFullYear().toString()}-${(date.getMonth() + 1).toString().padStart(2, 0)}-${(date.getDate() + 1).toString().padStart(2, 0)}`)
+}
+
+function calculateDeliveryDate() {
+    //TBD
 }

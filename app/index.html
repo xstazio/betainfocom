@@ -148,7 +148,7 @@
           </div>
           <div class="form-group">
             <label class="control-label" for="volume">Объем, м³</label>
-            <input type="number" min="1" value="0.1" id="volume" name="volume" placeholder="" class="form-control">
+            <input type="number" min="1" value="1" id="volume" name="volume" placeholder="" class="form-control">
             <span class="error_name"></span>
           </div>
           <div class="form-group">
@@ -157,18 +157,27 @@
             <span class="error_name"></span>
           </div>
           <div class="form-group">
-            <input type="hidden" name="oversize" value="">
-            <input type="checkbox" id="oversize" name="oversize">
-            <label for="oversize">Негабарит</label>
-          </div>
-          <div class="form-group">
             <label class="control-label" for="shipment_description">Характер груза</label>
             <input type="text" id="shipment_description" name="shipment_description" placeholder="" class="form-control">
             <span class="error_name"></span>
           </div>
         </div>
         <div class="col-large-6 col-medium-12">
-
+          <div class="form-group">
+            <label class="control-label" for="length">Длина, м</label>
+            <input type="number" min="1" value="1" id="length" name="length" placeholder="" class="form-control">
+            <span class="error_name"></span>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="width">Ширина, м</label>
+            <input type="number" min="1" value="1" id="width" name="width" placeholder="" class="form-control">
+            <span class="error_name"></span>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="height">Высота, м</label>
+            <input type="number" min="1" value="1" id="height" name="height" placeholder="" class="form-control">
+            <span class="error_name"></span>
+          </div>
         </div>
         <h4>Упаковка</h4>
         <div class="row">
@@ -218,6 +227,9 @@
     <section class="col-large-5 col-medium-12 border border--rounded">
       <!-- Цена -->
       <div id="total_price" class="color--red font-size--bigger font-weight--bold">— ₽</div>
+      <div class="form-group">
+        <a id="reset_form" href="#">Сохранить расчет</a> <a id="reset_form" href="#">Очистить расчет</a>
+      </div>
       <div class="form-group">
         <button type="submit" class="btn btn-primary">Оформить заявку</button>
       </div>

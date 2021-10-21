@@ -1,6 +1,7 @@
 (function() {
     const calculator = document.getElementById('calculation')
     const filePath = '/files/SPB_price_Beta_2021.json'
+    let jsonData
     
     const datalistFromInput = document.getElementById('address_from_input')
     const datalistFrom = document.getElementById('address_from')
@@ -18,6 +19,8 @@
     const weightInput = document.getElementById('weight')
     
     const volumeInput = document.getElementById('volume')
+
+    const resetFormLink = document.getElementById('reset_form')
 
     const totalPriceOutput = document.getElementById('total_price')
     
@@ -47,13 +50,20 @@
             }
             return response.json()
         })
-        .then(data => initCalculator(data))
+        .then(data => {
+            jsonData = data
+            initCalculator(jsonData)
+        })
         .catch(error => console.log(error))
     
     // Запускаем калькулятор
     function initCalculator(dataObj) {
 
-        if (pickDateInput && pickDateInput.value != null) pickDateInput.value = getTomorrowDate()
+        if (pickDateInput && pickDateInput.value != null) {
+            const tomorrow = getTomorrowDate()
+            pickDateInput.value = tomorrow
+            pickDateInput.setAttribute('min', tomorrow) // Не раньше, чем завтра
+        }
         
         // Заполняем селект citiesFrom
         populateDatalist(datalistFrom, getCitiesFrom(dataObj))
@@ -114,9 +124,17 @@
             // Если это большой калькулятор (TBD)
             // if (shipmentTerminalInput) shipmentTerminalInput.value = getShipmentTerminal(dataObj, calcParams)
         })
-
+        
+        // Сброс данных формы
+        resetFormLink.addEventListener('click', e => {
+            e.preventDefault()
+            calculator.reset()
+            initCalculator(jsonData)
+        })
     }
 })()
+
+
 
 // Готовим список городов From
 function getCitiesFrom(dataObj){

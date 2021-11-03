@@ -64,7 +64,7 @@
           <!-- Откуда -->
           <div class="form-group">
             <label class="control-label" for="address_from">Откуда</label>
-            <input list="address_from" name="address_from" id="address_from_input" onfocus="this.value=''" onchange="" placeholder="Выберите город">
+            <input list="address_from" name="address_from" id="address_from_input" onfocus="this.value=''" onchange="" placeholder="Выберите город" required>
             <datalist id="address_from"></datalist>
             <span class="error_name"></span>
           </div>
@@ -81,7 +81,13 @@
 
           <div class="form-group">
             <label class="control-label" for="shipment_terminal">Адрес терминала отправки</label>
-            <input type="text" id="shipment_terminal_from" name="shipment_terminal_from" readonly>
+            <textarea
+              type="text"
+              id="shipment_terminal_from"
+              name="shipment_terminal_from"
+              rows="4"
+              style="height: 4em"
+              readonly></textarea>
             <span class="error_name"></span>
           </div>
         </div>
@@ -89,7 +95,7 @@
         <div class="col-large-6 col-medium-12">
           <div class="form-group">
             <label class="control-label" for="address_to">Куда</label>
-            <select id="address_to" name="address_to" disabled="true"></select>
+            <select id="address_to" name="address_to" disabled="true" required></select>
             <span class="error_name"></span>
           </div>
           <div class="form-group">
@@ -105,7 +111,13 @@
           </div>
           <div class="form-group">
             <label class="control-label" for="shipment_terminal">Адрес терминала доставки</label>
-            <input type="text" id="shipment_terminal_to" name="shipment_terminal_to" readonly>
+            <textarea
+              type="text"
+              id="shipment_terminal_to"
+              name="shipment_terminal_to"
+              rows="4"
+              style="height: 4em"
+              readonly></textarea>
             <span class="error_name"></span>
           </div>
         </div>
@@ -114,46 +126,47 @@
       <div class="row">
         <div class="form-group col-large-6 col-medium-12">
           <div class="form-group">
-            <label class="control-label" for="pick_date">Дата забора груза</label>
-            <input type="date" id="pick_date" name="name" value="" placeholder="" class="form-control" required>
-            <span class="error_name"></span>
+            <label for="" class="control-label">Дни отправки</label>
+            <div id="pickup_days" class="form_output"></div>
           </div>
         </div>
         <div class="form-group col-large-6 col-medium-12">
           <div class="form-group">
-            <label for="" class="control-label">Дата доставки (ориентировочно)</label>
-            <input type="date" id="shipment_date" name="name" value="" placeholder="" class="form-control" readonly>
+            <label for="" class="control-label">Срок доставки (ориентировочно)</label>
+            <div id="delivery_time" class="form_output"></div>
           </div>
         </div>
       </div>
 
-      <h4>Параметры груза</h4>
-      <div class="row">
-        <div class="form-group col-large-6 col-medium-12">
-          <input type="hidden" name="shipment_options" value="">
-          <input type="radio" id="weight_or_volume" name="shipment_options" checked="">
-          <label for="weight_or_volume">Указать общий объем/вес</label>
-        </div>
-        <div class="form-group col-large-6 col-medium-12">
-          <input type="hidden" name="shipment_options" value="">
-          <input type="radio" id="dimensions" name="shipment_options"> <label for="dimensions">Указать габариты</label>
+      <div>
+        <h4>Параметры груза</h4>
+        <div class="row">
+          <div class="form-group col-large-6 col-medium-12">
+            <input type="hidden" name="shipment_options" value="">
+            <input type="radio" id="weight_or_volume" name="shipment_options" checked="">
+            <label for="weight_or_volume">Указать общий объем/вес</label>
+          </div>
+          <div class="form-group col-large-6 col-medium-12">
+            <input type="hidden" name="shipment_options" value="">
+            <input type="radio" id="dimensions" name="shipment_options"> <label for="dimensions">Указать габариты</label>
+          </div>
         </div>
       </div>
       <div class="row">
-        <div class="col-large-6 col-medium-12">
+        <div id="volume_weight_parameters" class="col-large-6 col-medium-12">
           <div class="form-group">
             <label class="control-label" for="weight">Вес, кг</label>
-            <input type="number" min="1" value="1" id="weight" name="weight" placeholder="" class="form-control">
+            <input type="number" min="0" value="1" id="weight" name="weight" placeholder="" class="form-control">
             <span class="error_name"></span>
           </div>
           <div class="form-group">
             <label class="control-label" for="volume">Объем, м³</label>
-            <input type="number" min="1" value="1" id="volume" name="volume" placeholder="" class="form-control">
+            <input type="number" min="0" value="1" id="volume" name="volume" placeholder="" class="form-control">
             <span class="error_name"></span>
           </div>
           <div class="form-group">
-            <label class="control-label" for="items_count">Кол-во мест, шт.</label>
-            <input type="number" min="1" value="1" id="items_count" name="items_count" placeholder="" class="form-control">
+            <label class="control-label" for="items_count_volume_weight">Кол-во мест, шт.</label>
+            <input type="number" min="1" value="1" step="1" id="items_count_volume_weight" name="items_count_volume_weight" placeholder="" class="form-control">
             <span class="error_name"></span>
           </div>
           <div class="form-group">
@@ -162,42 +175,62 @@
             <span class="error_name"></span>
           </div>
         </div>
-        <div class="col-large-6 col-medium-12">
+        <div id="dimensions_parameters" class="col-large-6 col-medium-12 hidden">
           <div class="form-group">
             <label class="control-label" for="length">Длина, м</label>
-            <input type="number" min="1" value="1" id="length" name="length" placeholder="" class="form-control">
+            <input type="number" min="0" value="0.1" id="length" name="length" placeholder="" class="form-control">
             <span class="error_name"></span>
           </div>
           <div class="form-group">
             <label class="control-label" for="width">Ширина, м</label>
-            <input type="number" min="1" value="1" id="width" name="width" placeholder="" class="form-control">
+            <input type="number" min="0" value="0.1" id="width" name="width" placeholder="" class="form-control">
             <span class="error_name"></span>
           </div>
           <div class="form-group">
             <label class="control-label" for="height">Высота, м</label>
-            <input type="number" min="1" value="1" id="height" name="height" placeholder="" class="form-control">
+            <input type="number" min="0" value="0.1" id="height" name="height" placeholder="" class="form-control">
+            <span class="error_name"></span>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="items_count_dimensions">Кол-во мест, шт.</label>
+            <input type="number" min="1" value="1" step="1" id="items_count_dimensions" name="items_count_dimensions" placeholder="" class="form-control">
             <span class="error_name"></span>
           </div>
         </div>
+      </div>
+      <div>
         <h4>Упаковка</h4>
-        <div class="row">
-          <div class="col-large-7 col-medium-12">
-            <div class="form-group">
-              <input type="hidden" name="return_documents" value="">
-              <input type="checkbox" id="packing" name="packing">
-              <label for="packing">Дополнительная упаковка</label>
-            </div>
-            <div class="col-large-7 col-medium-12">
-              <div class="form-group">
-                <input type="hidden" name="paletting" value="">
-                <input type="checkbox" id="paletting" name="paletting">
-                <label for="paletting">Паллетирование</label>
-              </div>
-            </div>
-          </div>
+        <div class="form-group">
+          <input type="hidden" name="paletting" value="">
+          <input type="checkbox" id="paletting" name="paletting">
+          <label for="paletting">Паллетирование</label>
         </div>
-        <h4>Страхование</h4>
+        <div class="form-group">
+          <label class="control-label" for="pallets_count">Кол-во паллет, шт.</label>
+          <input
+            class="form-control input--small"
+            type="number"
+            min="1"
+            step="1"
+            id="pallets_count"
+            name="pallets_count"
+            disabled>
+          <span class="error_name"></span>
+        </div>
+        <div class="form-group">
+          <input type="hidden" name="soft_packing" value="">
+          <input type="checkbox" id="soft_packing" name="soft_packing">
+          <label for="soft_packing">Мягкая упаковка</label>
+        </div>
+        <div class="form-group">
+          <input type="hidden" name="wooden_lath" value="">
+          <input type="checkbox" id="wooden_lath" name="wooden_lath">
+          <label for="wooden_lath">Обрешетка</label>
+        </div>
+      </div>
+      <div>
         <div class="row">
+          <h4>Страхование</h4>
           <div class="col-large-7 col-medium-12">
             <div class="form-group">
               <input type="hidden" name="ensurance" value="">
@@ -205,23 +238,30 @@
               <label for="ensurance">Страхование</label>
             </div>
             <div class="form-group">
-              <label class="control-label" for="shipment_cost">Объявленная стоимость груза, руб.</label>
-              <input type="text" id="shipment_cost" name="shipment_cost" placeholder="" class="form-control">
+              <label class="control-label" for="ensurance_cost">Объявленная стоимость груза, руб.</label>
+              <input
+                class="form-control input--small"
+                type="number"
+                min="1"
+                id="ensurance_cost"
+                name="ensurance_cost"
+                placeholder=""
+                disabled>
               <span class="error_name"></span>
             </div>
           </div>
         </div>
-        <h4>Документы</h4>
+        
         <div class="row">
-          <div class="col-large-7 col-medium-12">
-            <div class="form-group">
-              <input type="hidden" name="return_documents" value="">
-              <input type="checkbox" id="return_documents" name="return_documents">
-              <label for="return_documents">Вернуть документы с отметкой получателя</label>
-            </div>
+          <h4>Документы</h4>
+          <div class="form-group">
+            <input type="hidden" name="return_documents" value="">
+            <input type="checkbox" id="return_documents" name="return_documents">
+            <label for="return_documents">Вернуть документы с отметкой получателя</label>
           </div>
         </div>
       </div>
+
 
     </section>
     <section class="col-large-5 col-medium-12 border border--rounded">

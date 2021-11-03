@@ -214,8 +214,10 @@
         // Сброс данных формы
         if (resetFormLink) {
             resetFormLink.addEventListener('click', e => {
+                console.log('huy')
                 e.preventDefault()
                 calculator.reset()
+                totalPriceOutput.innerText = '— ₽'
                 initCalculator(jsonData)
             })
         }

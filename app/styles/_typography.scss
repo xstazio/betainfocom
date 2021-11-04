@@ -93,21 +93,6 @@ body {
             vertical-align: -0.09em;
         }
     }
-
-    // @media screen and (max-width: 849px) {
-    //     font-size: $base_font_size * 0.8;
-    // }
-
-    // @media screen and (max-width: 640px) {
-    //     h1,
-    //     h2,
-    //     h3,
-    //     h4,
-    //     h5,
-    //     h6 {
-    //         line-height: 0.9em;
-    //     }
-    // }
 }
 
 .text-center {
@@ -128,4 +113,10 @@ body {
 
 .font-size--smaller {
     font-size: .8em;
+}
+
+hr {
+    border: none;
+    border-bottom: 1px solid $color_red;
+    margin: 2em 0;
 }

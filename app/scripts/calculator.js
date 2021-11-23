@@ -2,6 +2,8 @@
     const calculator = document.getElementById('calculation')
     const filePath = '/files/SPB_price_Beta_2021.json'
     let jsonData
+
+    const changeEvent = new Event('change')
     
     const datalistFromInput = document.getElementById('address_from_input')
     const datalistFrom = document.getElementById('address_from')
@@ -78,7 +80,7 @@
         calculateBy: 'volumeWeight',
         itemsCountVolumeWeight: 1,
         itemsDimensions: [
-            {length: .1, width: .1, height: .1, weight: 1, count: 1}
+            {length: 1, width: 1, height: 1, weight: 1, count: 1}
         ],
         paletting: false,
         palletsCount: 1,
@@ -115,7 +117,7 @@
     
     // Запускаем калькулятор
     function initCalculator(dataObj) {
-        calcParams = Object.assign({}, calcParamsInitial)
+        calcParams = JSON.parse(JSON.stringify(calcParamsInitial))
 
         // Заполняем селект citiesFrom
         populateDatalist(datalistFrom, getCitiesFrom(dataObj))
@@ -128,6 +130,7 @@
         calcParams.returnDocumentsPrice = parseFloat(dataObj['фиксированные'][0]['Вернуть документы'])
 
         calculator.addEventListener('change', event => {
+            console.log('change')
             calcParams.expeditionFrom = expeditionFromRadio[1].checked
             calcParams.expeditionTo = expeditionToRadio[1].checked
             calcParams.weight = parseFloat(weightInput.value) || 1
@@ -163,42 +166,21 @@
             }
 
             // Выбор рассчета по весу/объему или по габаритам
-            if (shipmentOptionsRadio.length) {
+            if (shipmentOptionsRadio.length) { // вес/объем
                 if (shipmentOptionsRadio[1].checked) {
                     volumeWeightParametersBlock.classList.remove('hidden')
                     dimensionsParametersBlock.classList.add('hidden')
                     calcParams.calculateBy = 'volumeWeight'
-                } else if (shipmentOptionsRadio[3].checked) {
+                } else if (shipmentOptionsRadio[3].checked) { // габариты
                     volumeWeightParametersBlock.classList.add('hidden')
                     dimensionsParametersBlock.classList.remove('hidden')
                     calcParams.calculateBy = 'dimensions';
-
-                    (function populateDimensionsItems() {
-                        dimensionsItems.innerHTML = ''
-                        calcParams.itemsDimensions.forEach((item, index) => {
-                            let clone = dimensionsItemTemplate.content.cloneNode(true)
-                            let clonedItem = clone.querySelector('.dimensions-item')
-                            clonedItem.querySelectorAll('[data-parameter]').forEach(parameter => {
-                                parameter.value = item[parameter.getAttribute('data-parameter')]
-                            })
-                            clonedItem.querySelector('[data-parameter="volume"]').value = item.length * item.width * item.height
-
-                            dimensionsItems.appendChild(clonedItem)
-                        })
-
-                        addItemButton.addEventListener('click', (e) => {
-                            e.preventDefault()
-                            calcParams.itemsDimensions.push(Object.assign({}, calcParamsInitial.itemsDimensions[0]))
-                            console.log('calcParamsInitial.itemsDimensions', calcParamsInitial.itemsDimensions)
-                            populateDimensionsItems()
-                        })
-                    })() // Вынести наружу
+                    populateDimensionsItems()
                 }
             }
 
             // Указание кол-ва мест
             if (itemsCountVolumeWeightInput) calcParams.itemsCountVolumeWeight = parseInt(itemsCountVolumeWeightInput.value, 10)
-            // if (itemsCountDimensionsInput) calcParams.itemsCountDimensions = parseInt(itemsCountDimensionsInput.value, 10)
 
             // Параметры упаковки
             if (palettingInput) {
@@ -220,12 +202,32 @@
             if (insuranceCostInput && !insuranceCostInput.disabled) calcParams.insuranceCost = insuranceCostInput.value || 1
 
             // Возврат документов
-            if (returnDocumentsInput) calcParams.returnDocuments = returnDocumentsInput.checked
+            if (returnDocumentsInput) calcParams.returnDocuments = returnDocumentsInput.checked;
 
             // Подсчет подитога
             if (calcParams.cityFrom && calcParams.cityTo) {
-                if (volumeOutput) volumeOutput.innerText = (calcParams.calculateBy === 'volumeWeight') ? calcParams.volume * calcParams.itemsCountVolumeWeight : (calcParams.length * calcParams.width * calcParams.height * calcParams.itemsCountDimensions).toFixed(4)
-                if (weightOutput) weightOutput.innerText = (calcParams.calculateBy === 'volumeWeight') ? calcParams.weight * calcParams.itemsCountVolumeWeight : '—'
+                if (volumeOutput) {
+                    if ((calcParams.calculateBy === 'volumeWeight')) { // Вес/объем
+                        volumeOutput.innerText = (calcParams.volume * calcParams.itemsCountVolumeWeight).toFixed(4)
+                    } else { // Габариты
+                        let totalVolume = 0
+                        calcParams.itemsDimensions.forEach(item => {
+                            totalVolume += item.length * item.width * item.height * item.count
+                        })
+                        volumeOutput.innerText = totalVolume.toFixed(4)
+                    }
+                }
+                if (weightOutput) {
+                    if (calcParams.calculateBy === 'volumeWeight') { // Вес/объем
+                        weightOutput.innerText = calcParams.weight * calcParams.itemsCountVolumeWeight
+                    } else { // Габариты
+                        let totalWeight = 0
+                        calcParams.itemsDimensions.forEach(item => {
+                            totalWeight += item.weight * item.count
+                        })
+                        weightOutput.innerText = totalWeight.toFixed(4)
+                    }
+                }
                 if (addressFromOutput) addressFromOutput.innerText = calcParams.cityFrom
                 if (addressToOutput) addressToOutput.innerText = calcParams.cityTo
                 if (addressFromExpeditionOutput) {
@@ -266,14 +268,58 @@
                 if (returnDocumentsOutput) returnDocumentsOutput.innerText = (calcParams.returnDocuments ? calcParams.returnDocumentsPrice.toFixed(2) : '—') + ' ₽'
             }
 
+
             // ФИНАЛЬНЫЙ РАССЧЕТ
             if (calcParams.cityFrom && calcParams.cityTo) {
                 totalPrice = calculateTotalPrice(dataObj, calcParams)
                 totalPriceOutput.innerText = `${totalPrice.toFixed(2)} ₽` 
             }
         })
+
+        function populateDimensionsItems() { // Вынести наружу
+            console.log('populating')
+            dimensionsItems.innerHTML = ''
+            calcParams.itemsDimensions.forEach((item, index) => {
+                let clone = dimensionsItemTemplate.content.cloneNode(true)
+                let clonedItem = clone.querySelector('.dimensions-item')
+                let volumeCalculated = item.length * item.width * item.height
+                clonedItem.setAttribute('data-id', index)
+                clonedItem.querySelectorAll('[data-parameter]').forEach(parameter => {
+                    parameter.value = item[parameter.getAttribute('data-parameter')]
+                })
+                item.volume = volumeCalculated
+                clonedItem.querySelector('[data-parameter="volume"]').value = volumeCalculated
+                clonedItem.querySelector('.remove_item').setAttribute('data-remove-id', index)
+
+                dimensionsItems.appendChild(clonedItem)
+            })
+        }
+
+        document.addEventListener('change', e => { // data-parameter'
+            if (e.target.getAttribute('data-parameter')) {
+                calcParams.itemsDimensions[e.target.parentNode.parentNode.getAttribute('data-id')][e.target.getAttribute('data-parameter')] = parseFloat(e.target.value)
+                calculator.dispatchEvent(changeEvent)
+            }
+        })
+
+        if (addItemButton) {
+            addItemButton.addEventListener('click', (e) => {
+                e.preventDefault()
+                calcParams.itemsDimensions.push(JSON.parse(JSON.stringify(calcParamsInitial.itemsDimensions[0])))
+                console.log('calcParams.itemsDimensions', calcParams.itemsDimensions)
+                calculator.dispatchEvent(changeEvent)
+            })
+        }
+
+        document.addEventListener('click', e => { // remove_item
+            if (e.target.className === 'remove_item') {
+                e.preventDefault()
+                calcParams.itemsDimensions.splice(e.target.getAttribute('data-remove-id'), 1)
+                calculator.dispatchEvent(changeEvent)
+            }
+        })
     
-        // Отправка
+        // Выбор города отправки
         datalistFromInput.addEventListener('change', (event) => {
             calcParams.cityFrom = event.target.value.trim()
             // console.log('datalistFromInput', datalistFromInput.value)
@@ -289,7 +335,7 @@
             // if (shipmentTerminalInput) shipmentTerminalInput.value = getShipmentTerminal(dataObj, calcParams)
         })
         
-        // Получение
+        // Выбор города получения
         selectTo.addEventListener('change', event => {
             calcParams.cityTo = event.target.value.trim()
 
@@ -353,11 +399,16 @@ function calculateTotalPrice(dataObj, calcParams) {
         return calculateShipmentCost(cityToObj, calcParams) + extras
 
     } else { // Считаем по габаритам
-        calcParams.weight = 0
-        calcParams.volume = calcParams.length * calcParams.width * calcParams.height
+        let weight = 0
+        let volume = 0
 
-        if (calcParams.softPacking) extras += calcParams.softPackingPrice * calcParams.volume
-        if (calcParams.woodenLath) extras += calcParams.woodenLathPrice * calcParams.volume
+        calcParams.itemsDimensions.forEach(item => {
+            weight += item.weight * item.count
+            volume += item.length * item.width * item.height * item.count
+        })
+
+        if (calcParams.softPacking) extras += calcParams.softPackingPrice * volume
+        if (calcParams.woodenLath) extras += calcParams.woodenLathPrice * volume
 
         return calculateShipmentCost(cityToObj, calcParams) + extras
     }
@@ -365,10 +416,26 @@ function calculateTotalPrice(dataObj, calcParams) {
 
 // Без дополнительных услуг и экспедирования
 function calculateShipmentCost(cityToObj, calcParams) {
+    let weightPrice = 0
+    let volumePrice = 0
+
+    if (calcParams.calculateBy === 'volumeWeight') {
+        weightPrice = parseFloat(calcParams.weight) * getWeightPrice(cityToObj, calcParams) * calcParams.itemsCountVolumeWeight
+        volumePrice = parseFloat(calcParams.volume) * getVolumePrice(cityToObj, calcParams) * calcParams.itemsCountVolumeWeight
+    } else {
+        let weight = 0
+        let volume = 0
+        calcParams.itemsDimensions.forEach(item => {
+            weight += item.weight * item.count
+            volume += item.length * item.width * item.height * item.count
+        })
+        weightPrice = weight * getWeightPrice(cityToObj, calcParams)
+        volumePrice = volume * getVolumePrice(cityToObj, calcParams)
+    }
     return Math.max(
         parseFloat(cityToObj['Мин стоимость']),
-        (parseFloat(calcParams.weight) * getWeightPrice(cityToObj, calcParams) * (calcParams.calculateBy === 'volumeWeight' ? 1 : calcParams.itemsCountDimensions)), // В случае расчета по габаритам calcParams.weight = 0
-        (parseFloat(calcParams.volume) * getVolumePrice(cityToObj, calcParams) * (calcParams.calculateBy === 'volumeWeight' ? 1 : calcParams.itemsCountDimensions))
+        weightPrice,
+        volumePrice
     )
 }
 
@@ -457,62 +524,85 @@ function calculateExpeditionCost(expeditionObj, calcParams) {
     if (!cityFromObj || !cityToObj) return console.warn('Город экспедирования не найден!')
     
     return {
-            from: (calcParams.expeditionFrom ? (getExpeditionData(cityFromObj, calcParams) * (calcParams.calculateBy === 'volumeWeight' ? 1 : calcParams.itemsCountDimensions)) : 0),
-            to: (calcParams.expeditionTo ? (getExpeditionData(cityToObj, calcParams) * (calcParams.calculateBy === 'volumeWeight' ? 1 : calcParams.itemsCountDimensions)) : 0)
+            from: (calcParams.expeditionFrom ? getExpeditionData(cityFromObj, calcParams) : 0),
+            to: (calcParams.expeditionTo ? getExpeditionData(cityToObj, calcParams) : 0)
          }
 }
 
 function getExpeditionData(cityObj, calcParams) {
-    let expeditionWeight, expeditionVolume
+    let expeditionWeight = 0
+    let expeditionVolume = 0
+    let expeditionWeightPrice = 0
+    let expeditionVolumePrice = 0
 
-    if (calcParams.weight <= 200) {
-        expeditionWeight = parseFloat(cityObj['До 200 кг'])
-    } else if (calcParams.weight <= 500) {
-        expeditionWeight = parseFloat(cityObj['До 500 кг'])
-    } else if (calcParams.weight <= 1000) {
-        expeditionWeight = parseFloat(cityObj['До 1000 кг'])
-    } else if (calcParams.weight <= 2000) {
-        expeditionWeight = parseFloat(cityObj['До 2000 кг'])
-    } else if (calcParams.weight <= 3000) {
-        expeditionWeight = parseFloat(cityObj['До 3000 кг'])
-    }  else if (calcParams.weight <= 4000) {
-        expeditionWeight = parseFloat(cityObj['До 4000 кг'])
-    } else if (calcParams.weight <= 5000) {
-        expeditionWeight = parseFloat(cityObj['До 5000 кг'])
+    if (calcParams.calculateBy === 'volumeWeight') {
+        expeditionWeight = parseFloat(calcParams.weight) * calcParams.itemsCountVolumeWeight
+        expeditionVolume = parseFloat(calcParams.volume) * calcParams.itemsCountVolumeWeight
     } else {
-        expeditionWeight = parseFloat(cityObj['До 20000 кг'])
+        calcParams.itemsDimensions.forEach(item => {
+            expeditionWeight += item.weight * item.count
+            expeditionVolume += item.length * item.width * item.height * item.count
+        })
     }
 
-    if (calcParams.volume <= 1) {
-        expeditionVolume = parseFloat(cityObj['До 1 м3'])
-    } else if (calcParams.volume <= 2) {
-        expeditionVolume = parseFloat(cityObj['До 2 м3'])
-    } else if (calcParams.volume <= 4) {
-        expeditionVolume = parseFloat(cityObj['До 4 м3'])
-    } else if (calcParams.volume <= 10) {
-        expeditionVolume = parseFloat(cityObj['До 10 м3'])
-    } else if (calcParams.volume <= 15) {
-        expeditionVolume = parseFloat(cityObj['До 15 м3'])
-    } else if (calcParams.volume <= 20) {
-        expeditionVolume = parseFloat(cityObj['До 20 м3'])
-    } else if (calcParams.volume <= 25) {
-        expeditionVolume = parseFloat(cityObj['До 25 м3'])
+    if (expeditionWeight <= 200) {
+        expeditionWeightPrice = parseFloat(cityObj['До 200 кг'])
+    } else if (expeditionWeight <= 500) {
+        expeditionWeightPrice = parseFloat(cityObj['До 500 кг'])
+    } else if (expeditionWeight <= 1000) {
+        expeditionWeightPrice = parseFloat(cityObj['До 1000 кг'])
+    } else if (expeditionWeight <= 2000) {
+        expeditionWeightPrice = parseFloat(cityObj['До 2000 кг'])
+    } else if (expeditionWeight <= 3000) {
+        expeditionWeightPrice = parseFloat(cityObj['До 3000 кг'])
+    }  else if (expeditionWeight <= 4000) {
+        expeditionWeightPrice = parseFloat(cityObj['До 4000 кг'])
+    } else if (expeditionWeight <= 5000) {
+        expeditionWeightPrice = parseFloat(cityObj['До 5000 кг'])
     } else {
-        expeditionVolume = parseFloat(cityObj['До 90 м3'])
+        expeditionWeightPrice = parseFloat(cityObj['До 20000 кг'])
+    }
+
+    if (expeditionVolume <= 1) {
+        expeditionVolumePrice = parseFloat(cityObj['До 1 м3'])
+    } else if (expeditionVolume <= 2) {
+        expeditionVolumePrice = parseFloat(cityObj['До 2 м3'])
+    } else if (expeditionVolume <= 4) {
+        expeditionVolumePrice = parseFloat(cityObj['До 4 м3'])
+    } else if (expeditionVolume <= 10) {
+        expeditionVolumePrice = parseFloat(cityObj['До 10 м3'])
+    } else if (expeditionVolume <= 15) {
+        expeditionVolumePrice = parseFloat(cityObj['До 15 м3'])
+    } else if (expeditionVolume <= 20) {
+        expeditionVolumePrice = parseFloat(cityObj['До 20 м3'])
+    } else if (expeditionVolume <= 25) {
+        expeditionVolumePrice = parseFloat(cityObj['До 25 м3'])
+    } else {
+        expeditionVolumePrice = parseFloat(cityObj['До 90 м3'])
     }
 
     return Math.max(
-        expeditionWeight, 
-        expeditionVolume
+        expeditionWeightPrice, 
+        expeditionVolumePrice
     )
 }
 
 function getWeightPrice(cityToObj, calcParams) {
-    if (calcParams.weight <= 500) {
+    let weight = 0
+
+    if (calcParams.calculateBy === 'volumeWeight') {
+        weight = calcParams.weight * calcParams.itemsCountVolumeWeight
+    } else {
+        calcParams.itemsDimensions.forEach(item => {
+            weight += item.weight * item.count
+        })
+    }
+
+    if (weight <= 500) {
         return parseFloat(cityToObj['До 500 кг'])
-    } else if (calcParams.weight <= 1000) {
+    } else if (weight <= 1000) {
         return parseFloat(cityToObj['До 1000 кг'])
-    } else if (calcParams.weight <= 3000) {
+    } else if (weight <= 3000) {
         return parseFloat(cityToObj['До 3000 кг'])
     } else {
         return parseFloat(cityToObj['До 5000 кг'])
@@ -520,11 +610,20 @@ function getWeightPrice(cityToObj, calcParams) {
 }
 
 function getVolumePrice(cityToObj, calcParams) {
-    if (calcParams.volume <= 2) {
+    let volume = 0
+    if (calcParams.calculateBy === 'volumeWeight') {
+        volume = calcParams.volume * calcParams.itemsCountVolumeWeight
+    } else {
+        calcParams.itemsDimensions.forEach(item => {
+            volume += item.length * item.width * item.height * item.count
+        })
+    }
+
+    if (volume <= 2) {
         return parseFloat(parseFloat(cityToObj['До 2 м3'].replace(/,/g, '')))
-    } else if (calcParams.volume <= 4) {
+    } else if (volume <= 4) {
         return parseFloat(parseFloat(cityToObj['До 4 м3'].replace(/,/g, '')))
-    } else if (calcParams.volume <= 12) {
+    } else if (volume <= 12) {
         return parseFloat(parseFloat(cityToObj['До 12 м3'].replace(/,/g, '')))
     } else {
         return parseFloat(parseFloat(cityToObj['До 20 м3'].replace(/,/g, '')))

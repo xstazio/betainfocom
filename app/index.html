@@ -191,26 +191,47 @@
           </div>
         </div>
         <!-- Габариты -->
-        <div id="dimensions_parameters" class="col-large-6 col-medium-12 hidden">
-          <div class="form-group">
-            <label class="control-label" for="length">Длина, м</label>
-            <input type="number" min="0" value="0.1" id="length" name="length" placeholder="" class="form-control">
-            <span class="error_name"></span>
-          </div>
-          <div class="form-group">
-            <label class="control-label" for="width">Ширина, м</label>
-            <input type="number" min="0" value="0.1" id="width" name="width" placeholder="" class="form-control">
-            <span class="error_name"></span>
-          </div>
-          <div class="form-group">
-            <label class="control-label" for="height">Высота, м</label>
-            <input type="number" min="0" value="0.1" id="height" name="height" placeholder="" class="form-control">
-            <span class="error_name"></span>
-          </div>
-          <div class="form-group">
-            <label class="control-label" for="items_count_dimensions">Кол-во мест, шт.</label>
-            <input type="number" min="1" value="1" step="1" id="items_count_dimensions" name="items_count_dimensions" placeholder="" class="form-control">
-            <span class="error_name"></span>
+        <div id="dimensions_parameters_block" class="col-large-12 col-medium-12 hidden">
+          <div id="dimensions_items"></div>
+          
+          <template id="dimensions_item_template">
+            <div class="form-group-row dimensions-item">
+              <div class="form-group form-group--inline">
+                <label class="control-label" for="length">Длина, м</label>
+                <input type="number" min="0" data-parameter="length" name="length" placeholder="" class="form-control" style="max-width: 4em;">
+              </div>
+              <div class="form-group form-group--inline">
+                <label class="control-label" for="width">Ширина, м</label>
+                <input type="number" min="0" data-parameter="width" name="width" placeholder="" class="form-control" style="max-width: 4em;">
+              </div>
+              <div class="form-group form-group--inline">
+                <label class="control-label" for="height">Высота, м</label>
+                <input type="number" min="0" data-parameter="height" name="height" placeholder="" class="form-control" style="max-width: 4em;">
+              </div>
+              <div class="form-group form-group--inline">
+                <label class="control-label" for="dimensions-volume">Объем, м³</label>
+                <input type="number" data-parameter="volume" name="dimensions-volume" placeholder="" class="form-control" style="max-width: 4em;" readonly>
+              </div>
+              <div class="form-group form-group--inline">
+                <label class="control-label" for="weightDimensions">Вес, кг</label>
+                <input type="number" min="0" data-parameter="weight" name="weightDimensions" placeholder="" class="form-control" style="max-width: 4em;">
+              </div>
+              <div class="form-group form-group--inline">
+                <label class="control-label" for="items_count_dimensions">Кол-во мест, шт.</label>
+                <input type="number" min="1" step="1" data-parameter="count" name="items_count_dimensions" placeholder="" class="form-control" style="max-width: 4em;">
+              </div>
+              <div class="form-group form-group--inline">
+                <a
+                  href="#"
+                  class="remove-item">Удалить</a>
+              </div>
+            </div>
+          </template>
+
+          <div>
+            <a
+              href="#"
+              id="add_item">+ Добавить грузовое место</a>
           </div>
         </div>
       </div>

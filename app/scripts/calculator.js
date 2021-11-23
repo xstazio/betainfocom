@@ -20,7 +20,10 @@
     // Выбор между рассчетом за объем (вес) и габариты
     const shipmentOptionsRadio = document.getElementsByName('shipment_options')
     const volumeWeightParametersBlock = document.getElementById('volume_weight_parameters')
-    const dimensionsParametersBlock = document.getElementById('dimensions_parameters')
+    const dimensionsParametersBlock = document.getElementById('dimensions_parameters_block')
+    const dimensionsItems = document.getElementById('dimensions_items')
+    const dimensionsItemTemplate = document.getElementById('dimensions_item_template')
+    const addItemButton = document.getElementById('add_item')
 
     // Параметры груза
     const weightInput = document.getElementById('weight')
@@ -29,7 +32,7 @@
     const widthInput = document.getElementById('width')
     const heightInput = document.getElementById('height')
     const itemsCountVolumeWeightInput = document.getElementById('items_count_volume_weight')
-    const itemsCountDimensionsInput = document.getElementById('items_count_dimensions')
+    // const dimensionsParameters = document.getElementById('dimensions_parameters')
 
     // Дополнительные услуги
     const palettingInput = document.getElementById('paletting')
@@ -73,8 +76,10 @@
         expeditionFrom: false,
         expeditionTo: false,
         calculateBy: 'volumeWeight',
-        itemsCountVolumeWeight: 1, // Пока нигде не учитывается
-        itemsCountDimensions: 1,
+        itemsCountVolumeWeight: 1,
+        itemsDimensions: [
+            {length: .1, width: .1, height: .1, weight: 1, count: 1}
+        ],
         paletting: false,
         palletsCount: 1,
         softPacking: false,
@@ -166,13 +171,34 @@
                 } else if (shipmentOptionsRadio[3].checked) {
                     volumeWeightParametersBlock.classList.add('hidden')
                     dimensionsParametersBlock.classList.remove('hidden')
-                    calcParams.calculateBy = 'dimensions'
+                    calcParams.calculateBy = 'dimensions';
+
+                    (function populateDimensionsItems() {
+                        dimensionsItems.innerHTML = ''
+                        calcParams.itemsDimensions.forEach((item, index) => {
+                            let clone = dimensionsItemTemplate.content.cloneNode(true)
+                            let clonedItem = clone.querySelector('.dimensions-item')
+                            clonedItem.querySelectorAll('[data-parameter]').forEach(parameter => {
+                                parameter.value = item[parameter.getAttribute('data-parameter')]
+                            })
+                            clonedItem.querySelector('[data-parameter="volume"]').value = item.length * item.width * item.height
+
+                            dimensionsItems.appendChild(clonedItem)
+                        })
+
+                        addItemButton.addEventListener('click', (e) => {
+                            e.preventDefault()
+                            calcParams.itemsDimensions.push(Object.assign({}, calcParamsInitial.itemsDimensions[0]))
+                            console.log('calcParamsInitial.itemsDimensions', calcParamsInitial.itemsDimensions)
+                            populateDimensionsItems()
+                        })
+                    })() // Вынести наружу
                 }
             }
 
             // Указание кол-ва мест
             if (itemsCountVolumeWeightInput) calcParams.itemsCountVolumeWeight = parseInt(itemsCountVolumeWeightInput.value, 10)
-            if (itemsCountDimensionsInput) calcParams.itemsCountDimensions = parseInt(itemsCountDimensionsInput.value, 10)
+            // if (itemsCountDimensionsInput) calcParams.itemsCountDimensions = parseInt(itemsCountDimensionsInput.value, 10)
 
             // Параметры упаковки
             if (palettingInput) {
@@ -198,8 +224,8 @@
 
             // Подсчет подитога
             if (calcParams.cityFrom && calcParams.cityTo) {
-                if (volumeOutput) volumeOutput.innerText = (calcParams.calculateBy === 'volumeWeight') ?calcParams.volume : (calcParams.length * calcParams.width * calcParams.height).toFixed(4)
-                if (weightOutput) weightOutput.innerText = (calcParams.calculateBy === 'volumeWeight') ? calcParams.weight : '—'
+                if (volumeOutput) volumeOutput.innerText = (calcParams.calculateBy === 'volumeWeight') ? calcParams.volume * calcParams.itemsCountVolumeWeight : (calcParams.length * calcParams.width * calcParams.height * calcParams.itemsCountDimensions).toFixed(4)
+                if (weightOutput) weightOutput.innerText = (calcParams.calculateBy === 'volumeWeight') ? calcParams.weight * calcParams.itemsCountVolumeWeight : '—'
                 if (addressFromOutput) addressFromOutput.innerText = calcParams.cityFrom
                 if (addressToOutput) addressToOutput.innerText = calcParams.cityTo
                 if (addressFromExpeditionOutput) {

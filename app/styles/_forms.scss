@@ -135,9 +135,8 @@ form {
     }
 }
 
-a.button, button, input[type=submit] {
+a.btn, button, input[type=submit] {
     all: unset;
-    background-color: $color_red;
     color: $color_white;
     padding: 9px 13px;
     outline: none;
@@ -148,6 +147,16 @@ a.button, button, input[type=submit] {
     cursor: pointer;
     white-space: nowrap;
     // height: 36.1px;
+}
+
+.btn {
+    &-primary {
+        background-color: $color_red;
+    }
+
+    &-secondary {
+        background-color: $color_mediumgrey;
+    }
 }
 
 .controls {

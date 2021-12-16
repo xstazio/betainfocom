@@ -145,10 +145,10 @@ const build = series(
   clean,
   parallel(
     lint,
-    series(parallel(styles, scripts, modernizr), html),
-    images,
-    fonts,
-    extras
+    series(parallel(styles, scripts, modernizr), html)
+    // images,
+    // fonts,
+    // extras
   ),
   measureSize
 );

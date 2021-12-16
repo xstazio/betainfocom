@@ -64,6 +64,7 @@
 
     const resetFormLink = document.getElementById('reset_form')
     const totalPriceOutput = document.getElementById('total_price')
+    const totalPriceHiddenInput = document.getElementById('total_price_hidden_input')
     
     // Параметры для рассчета
     let calcParams
@@ -273,6 +274,7 @@
             if (calcParams.cityFrom && calcParams.cityTo) {
                 totalPrice = calculateTotalPrice(dataObj, calcParams)
                 totalPriceOutput.innerText = `${totalPrice.toFixed(2)} ₽` 
+                totalPriceHiddenInput.value = totalPrice.toFixed(2)
             }
         })
 
@@ -340,12 +342,12 @@
             calcParams.cityTo = event.target.value.trim()
 
             if (!getShipmentTerminal(dataObj, calcParams.cityTo)) { // Не найден терминал для этого города
-                expeditionToRadio[3].parentNode.classList.add('hidden')
+                expeditionToRadio[3]?.parentNode.classList.add('hidden')
                 if (shipmentTerminalToInput) shipmentTerminalToInput.parentNode.classList.add('hidden')
                 expeditionToRadio[1].checked = true
                 calcParams.expeditionTo = true
             } else {
-                expeditionToRadio[3].parentNode.classList.remove('hidden')
+                expeditionToRadio[3]?.parentNode.classList.remove('hidden')
                 if (shipmentTerminalToInput) shipmentTerminalToInput.parentNode.classList.remove('hidden')
                 calcParams.expeditionTo = (expeditionToRadio[1].checked === true)
             }
@@ -371,6 +373,7 @@
                 insuranceOutput.innerText = '— ₽'
                 returnDocumentsOutput.innerText = '— ₽'
                 totalPriceOutput.innerText = '— ₽'
+                totalPriceHiddenInput.value = ''
                 shipmentCostOutput.innerText = '— ₽'
                 initCalculator(jsonData)
             })

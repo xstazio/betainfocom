@@ -1,387 +1,355 @@
-(function() {
-    const calculator = document.getElementById('calculation')
-    const filePath = '/files/SPB_price_Beta_2021.json'
-    let jsonData
+const calculator = document.getElementById('calculation')
+const filePath = '/files/SPB_price_Beta_2021.json'
+let jsonData
 
-    const changeEvent = new Event('change')
-    
-    const datalistFromInput = document.getElementById('address_from_input')
-    const datalistFrom = document.getElementById('address_from')
-    const selectTo = document.getElementById('address_to')
+const changeEvent = new Event('change')
 
-    const expeditionFromRadio = document.getElementsByName('expedition_from')
-    const expeditionToRadio = document.getElementsByName('expedition_to')
+const datalistFromInput = document.getElementById('address_from_input')
+const datalistFrom = document.getElementById('address_from')
+const selectTo = document.getElementById('address_to')
 
-    const shipmentTerminalFromInput = document.getElementById('shipment_terminal_from') // readonly
-    const shipmentTerminalToInput = document.getElementById('shipment_terminal_to') // readonly
+const expeditionFromRadio = document.getElementsByName('expedition_from')
+const expeditionToRadio = document.getElementsByName('expedition_to')
 
-    // Сроки и дни отправки
-    const pickupDays = document.getElementById('pickup_days')
-    const deliveryTime = document.getElementById('delivery_time')
-    
-    // Выбор между рассчетом за объем (вес) и габариты
-    const shipmentOptionsRadio = document.getElementsByName('shipment_options')
-    const volumeWeightParametersBlock = document.getElementById('volume_weight_parameters')
-    const dimensionsParametersBlock = document.getElementById('dimensions_parameters_block')
-    const dimensionsItems = document.getElementById('dimensions_items')
-    const dimensionsItemTemplate = document.getElementById('dimensions_item_template')
-    const addItemButton = document.getElementById('add_item')
+const shipmentTerminalFromInput = document.getElementById('shipment_terminal_from') // readonly
+const shipmentTerminalToInput = document.getElementById('shipment_terminal_to') // readonly
 
-    // Параметры груза
-    const weightInput = document.getElementById('weight')
-    const volumeInput = document.getElementById('volume')
-    const lengthInput = document.getElementById('length')
-    const widthInput = document.getElementById('width')
-    const heightInput = document.getElementById('height')
-    const itemsCountVolumeWeightInput = document.getElementById('items_count_volume_weight')
-    // const dimensionsParameters = document.getElementById('dimensions_parameters')
+// Сроки и дни отправки
+const pickupDays = document.getElementById('pickup_days')
+const deliveryTime = document.getElementById('delivery_time')
 
-    // Дополнительные услуги
-    const palettingInput = document.getElementById('paletting')
-    const palettsCountInput = document.getElementById('pallets_count')
-    const softPackingInput = document.getElementById('soft_packing')
-    const woodenLathInput = document.getElementById('wooden_lath')
-    const insuranceInput = document.getElementById('insurance')
-    const insuranceCostInput = document.getElementById('insurance_cost')
-    const returnDocumentsInput = document.getElementById('return_documents')
+// Выбор между рассчетом за объем (вес) и габариты
+const shipmentOptionsRadio = document.getElementsByName('shipment_options')
+const volumeWeightParametersBlock = document.getElementById('volume_weight_parameters')
+const dimensionsParametersBlock = document.getElementById('dimensions_parameters_block')
+const dimensionsItems = document.getElementById('dimensions_items')
+const dimensionsItemTemplate = document.getElementById('dimensions_item_template')
+const addItemButton = document.getElementById('add_item')
 
-    // Вывод итоговых данных
-    const volumeOutput = document.getElementById('volume_output')
-    const weightOutput = document.getElementById('weight_output')
-    const interterminalShipmentOutput = document.getElementById('interterminal_shipment_output')
-    const addressFromOutput = document.getElementById('address_from_output')
-    const addressFromExpeditionOutput = document.getElementById('address_from_expedition_output')
-    const addressToOutput = document.getElementById('address_to_output')
-    const addressToExpeditionOutput = document.getElementById('address_to_expedition_output')
-    const addressFromPrice = document.getElementById('address_from_price')
-    const addressToPrice = document.getElementById('address_to_price')
-    const shipmentCostOutput = document.getElementById('shipment_cost_output')
-    const palettingOutput = document.getElementById('paletting_output')
-    const packingOutput = document.getElementById('packing_output')
-    const lathOutput = document.getElementById('lath_output')
-    const insuranceOutput = document.getElementById('insurance_output')
-    const returnDocumentsOutput = document.getElementById('return_documents_output')
+// Параметры груза
+const weightInput = document.getElementById('weight')
+const volumeInput = document.getElementById('volume')
+const lengthInput = document.getElementById('length')
+const widthInput = document.getElementById('width')
+const heightInput = document.getElementById('height')
+const itemsCountVolumeWeightInput = document.getElementById('items_count_volume_weight')
+// const dimensionsParameters = document.getElementById('dimensions_parameters')
 
-    const resetFormLink = document.getElementById('reset_form')
-    const totalPriceOutput = document.getElementById('total_price')
-    const totalPriceHiddenInput = document.getElementById('total_price_hidden_input')
-    
-    // Параметры для рассчета
-    let calcParams
-    const calcParamsInitial = {
-        cityFrom: '',
-        cityTo: '',
-        weight: 1,
-        volume: .1, 
-        length: .1,
-        width: .1,
-        height: .1,
-        expeditionFrom: false,
-        expeditionTo: false,
-        calculateBy: 'volumeWeight',
-        itemsCountVolumeWeight: 1,
-        itemsDimensions: [
-            {length: 1, width: 1, height: 1, weight: 1, count: 1}
-        ],
-        paletting: false,
-        palletsCount: 1,
-        softPacking: false,
-        woodenLath: false,
-        insurance: false,
-        insuranceCost: 1,
-        returnDocuments: false
-    }
+const dimenstionParametersHiddenInput = document.createElement('input')
+dimenstionParametersHiddenInput.type = 'hidden'
+dimenstionParametersHiddenInput.name = 'dimension_parameters_hidden'
 
-    let totalPrice = 0 // Возможно, нужно сделать скрытое поле, чтобы отправлять с формой финальную сумму
+// Дополнительные услуги
+const palettingInput = document.getElementById('paletting')
+const palettsCountInput = document.getElementById('pallets_count')
+const softPackingInput = document.getElementById('soft_packing')
+const woodenLathInput = document.getElementById('wooden_lath')
+const insuranceInput = document.getElementById('insurance')
+const insuranceCostInput = document.getElementById('insurance_cost')
+const returnDocumentsInput = document.getElementById('return_documents')
 
-    // Параметры для вывода на странице полного калькулятора
-    const volumeFinal = document.getElementById('volume_final')
-    const weightFinal = document.getElementById('weight_final')
-    
+// Вывод итоговых данных
+const volumeOutput = document.getElementById('volume_output')
+const weightOutput = document.getElementById('weight_output')
+const interterminalShipmentOutput = document.getElementById('interterminal_shipment_output')
+const addressFromOutput = document.getElementById('address_from_output')
+const addressFromExpeditionOutput = document.getElementById('address_from_expedition_output')
+const addressToOutput = document.getElementById('address_to_output')
+const addressToExpeditionOutput = document.getElementById('address_to_expedition_output')
+const addressFromPrice = document.getElementById('address_from_price')
+const addressToPrice = document.getElementById('address_to_price')
+const shipmentCostOutput = document.getElementById('shipment_cost_output')
+const palettingOutput = document.getElementById('paletting_output')
+const packingOutput = document.getElementById('packing_output')
+const lathOutput = document.getElementById('lath_output')
+const insuranceOutput = document.getElementById('insurance_output')
+const returnDocumentsOutput = document.getElementById('return_documents_output')
+
+const resetFormLink = document.getElementById('reset_form')
+const totalPriceOutput = document.getElementById('total_price')
+const totalPriceHiddenInput = document.getElementById('total_price_hidden_input')
+
+// Параметры для рассчета
+let calcParams
+const calcParamsInitial = {
+    cityFrom: '',
+    cityTo: '',
+    weight: 1,
+    volume: .1, 
+    length: .1,
+    width: .1,
+    height: .1,
+    expeditionFrom: false,
+    expeditionTo: false,
+    calculateBy: 'volumeWeight',
+    itemsCountVolumeWeight: 1,
+    itemsDimensions: [
+        {length: 1, width: 1, height: 1, weight: 1, count: 1}
+    ],
+    paletting: false,
+    palletsCount: 1,
+    softPacking: false,
+    woodenLath: false,
+    insurance: false,
+    insuranceCost: 1,
+    returnDocuments: false
+}
+
+let totalPrice = 0 // Возможно, нужно сделать скрытое поле, чтобы отправлять с формой финальную сумму
+
+// Параметры для вывода на странице полного калькулятора
+const volumeFinal = document.getElementById('volume_final')
+const weightFinal = document.getElementById('weight_final')
+
+getDataAndstartCalculation() //ВХОД
+
+// Сброс данных формы
+if (resetFormLink) {
+    resetFormLink.addEventListener('click', e => {
+        e.preventDefault()
+        
+        initCalculator()
+    })
+}
+
+function getDataAndstartCalculation() {    
     if (!calculator) return // Если калькулятора нет на странице
 
     // Получаем данные
-    (function() {
-        fetch(filePath)
-        .then(response => {
-            if (response.ok) {
-                // console.log('SUCCESS')
+    fetch(filePath)
+    .then(response => {
+        if (response.ok) {
+            // console.log('SUCCESS')
+        }
+        return response.json()
+    })
+    .then(data => {
+        jsonData = data
+        initCalculator(jsonData)
+    })
+    .catch(error => console.log(error))
+}
+
+// Запускаем калькулятор
+function initCalculator(dataObj) {
+    calcParams = JSON.parse(JSON.stringify(calcParamsInitial))
+
+    resetForm()
+
+    if (volumeWeightParametersBlock) volumeWeightParametersBlock.classList.remove('hidden')
+    if (dimensionsParametersBlock) dimensionsParametersBlock.classList.add('hidden')
+
+    // Заполняем селект citiesFrom
+    populateDatalist(datalistFrom, getCitiesFrom(dataObj))
+
+    // Получаем дополнительные параметры, потому что они не будут меняться
+    calcParams.palettingPrice = parseFloat(dataObj['фиксированные'][0]['Паллетирование, за паллет'])
+    calcParams.softPackingPrice = parseFloat(dataObj['фиксированные'][0]['Мягкая упаковка, за м3'])
+    calcParams.woodenLathPrice = parseFloat(dataObj['фиксированные'][0]['Деревянная обрешетка, за м3'])
+    calcParams.insuranceRate = parseFloat(dataObj['фиксированные'][0]['Страховой тариф, %'])
+    calcParams.returnDocumentsPrice = parseFloat(dataObj['фиксированные'][0]['Вернуть документы'])
+
+    calculator.addEventListener('change', event => {
+        calcParams.expeditionFrom = expeditionFromRadio[0].checked
+        calcParams.expeditionTo = expeditionToRadio[0].checked
+        calcParams.weight = parseFloat(weightInput.value) || 1
+        calcParams.volume = parseFloat(volumeInput.value) || 0.1
+        if (lengthInput) calcParams.length = parseFloat(lengthInput.value) || .1
+        if (widthInput) calcParams.width = parseFloat(widthInput.value) || .1
+        if (heightInput) calcParams.height = parseFloat(heightInput.value) || .1
+
+        if (shipmentTerminalFromInput && expeditionFromRadio[1]?.checked) {
+            shipmentTerminalFromInput.value = getShipmentTerminal(dataObj, calcParams.cityFrom)
+        } else {
+            if (shipmentTerminalFromInput) shipmentTerminalFromInput.value = ''
+        }
+
+        if (shipmentTerminalToInput && expeditionToRadio[1]?.checked && calcParams.cityFrom) {
+            if (!getShipmentTerminal(dataObj, calcParams.cityTo)) {
+                // expeditionToRadio[1].checked = true
             }
-            return response.json()
-        })
-        .then(data => {
-            jsonData = data
-            initCalculator(jsonData)
-        })
-        .catch(error => console.log(error))
-    })()
-    
-    // Запускаем калькулятор
-    function initCalculator(dataObj) {
-        calcParams = JSON.parse(JSON.stringify(calcParamsInitial))
+            shipmentTerminalToInput.value = getShipmentTerminal(dataObj, calcParams.cityTo)
+        } else {
+            if (shipmentTerminalToInput) shipmentTerminalToInput.value = ''
+        }
 
-        // Заполняем селект citiesFrom
-        populateDatalist(datalistFrom, getCitiesFrom(dataObj))
-
-        // Получаем дополнительные параметры, потому что они не будут меняться
-        calcParams.palettingPrice = parseFloat(dataObj['фиксированные'][0]['Паллетирование, за паллет'])
-        calcParams.softPackingPrice = parseFloat(dataObj['фиксированные'][0]['Мягкая упаковка, за м3'])
-        calcParams.woodenLathPrice = parseFloat(dataObj['фиксированные'][0]['Деревянная обрешетка, за м3'])
-        calcParams.insuranceRate = parseFloat(dataObj['фиксированные'][0]['Страховой тариф, %'])
-        calcParams.returnDocumentsPrice = parseFloat(dataObj['фиксированные'][0]['Вернуть документы'])
-
-        calculator.addEventListener('change', event => {
-            console.log('change')
-            calcParams.expeditionFrom = expeditionFromRadio[1].checked
-            calcParams.expeditionTo = expeditionToRadio[1].checked
-            calcParams.weight = parseFloat(weightInput.value) || 1
-            calcParams.volume = parseFloat(volumeInput.value) || 0.1
-            if (lengthInput) calcParams.length = parseFloat(lengthInput.value) || .1
-            if (widthInput) calcParams.width = parseFloat(widthInput.value) || .1
-            if (heightInput) calcParams.height = parseFloat(heightInput.value) || .1
-
-            if (shipmentTerminalFromInput && expeditionFromRadio[3].checked) {
-                shipmentTerminalFromInput.value = getShipmentTerminal(dataObj, calcParams.cityFrom)
-            } else {
-                if (shipmentTerminalFromInput) shipmentTerminalFromInput.value = ''
-            }
-
-            if (shipmentTerminalToInput && expeditionToRadio[3].checked && calcParams.cityFrom) {
-                if (!getShipmentTerminal(dataObj, calcParams.cityTo)) {
-                    // expeditionToRadio[1].checked = true
-                }
-                shipmentTerminalToInput.value = getShipmentTerminal(dataObj, calcParams.cityTo)
-            } else {
-                if (shipmentTerminalToInput) shipmentTerminalToInput.value = ''
-            }
-
-            // Дни забора и срок доставки
-            if (pickupDays && deliveryTime) {
-                if (calcParams.cityFrom && calcParams.cityTo) {
-                    pickupDays.innerText = getPicupDaysAndDeliveryTime(dataObj, calcParams).pickupDays
-                    deliveryTime.innerText = getPicupDaysAndDeliveryTime(dataObj, calcParams).deliveryTime
-                } else {
-                    pickupDays.innerText = 'Неизв.'
-                    deliveryTime.innerText = 'Неизв.'
-                }
-            }
-
-            // Выбор рассчета по весу/объему или по габаритам
-            if (shipmentOptionsRadio.length) { // вес/объем
-                if (shipmentOptionsRadio[1].checked) {
-                    volumeWeightParametersBlock.classList.remove('hidden')
-                    dimensionsParametersBlock.classList.add('hidden')
-                    calcParams.calculateBy = 'volumeWeight'
-                } else if (shipmentOptionsRadio[3].checked) { // габариты
-                    volumeWeightParametersBlock.classList.add('hidden')
-                    dimensionsParametersBlock.classList.remove('hidden')
-                    calcParams.calculateBy = 'dimensions';
-                    populateDimensionsItems()
-                }
-            }
-
-            // Указание кол-ва мест
-            if (itemsCountVolumeWeightInput) calcParams.itemsCountVolumeWeight = parseInt(itemsCountVolumeWeightInput.value, 10)
-
-            // Параметры упаковки
-            if (palettingInput) {
-                calcParams.paletting = palettingInput.checked
-                palettsCountInput.disabled = !palettingInput.checked
-                if (!palettsCountInput.disabled && !palettsCountInput.value) palettsCountInput.value = calcParams.palletsCount
-            }
-            if (palettsCountInput && !palettsCountInput.disabled) calcParams.palletsCount = palettsCountInput.value || 1
-
-            if (softPackingInput) calcParams.softPacking = softPackingInput.checked
-            if (woodenLathInput) calcParams.woodenLath = woodenLathInput.checked
-
-            // Страховка
-            if (insuranceInput) {
-                calcParams.insurance = insuranceInput.checked
-                insuranceCostInput.disabled = !insuranceInput.checked
-                if (!insuranceCostInput.disabled && !insuranceCostInput.value) insuranceCostInput.value = calcParams.insuranceCost
-            }
-            if (insuranceCostInput && !insuranceCostInput.disabled) calcParams.insuranceCost = insuranceCostInput.value || 1
-
-            // Возврат документов
-            if (returnDocumentsInput) calcParams.returnDocuments = returnDocumentsInput.checked;
-
-            // Подсчет подитога
+        // Дни забора и срок доставки
+        if (pickupDays && deliveryTime) {
             if (calcParams.cityFrom && calcParams.cityTo) {
-                if (volumeOutput) {
-                    if ((calcParams.calculateBy === 'volumeWeight')) { // Вес/объем
-                        volumeOutput.innerText = (calcParams.volume * calcParams.itemsCountVolumeWeight).toFixed(4)
-                    } else { // Габариты
-                        let totalVolume = 0
-                        calcParams.itemsDimensions.forEach(item => {
-                            totalVolume += item.length * item.width * item.height * item.count
-                        })
-                        volumeOutput.innerText = totalVolume.toFixed(4)
-                    }
-                }
-                if (weightOutput) {
-                    if (calcParams.calculateBy === 'volumeWeight') { // Вес/объем
-                        weightOutput.innerText = calcParams.weight * calcParams.itemsCountVolumeWeight
-                    } else { // Габариты
-                        let totalWeight = 0
-                        calcParams.itemsDimensions.forEach(item => {
-                            totalWeight += item.weight * item.count
-                        })
-                        weightOutput.innerText = totalWeight.toFixed(4)
-                    }
-                }
-                if (addressFromOutput) addressFromOutput.innerText = calcParams.cityFrom
-                if (addressToOutput) addressToOutput.innerText = calcParams.cityTo
-                if (addressFromExpeditionOutput) {
-                    addressFromExpeditionOutput.innerText = calcParams.expeditionFrom ? 'забор от адреса' : 'забор из терминала'
-                }
-                if (addressToExpeditionOutput) {
-                    addressToExpeditionOutput.innerText = calcParams.expeditionTo ? 'доставка до адреса' : 'доставка до терминала'
-                }
-
-                if (addressFromPrice && addressToPrice) {
-                    addressFromPrice.innerText = calculateExpeditionCost(dataObj['экспедирование'], calcParams).from + ' ₽'
-                    addressToPrice.innerText = calculateExpeditionCost(dataObj['экспедирование'], calcParams).to + ' ₽'
-                }
-
-                // Расчет стоимости доставки без доп услуг
-                if (interterminalShipmentOutput && shipmentCostOutput) {
-                    let cityFromObj = dataObj[calcParams.cityFrom]
-                    let cityToObj = getCityObj(cityFromObj, calcParams.cityTo)
-                    let cost
-
-                    if (calcParams.calculateBy === 'dimensions') {
-                        calcParams.weight = 0
-                        calcParams.volume = calcParams.length * calcParams.width * calcParams.height
-                    }
-                    cost = calculateShipmentCost(cityToObj, calcParams)
-                    interterminalShipmentOutput.innerText = cost.toFixed(2) + ' ₽'
-                    shipmentCostOutput.innerText = (cost + calculateExpeditionCost(dataObj['экспедирование'], calcParams).from + calculateExpeditionCost(dataObj['экспедирование'], calcParams).to).toFixed(2) + ' ₽'
-                }
-
-                if (palettingOutput) palettingOutput.innerText = ((calcParams.paletting ? (calcParams.palettingPrice * calcParams.palletsCount).toFixed(2) : 0) || '—') + ' ₽'
-                if (packingOutput) {
-                    packingOutput.innerText = (calcParams.softPacking ? (calcParams.softPackingPrice * calcParams.volume).toFixed(2) : '—') + ' ₽'
-                } 
-                if (lathOutput) {
-                    lathOutput.innerText = (calcParams.woodenLath ? (calcParams.woodenLathPrice * calcParams.volume).toFixed(2) : '—') + ' ₽'
-                }
-                if (insuranceOutput) insuranceOutput.innerText = (calcParams.insurance ? (calcParams.insuranceCost * calcParams.insuranceRate).toFixed(2) : '—') + ' ₽'
-                if (returnDocumentsOutput) returnDocumentsOutput.innerText = (calcParams.returnDocuments ? calcParams.returnDocumentsPrice.toFixed(2) : '—') + ' ₽'
-            }
-
-
-            // ФИНАЛЬНЫЙ РАССЧЕТ
-            if (calcParams.cityFrom && calcParams.cityTo) {
-                totalPrice = calculateTotalPrice(dataObj, calcParams)
-                totalPriceOutput.innerText = `${totalPrice.toFixed(2)} ₽` 
-                totalPriceHiddenInput.value = totalPrice.toFixed(2)
-            }
-        })
-
-        function populateDimensionsItems() { // Вынести наружу
-            console.log('populating')
-            dimensionsItems.innerHTML = ''
-            calcParams.itemsDimensions.forEach((item, index) => {
-                let clone = dimensionsItemTemplate.content.cloneNode(true)
-                let clonedItem = clone.querySelector('.dimensions-item')
-                let volumeCalculated = item.length * item.width * item.height
-                clonedItem.setAttribute('data-id', index)
-                clonedItem.querySelectorAll('[data-parameter]').forEach(parameter => {
-                    parameter.value = item[parameter.getAttribute('data-parameter')]
-                })
-                item.volume = volumeCalculated
-                clonedItem.querySelector('[data-parameter="volume"]').value = volumeCalculated
-                clonedItem.querySelector('.remove_item').setAttribute('data-remove-id', index)
-
-                dimensionsItems.appendChild(clonedItem)
-            })
-        }
-
-        document.addEventListener('change', e => { // data-parameter'
-            if (e.target.getAttribute('data-parameter')) {
-                calcParams.itemsDimensions[e.target.parentNode.parentNode.getAttribute('data-id')][e.target.getAttribute('data-parameter')] = parseFloat(e.target.value)
-                calculator.dispatchEvent(changeEvent)
-            }
-        })
-
-        if (addItemButton) {
-            addItemButton.addEventListener('click', (e) => {
-                e.preventDefault()
-                calcParams.itemsDimensions.push(JSON.parse(JSON.stringify(calcParamsInitial.itemsDimensions[0])))
-                console.log('calcParams.itemsDimensions', calcParams.itemsDimensions)
-                calculator.dispatchEvent(changeEvent)
-            })
-        }
-
-        document.addEventListener('click', e => { // remove_item
-            if (e.target.className === 'remove_item') {
-                e.preventDefault()
-                calcParams.itemsDimensions.splice(e.target.getAttribute('data-remove-id'), 1)
-                calculator.dispatchEvent(changeEvent)
-            }
-        })
-    
-        // Выбор города отправки
-        datalistFromInput.addEventListener('change', (event) => {
-            calcParams.cityFrom = event.target.value.trim()
-            // console.log('datalistFromInput', datalistFromInput.value)
-            
-            populateSelect(selectTo, getCitiesTo(dataObj, calcParams))
-
-            calcParams.cityTo = selectTo.options[selectTo.selectedIndex].value
-            
-            // Разблокируем selectTo
-            selectTo.disabled = calcParams.cityFrom ? false : true
-            
-            // Если это большой калькулятор (TBD)
-            // if (shipmentTerminalInput) shipmentTerminalInput.value = getShipmentTerminal(dataObj, calcParams)
-        })
-        
-        // Выбор города получения
-        selectTo.addEventListener('change', event => {
-            calcParams.cityTo = event.target.value.trim()
-
-            if (!getShipmentTerminal(dataObj, calcParams.cityTo)) { // Не найден терминал для этого города
-                expeditionToRadio[3]?.parentNode.classList.add('hidden')
-                if (shipmentTerminalToInput) shipmentTerminalToInput.parentNode.classList.add('hidden')
-                expeditionToRadio[1].checked = true
-                calcParams.expeditionTo = true
+                pickupDays.innerText = getPicupDaysAndDeliveryTime(dataObj, calcParams).pickupDays
+                deliveryTime.innerText = getPicupDaysAndDeliveryTime(dataObj, calcParams).deliveryTime
             } else {
-                expeditionToRadio[3]?.parentNode.classList.remove('hidden')
-                if (shipmentTerminalToInput) shipmentTerminalToInput.parentNode.classList.remove('hidden')
-                calcParams.expeditionTo = (expeditionToRadio[1].checked === true)
+                pickupDays.innerText = 'Неизв.'
+                deliveryTime.innerText = 'Неизв.'
             }
-        })
-        
-        // Сброс данных формы
-        if (resetFormLink) {
-            resetFormLink.addEventListener('click', e => {
-                e.preventDefault()
-                calculator.reset()
-                volumeOutput.innerText = 1
-                weightOutput.innerText = 1
-                interterminalShipmentOutput.innerText = '— ₽'
-                addressFromOutput.innerText = '—'
-                addressFromExpeditionOutput.innerText = ''
-                addressToOutput.innerText = '—'
-                addressToExpeditionOutput.innerText = ''
-                addressFromPrice.innerText = '— ₽'
-                addressToPrice.innerText = '— ₽'
-                palettingOutput.innerText = '— ₽'
-                packingOutput.innerText = '— ₽'
-                lathOutput.innerText = '— ₽'
-                insuranceOutput.innerText = '— ₽'
-                returnDocumentsOutput.innerText = '— ₽'
-                totalPriceOutput.innerText = '— ₽'
-                totalPriceHiddenInput.value = ''
-                shipmentCostOutput.innerText = '— ₽'
-                initCalculator(jsonData)
-            })
         }
+
+        // Выбор рассчета по весу/объему или по габаритам
+        if (shipmentOptionsRadio.length) { // вес/объем
+            if (shipmentOptionsRadio[0].checked) {
+                volumeWeightParametersBlock.classList.remove('hidden')
+                dimensionsParametersBlock.classList.add('hidden')
+                calcParams.calculateBy = 'volumeWeight'
+            } else if (shipmentOptionsRadio[1]?.checked) { // габариты
+                volumeWeightParametersBlock.classList.add('hidden')
+                dimensionsParametersBlock.classList.remove('hidden')
+                calcParams.calculateBy = 'dimensions';
+                populateDimensionsItems()
+            }
+        }
+
+        // Указание кол-ва мест
+        if (itemsCountVolumeWeightInput) calcParams.itemsCountVolumeWeight = parseInt(itemsCountVolumeWeightInput.value, 10)
+
+        // Параметры упаковки
+        if (palettingInput) {
+            calcParams.paletting = palettingInput.checked
+            palettsCountInput.disabled = !palettingInput.checked
+            if (!palettsCountInput.disabled && !palettsCountInput.value) palettsCountInput.value = calcParams.palletsCount
+        }
+        if (palettsCountInput && !palettsCountInput.disabled) calcParams.palletsCount = palettsCountInput.value || 1
+
+        if (softPackingInput) calcParams.softPacking = softPackingInput.checked
+        if (woodenLathInput) calcParams.woodenLath = woodenLathInput.checked
+
+        // Страховка
+        if (insuranceInput) {
+            calcParams.insurance = insuranceInput.checked
+            insuranceCostInput.disabled = !insuranceInput.checked
+            if (!insuranceCostInput.disabled && !insuranceCostInput.value) insuranceCostInput.value = calcParams.insuranceCost
+        }
+        if (insuranceCostInput && !insuranceCostInput.disabled) calcParams.insuranceCost = insuranceCostInput.value || 1
+
+        // Возврат документов
+        if (returnDocumentsInput) calcParams.returnDocuments = returnDocumentsInput.checked;
+
+        // Подсчет подитога
+        if (calcParams.cityFrom && calcParams.cityTo) {
+            if (volumeOutput) {
+                if ((calcParams.calculateBy === 'volumeWeight')) { // Вес/объем
+                    volumeOutput.innerText = (calcParams.volume * calcParams.itemsCountVolumeWeight).toFixed(4)
+                } else { // Габариты
+                    let totalVolume = 0
+                    calcParams.itemsDimensions.forEach(item => {
+                        totalVolume += item.length * item.width * item.height * item.count
+                    })
+                    volumeOutput.innerText = totalVolume.toFixed(4)
+                }
+            }
+            if (weightOutput) {
+                if (calcParams.calculateBy === 'volumeWeight') { // Вес/объем
+                    weightOutput.innerText = calcParams.weight * calcParams.itemsCountVolumeWeight
+                } else { // Габариты
+                    let totalWeight = 0
+                    calcParams.itemsDimensions.forEach(item => {
+                        totalWeight += item.weight * item.count
+                    })
+                    weightOutput.innerText = totalWeight.toFixed(4)
+                }
+            }
+            if (addressFromOutput) addressFromOutput.innerText = calcParams.cityFrom
+            if (addressToOutput) addressToOutput.innerText = calcParams.cityTo
+            if (addressFromExpeditionOutput) {
+                addressFromExpeditionOutput.innerText = calcParams.expeditionFrom ? 'забор от адреса' : 'забор из терминала'
+            }
+            if (addressToExpeditionOutput) {
+                addressToExpeditionOutput.innerText = calcParams.expeditionTo ? 'доставка до адреса' : 'доставка до терминала'
+            }
+
+            if (addressFromPrice && addressToPrice) {
+                addressFromPrice.innerText = calculateExpeditionCost(dataObj['экспедирование'], calcParams).from + ' ₽'
+                addressToPrice.innerText = calculateExpeditionCost(dataObj['экспедирование'], calcParams).to + ' ₽'
+            }
+
+            // Расчет стоимости доставки без доп услуг
+            if (interterminalShipmentOutput && shipmentCostOutput) {
+                let cityFromObj = dataObj[calcParams.cityFrom]
+                let cityToObj = getCityObj(cityFromObj, calcParams.cityTo)
+                let cost
+
+                if (calcParams.calculateBy === 'dimensions') {
+                    calcParams.weight = 0
+                    calcParams.volume = calcParams.length * calcParams.width * calcParams.height
+                }
+                cost = calculateShipmentCost(cityToObj, calcParams)
+                interterminalShipmentOutput.innerText = cost.toFixed(2) + ' ₽'
+                shipmentCostOutput.innerText = (cost + calculateExpeditionCost(dataObj['экспедирование'], calcParams).from + calculateExpeditionCost(dataObj['экспедирование'], calcParams).to).toFixed(2) + ' ₽'
+            }
+
+            if (palettingOutput) palettingOutput.innerText = ((calcParams.paletting ? (calcParams.palettingPrice * calcParams.palletsCount).toFixed(2) : 0) || '—') + ' ₽'
+            if (packingOutput) {
+                packingOutput.innerText = (calcParams.softPacking ? (calcParams.softPackingPrice * calcParams.volume).toFixed(2) : '—') + ' ₽'
+            } 
+            if (lathOutput) {
+                lathOutput.innerText = (calcParams.woodenLath ? (calcParams.woodenLathPrice * calcParams.volume).toFixed(2) : '—') + ' ₽'
+            }
+            if (insuranceOutput) insuranceOutput.innerText = (calcParams.insurance ? (calcParams.insuranceCost * calcParams.insuranceRate).toFixed(2) : '—') + ' ₽'
+            if (returnDocumentsOutput) returnDocumentsOutput.innerText = (calcParams.returnDocuments ? calcParams.returnDocumentsPrice.toFixed(2) : '—') + ' ₽'
+        }
+
+        // ФИНАЛЬНЫЙ РАССЧЕТ
+        if (calcParams.cityFrom && calcParams.cityTo) {
+            totalPrice = calculateTotalPrice(dataObj, calcParams)
+            totalPriceOutput.innerText = `${totalPrice.toFixed(2)} ₽` 
+            totalPriceHiddenInput.value = totalPrice.toFixed(2)
+        }
+    })
+
+    document.addEventListener('change', e => { // ВЫНЕСТИ!!!
+        if (e.target.getAttribute('data-parameter')) {
+            calcParams.itemsDimensions[e.target.parentNode.parentNode.getAttribute('data-id')][e.target.getAttribute('data-parameter')] = parseFloat(e.target.value)
+            calculator.dispatchEvent(changeEvent)
+        }
+    })
+
+    if (addItemButton) {
+        addItemButton.addEventListener('click', (e) => {
+            e.preventDefault()
+            calcParams.itemsDimensions.push(JSON.parse(JSON.stringify(calcParamsInitial.itemsDimensions[0])))
+            console.log('calcParams.itemsDimensions', calcParams.itemsDimensions)
+            calculator.dispatchEvent(changeEvent)
+        })
     }
-})()
 
-// function calculateTotalPrice(dataObj, cityFrom, cityTo, weight = 0, volume = 0, expeditionFrom = false, expeditionTo = false) {
+    document.addEventListener('click', e => { // remove_item
+        if (e.target.className === 'remove_item') {
+            e.preventDefault()
+            calcParams.itemsDimensions.splice(e.target.getAttribute('data-remove-id'), 1)
+            calculator.dispatchEvent(changeEvent)
+        }
+    })
+
+    // Выбор города отправки
+    datalistFromInput.addEventListener('change', (event) => {
+        calcParams.cityFrom = event.target.value.trim()
+        // console.log('datalistFromInput', datalistFromInput.value)
+        
+        populateSelect(selectTo, getCitiesTo(dataObj, calcParams))
+
+        calcParams.cityTo = selectTo.options[selectTo.selectedIndex].value
+        
+        // Разблокируем selectTo
+        selectTo.disabled = calcParams.cityFrom ? false : true
+    })
+    
+    // Выбор города получения
+    selectTo.addEventListener('change', event => {
+        calcParams.cityTo = event.target.value.trim()
+
+        if (!getShipmentTerminal(dataObj, calcParams.cityTo)) { // Не найден терминал для этого города
+            expeditionToRadio[3]?.parentNode.classList.add('hidden')
+            if (shipmentTerminalToInput) shipmentTerminalToInput.parentNode.classList.add('hidden')
+            expeditionToRadio[1].checked = true
+            calcParams.expeditionTo = true
+        } else {
+            expeditionToRadio[3]?.parentNode.classList.remove('hidden')
+            if (shipmentTerminalToInput) shipmentTerminalToInput.parentNode.classList.remove('hidden')
+            calcParams.expeditionTo = (expeditionToRadio[1].checked === true)
+        }
+    })
+}
+
+// Финальная сумма
 function calculateTotalPrice(dataObj, calcParams) {
     let cityFromObj = dataObj[calcParams.cityFrom]
     let cityToObj
@@ -417,7 +385,7 @@ function calculateTotalPrice(dataObj, calcParams) {
     }
 }
 
-// Без дополнительных услуг и экспедирования
+// Стоимость доставки без дополнительных услуг и экспедирования
 function calculateShipmentCost(cityToObj, calcParams) {
     let weightPrice = 0
     let volumePrice = 0
@@ -435,6 +403,7 @@ function calculateShipmentCost(cityToObj, calcParams) {
         weightPrice = weight * getWeightPrice(cityToObj, calcParams)
         volumePrice = volume * getVolumePrice(cityToObj, calcParams)
     }
+
     return Math.max(
         parseFloat(cityToObj['Мин стоимость']),
         weightPrice,
@@ -452,6 +421,7 @@ function getCitiesFrom(dataObj){
     return citiesFromFiltered
 }
 
+// Datalist для городов From
 function populateDatalist(datalist, array) {
     array.sort()
     let options = ''
@@ -481,6 +451,7 @@ function getCitiesTo(dataObj, calcParams) {
     return citiesToFiltered
 }
 
+// Select для городов To
 function populateSelect(select, array) {
     array.sort()
     select.length = 0
@@ -501,9 +472,10 @@ function getShipmentTerminal(dataObj, city) {
     dataObj['адреса региональных складов'].forEach(item => {
         if (item['Город'].trim() == city) { // trim() нужен на случай ошибки в Excel
             shipmentTerminal = item['Адрес склада']
+            console.log(shipmentTerminal)
         } else {
             // shipmentTerminal = '' // если в таблице его не было. такого не должно случаться
-            // console.warn('Адрес терминала не найден!')
+            console.warn('Адрес терминала не найден!')
         }
     })
     return shipmentTerminal
@@ -514,6 +486,7 @@ function getPicupDaysAndDeliveryTime(dataObj, calcParams) {
     let cityToObj
     
     cityToObj = getCityObj(cityFromObj, calcParams.cityTo)
+
     if (!cityToObj) return console.warn('Город доставки не найден!')
 
     return {pickupDays: cityToObj['Дни недели'], deliveryTime: cityToObj['Время в пути']}
@@ -524,6 +497,7 @@ function calculateExpeditionCost(expeditionObj, calcParams) {
 
     cityFromObj = getCityObj(expeditionObj, calcParams.cityFrom)
     cityToObj = getCityObj(expeditionObj, calcParams.cityTo)
+
     if (!cityFromObj || !cityToObj) return console.warn('Город экспедирования не найден!')
     
     return {
@@ -614,6 +588,7 @@ function getWeightPrice(cityToObj, calcParams) {
 
 function getVolumePrice(cityToObj, calcParams) {
     let volume = 0
+
     if (calcParams.calculateBy === 'volumeWeight') {
         volume = calcParams.volume * calcParams.itemsCountVolumeWeight
     } else {
@@ -633,10 +608,54 @@ function getVolumePrice(cityToObj, calcParams) {
     }
 }
 
+function populateDimensionsItems() {
+    dimensionsItems.innerHTML = ''
+    calcParams.itemsDimensions.forEach((item, index) => {
+        let clone = dimensionsItemTemplate.content.cloneNode(true)
+        let clonedItem = clone.querySelector('.dimensions-item')
+        let volumeCalculated = item.length * item.width * item.height
+        clonedItem.setAttribute('data-id', index)
+        clonedItem.querySelectorAll('[data-parameter]').forEach(parameter => {
+            parameter.value = item[parameter.getAttribute('data-parameter')]
+            parameter.name += index
+        })
+        item.volume = volumeCalculated
+        clonedItem.querySelector('[data-parameter="volume"]').value = volumeCalculated
+        clonedItem.querySelector('.remove_item').setAttribute('data-remove-id', index)
+
+        dimensionsItems.appendChild(clonedItem)
+        dimenstionParametersHiddenInput.value = JSON.stringify(calcParams.itemsDimensions)
+        dimensionsItems.appendChild(dimenstionParametersHiddenInput)
+    })
+}
+
 function getCityObj(dataObj, city) {
     for (let i = 0, len = dataObj.length; i < len; i++) {
         if (dataObj[i]['undefined'] == city) {
             return dataObj[i]
         }
     }
+}
+
+function resetForm() {
+    calculator.reset()
+    volumeOutput.innerText = 1
+    weightOutput.innerText = 1
+    pickupDays.inneerText = '—'
+    deliveryTime.inneerText = '—'
+    interterminalShipmentOutput.innerText = '— ₽'
+    addressFromOutput.innerText = '—'
+    addressFromExpeditionOutput.innerText = ''
+    addressToOutput.innerText = '—'
+    addressToExpeditionOutput.innerText = ''
+    addressFromPrice.innerText = '— ₽'
+    addressToPrice.innerText = '— ₽'
+    palettingOutput.innerText = '— ₽'
+    packingOutput.innerText = '— ₽'
+    lathOutput.innerText = '— ₽'
+    insuranceOutput.innerText = '— ₽'
+    returnDocumentsOutput.innerText = '— ₽'
+    totalPriceOutput.innerText = '— ₽'
+    totalPriceHiddenInput.value = ''
+    shipmentCostOutput.innerText = '— ₽'
 }

@@ -8,7 +8,7 @@ document.addEventListener('click', e => {
         if (targetElement == header) {
             return
         }
-        targetElement = targetElement.parentNode;
+        targetElement = targetElement.parentNode
     } while (targetElement)
 
     if (navToggle) navToggle.checked = false

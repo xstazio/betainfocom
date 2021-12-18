@@ -115,6 +115,7 @@ if (resetFormLink) {
         resetForm()
         calcParams.cityFrom = undefined
         calcParams.cityTo = undefined
+        calcParams.itemsDimensions = JSON.parse(JSON.stringify(calcParamsInitial.itemsDimensions))
     })
 }
 
@@ -235,25 +236,21 @@ function initCalculator(dataObj) {
         if (returnDocumentsInput) calcParams.returnDocuments = returnDocumentsInput.checked;
 
         // Подсчет подитога
+        if (volumeOutput) {
+            if ((calcParams.calculateBy === 'volumeWeight')) { // Вес/объем
+                volumeOutput.innerText = (calcParams.volume * calcParams.itemsCountVolumeWeight).toFixed(4)
+            } else { // Габариты
+                volumeOutput.innerText = calcVolumeAndWeightForMultiple(calcParams).volume.toFixed(4)
+            }
+        }
+        if (weightOutput) {
+            if (calcParams.calculateBy === 'volumeWeight') { // Вес/объем
+                weightOutput.innerText = (calcParams.weight * calcParams.itemsCountVolumeWeight).toFixed(2)
+            } else { // Габариты
+                weightOutput.innerText = calcVolumeAndWeightForMultiple(calcParams).weight.toFixed(2)
+            }
+        }
         if (calcParams.cityFrom && calcParams.cityTo) {
-            if (volumeOutput) {
-                if ((calcParams.calculateBy === 'volumeWeight')) { // Вес/объем
-                    volumeOutput.innerText = (calcParams.volume * calcParams.itemsCountVolumeWeight).toFixed(4)
-                } else { // Габариты
-                    volumeOutput.innerText = calcVolumeAndWeightForMultiple(calcParams).volume.toFixed(4)
-                }
-            }
-            if (weightOutput) {
-                if (calcParams.calculateBy === 'volumeWeight') { // Вес/объем
-                    weightOutput.innerText = calcParams.weight * calcParams.itemsCountVolumeWeight
-                } else { // Габариты
-                    let totalWeight = 0
-                    calcParams.itemsDimensions.forEach(item => {
-                        totalWeight += item.weight * item.count
-                    })
-                    weightOutput.innerText = totalWeight.toFixed(4)
-                }
-            }
             if (addressFromOutput) addressFromOutput.innerText = calcParams.cityFrom
             if (addressToOutput) addressToOutput.innerText = calcParams.cityTo
             if (addressFromExpeditionOutput) {
@@ -706,7 +703,7 @@ function resetForm() {
     
     expeditionFromRadio[1].checked = true
     expeditionToRadio[1].checked = true
-    
+
     if (nameInput) nameInput.value = ''
     if (phoneInput) phoneInput.value = ''
     if (emailInput) emailInput.value = ''

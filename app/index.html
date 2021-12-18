@@ -56,135 +56,449 @@
 
       <main id="content" class="content" data-fred-rte="">
 
+        <section class="news"> <h2>Новости</h2> <article class="news__item"> <img src="images/news/docs.PNG" style="width: 100%"> <h4>Мы любим электронный документооборот!</h4> У&nbsp;нас используются системы Такском <span style="word-spacing:nowrap;">и Калуга-Астрал</span>, настроим роуминг со&nbsp;всеми операторами. <p><a href="news/2021/05/18/pervaya-novost/">Читать дальше</a></p> </article> <article class="news__item"> <h4>Специальная цена на доставку в Тверь и Москву</h4> Единая цена для любой партии груза на&nbsp;межтерминальную доставку по&nbsp;направлениям <span style="word-spacing:nowrap;">Санкт-Петербург</span>&nbsp;— ТВЕРЬ <span style="word-spacing:nowrap;">и Санкт-Петербург</span>&nbsp;— МОСКВА 5,8 руб/кг, 1500 руб/м3 <p><a href="news/2021/08/02/vtoraya-novost/">Читать дальше</a></p> </article> <article class="news__item"> <h4>Открытие обособленного подразделения в г. Пермь</h4> Выдаём и&nbsp;принимаем грузы в&nbsp;Перми по&nbsp;новому адресу: ул.&nbsp;Чистопольская, д.&nbsp;35 <p><a href="news/2021/08/02/otkryitie-obosoblennogo-podrazdeleniya-v-g.-perm/">Читать дальше</a></p> </article> <div><a href="news/" class="button">Перейти</a></div> </section>
+
 <form id="calculation">
+
   <div class="row">
-    <div class="col-large-6 col-medium-12">
+    <div class="col-large-7 col-medium-12">
+      <div class="row">
+        <!-- Откуда -->
+        <div class="col-large-6 col-medium-12">
+          <div class="form-group">
+            <label class="control-label" for="address_from">Откуда:</label>
+            <input
+              list="address_from"
+              name="address_from"
+              id="address_from_input"
+              onfocus="this.value=''"
+              onchange=""
+              placeholder="Выберите город">
+            <datalist id="address_from"></datalist>
+            <span class="error_address_from">[[+fi.error.address_from]]</span>
+          </div>
+          <div class="form-group">
+            <input
+              type="radio"
+              id="get_at_address"
+              name="expedition_from"
+              value="get_at_address">
+            <label for="get_at_address">Забрать груз по адресу</label>
+            
+            <input
+              type="radio"
+              id="deliver_to_terminal"
+              name="expedition_from"
+              value="deliver_to_terminal"
+              checked>
+            <label for="deliver_to_terminal">Сдать груз на терминал</label>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="shipment_terminal">Адрес терминала отправки:</label>
+            <textarea
+              type="text"
+              id="shipment_terminal_from"
+              name="shipment_terminal_from"
+              rows="4"
+              style="height: 4em"
+              readonly></textarea>
+          </div>
+        </div>
 
-      <!-- Откуда -->
-      <div class="form-group">
-        <label class="control-label" for="address_from">Откуда</label>
-        <input
-          list="address_from"
-          name="address_from"
-          id="address_from_input"
-          onfocus="this.value=''"
-          onchange=""
-          placeholder="Выберите город"></input>
-        <datalist id="address_from"></datalist>
-      </div>
+        <!-- Куда -->
+        <div class="col-large-6 col-medium-12">
+          <div class="form-group">
+            <label class="control-label" for="address_to">Куда:</label>
+            <select
+              id="address_to"
+              name="address_to"
+              disabled="true"></select>
+            <span class="error_address_to">[[+fi.error.address_to]]</span>
+          </div>
+          <div class="form-group">
+            <input
+              type="radio"
+              id="deliver_to_address"
+              name="expedition_to"
+              value="deliver_to_address">
+            <label for="deliver_to_address">Доставка по адресу</label>
 
-      <div class="form-group">
-        <input
-          type="radio"
-          id="get_at_address"
-          name="expedition_from">
-        <label for="get_at_address">Забрать груз по адресу</label>
-      </div>
-      <div class="form-group">
-        <input
-          type="radio"
-          id="deliver_to_terminal"
-          name="expedition_from"
-          checked>
-        <label for="deliver_to_terminal">Сдать груз на терминал</label>
-      </div>
-    </div>
-    <div class="col-large-6 col-medium-12">
-      <!-- Куда -->
-      <div class="form-group">
-        <label class="control-label" for="address_to">Куда</label>
-        <div class="controls">
-          <select
-            id="address_to"
-            name="address_to"
-            disabled="true"></select>
+            <input
+              type="radio"
+              id="get_at_terminal"
+              name="expedition_to"
+              value="get_at_terminal"
+              checked>
+            <label for="get_at_terminal">Забрать груз на терминале</label>
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="shipment_terminal">Адрес терминала доставки:</label>
+            <textarea
+              type="text"
+              id="shipment_terminal_to"
+              name="shipment_terminal_to"
+              rows="4"
+              style="height: 4em"
+              readonly></textarea>
+          </div>
         </div>
       </div>
 
-      <div class="form-group">
-        <input
-          type="radio"
-          id="deliver_to_address"
-          name="expedition_to">
-        <label for="deliver_to_address">Доставка по адресу</label>
+      <!-- Сроки и дни -->
+      <div class="row">
+        <div class="form-group col-large-6 col-medium-12">
+          <div class="form-group">
+            <label for="" class="control-label">Дни отправки:</label>
+            <div id="pickup_days" class="form_output">—</div>
+          </div>
+        </div>
+        <div class="form-group col-large-6 col-medium-12">
+          <div class="form-group">
+            <label for="" class="control-label">Срок доставки (ориентировочно):</label>
+            <div id="delivery_time" class="form_output">—</div>
+          </div>
+        </div>
       </div>
 
-      <div class="form-group">
-        <input
-          type="radio"
-          id="get_at_terminal"
-          name="expedition_to"
-          checked>
-        <label for="get_at_terminal">Забрать груз на терминале</label>
+      <!-- Выбор параметров груза -->
+      <div>
+        <h3>Параметры груза</h3>
+        <div class="row">
+          <div class="form-group col-large-6 col-small-12">
+            <input
+              type="radio"
+              id="weight_or_volume"
+              name="shipment_options"
+              checked
+              value="weight_or_volume">
+            <label for="weight_or_volume">Указать общий объем/вес</label>
+          </div>
+          <div class="form-group col-large-6 col-small-12">
+            <input
+            type="radio"
+            id="dimensions"
+            name="shipment_options"
+            value="dimensions">
+            <label for="dimensions">Указать габариты</label>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  
-  <div class="row">
-    <div class="col-large-6 col-medium-12">
-      <div class="form-group">
-        <label class="control-label" for="weight">Вес, кг</label>
-        <input
-          type="number"
-          min="1"
-          value="1"
-          id="weight"
-          name="weight"
-          placeholder=""
-          class="form-control">
-      </div>
-    </div>
-    <div class="col-large-6 col-medium-12">
-      <div class="form-group">
-        <label class="control-label" for="volume">Объем, м³</label>
-        <input
-          type="number"
-          min="0.1"
-          value="0.1"
-          id="volume"
-          name="volume"
-          placeholder=""
-          class="form-control">
-      </div>
-    </div>
-  </div>
-  
-  <!-- Цена -->
-  <div
-    id="total_price"
-    class="color--red font-size--bigger font-weight--bold">— ₽</div>
+      <!-- Параметры груза -->
+      <div class="row">
+        <!-- Объем или вес -->
+        <div id="volume_weight_parameters" class="col-large-6 col-medium-12">
+          <div class="form-group">
+            <label class="control-label" for="weight">Вес, кг:</label>
+            <input
+              type="number"
+              min="1"
+              value="1"
+              id="weight"
+              name="weight"
+              class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="volume">Объем, м³:</label>
+            <input
+              type="number"
+              min="0"
+              value="1"
+              id="volume"
+              name="volume"
+              class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="items_count_volume_weight">Кол-во мест, шт.:</label>
+            <input type="number" min="1" value="1" step="1" id="items_count_volume_weight" name="items_count_volume_weight" placeholder="" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="control-label" for="shipment_description">Характер груза:</label>
+            <input type="text" id="shipment_description" name="shipment_description" placeholder="" class="form-control">
+          </div>
+        </div>
+        <!-- Габариты -->
+        <div id="dimensions_parameters_block" class="col-large-12 col-medium-12 hidden">
+          
+          <div id="dimensions_items"></div>
+          
+          <template id="dimensions_item_template">
+            <div class="form-group-row dimensions-item">
+              <div class="form-group form-group--small form-group--inline">
+                <label class="control-label" for="length">Длина, м:</label>
+                <input
+                  type="number"
+                  min="0.1"
+                  step="any"
+                  data-parameter="length"
+                  name="length"
+                  class="form-control">
+              </div>
+              <div class="form-group form-group--small form-group--inline">
+                <label class="control-label" for="width">Ширина, м:</label>
+                <input
+                  type="number"
+                  min="0.1"
+                  step="any"
+                  data-parameter="width"
+                  name="width"
+                  class="form-control">
+              </div>
+              <div class="form-group form-group--small form-group--inline">
+                <label class="control-label" for="height">Высота, м:</label>
+                <input
+                  type="number"
+                  min="0.1"
+                  step="any"
+                  data-parameter="height"
+                  name="height"
+                  class="form-control">
+              </div>
+              <div class="form-group form-group--small form-group--inline">
+                <label class="control-label" for="dimensions-volume">Объем, м³:</label>
+                <input
+                type="number"
+                data-parameter="volume"
+                name="dimensions-volume"
+                class="form-control"
+                style="max-width: 4.2em"
+                readonly>
+              </div>
+              <div class="form-group form-group--small form-group--inline">
+                <label class="control-label" for="weightDimensions">Вес, кг:</label>
+                <input
+                  type="number"
+                  min="0.1"
+                  step="any"
+                  data-parameter="weight"
+                  name="weightDimensions"
+                  placeholder=""
+                  class="form-control">
+              </div>
+              <div class="form-group form-group--small form-group--inline">
+                <label class="control-label" for="items_count_dimensions">Кол-во, шт.:</label>
+                <input
+                  type="number"
+                  min="1"
+                  step="1"
+                  data-parameter="count"
+                  name="items_count_dimensions"
+                  placeholder=""
+                  class="form-control">
+              </div>
+              <div
+                class="form-group form-group--inline"
+                style="margin-bottom: 1.3em;">
+                <button
+                  type="button"
+                  class="btn btn-primary remove_item">x</button>
+              </div>
+            </div>
+          </template>
 
-  <p class="font-size--smaller">Рассчитана примерная стоимость доставки груза. Точная стоимость рассчитывается после взвешивания и измерения груза на терминале</p>
-  
-  <div class="form-group">
-    <div class="controls">
-      <button
-        class="btn btn-primary"
-        data-modal="open"
-        type="button">
-        Оформить заявку</button>
-    </div>
-  </div>
-  
-  <div class="modal">
-    <div class="modal__body">
-      <h3>Заявка на перевозку</h3>
-      <p>Заполните форму и наш менеджер свяжется с вами для оформления перевозки.</p>
-      <div class="form-group">
-        <label class="control-label" for="af_name">Имя</label>
-        <div class="controls">
+          <div class="form-group">
+            <a
+              href="#"
+              id="add_item">
+              + Добавить грузовое место</a>
+          </div>
+        </div>
+      </div>
+      <!-- Упаковка -->
+      <div>
+        <h3>Упаковка</h3>
+        <div class="row">
+          <div class="form-group col-large-5 col-medium-12">
+            <input
+              type="checkbox"
+              id="paletting"
+              name="paletting"
+              value="Да">
+            <label for="paletting">Паллетирование</label>
+          </div>
+          <div class="form-group col-large-7 col-medium-12">
+            <label class="control-label" for="pallets_count">Кол-во паллет, шт.</label>
+            <input
+              class="form-control input--small"
+              type="number"
+              min="1"
+              step="1"
+              id="pallets_count"
+              name="pallets_count"
+              disabled>
+          </div>          
+        </div>
+        <div class="form-group">
           <input
-            type="text"
-            id="af_name"
-            name="name"
-            value="[[+fi.name]]"
-            placeholder=""
-            class="form-control">
-          <span class="error_name">[[+fi.error.name]]</span>
+            type="checkbox"
+            id="soft_packing"
+            name="soft_packing"
+            value="Да">
+          <label for="soft_packing">Мягкая упаковка</label>
+        </div>
+        <div class="form-group">
+          <input
+            type="checkbox"
+            id="wooden_lath"
+            name="wooden_lath"
+            value="Да">
+          <label for="wooden_lath">Обрешетка</label>
         </div>
       </div>
+      <!-- Страхование -->
+      <div>
+        <h3>Страхование</h3>
+        <div class="row">
+          <div class="form-group col-large-5 col-medium-12">
+            <input
+              type="checkbox"
+              id="insurance"
+              name="insurance"
+              value="Да">
+            <label for="insurance">Страхование</label>
+          </div>
+          <div class="form-group col-large-7 col-medium-12">
+            <label class="control-label" for="insurance_cost">Объявленная стоимость груза, ₽:</label>
+            <input
+              class="form-control input--small"
+              type="number"
+              min="1"
+              id="insurance_cost"
+              name="insurance_cost"
+              placeholder=""
+              disabled>
+          </div>
+        </div>
+
+        
+        
+        <h3>Документы</h3>
+        <div class="form-group">
+          <input
+            type="checkbox"
+            id="return_documents"
+            name="return_documents"
+            value="Да">
+          <label for="return_documents">Вернуть документы с отметкой получателя</label>
+        </div>
+        
+      </div>
+    </div>
+    
+    <!-- Правая колонка -->
+    <div class="col-large-5 col-medium-12 border border--rounded">
+      <table>
+        <tbody>
+          <tr>
+            <td>Объем, м³:</td>
+            <td
+              id="volume_output"
+              style="width: 8em">—</td>
+          </tr>
+          <tr>
+            <td>Вес, кг:</td>
+            <td id="weight_output">—</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Предварительный расчет</h3>
+      <table>
+        <tbody>
+          <tr>
+            <td>Межтерминальная перевозка, ₽:</td>
+            <td
+              id="interterminal_shipment_output"
+              style="width: 8em">—</td>
+          </tr>
+        </tbody>
+      </table>
+      <ul>
+        <li class="icon icon__step_complete">
+          <span id="address_from_output">—</span>
+          <span
+            id="address_from_expedition_output"
+            class="expedition_option"></span>
+        </li>
+        <li class="icon icon__step_complete">
+          <span id="address_to_output">—</span>
+          <span
+            id="address_to_expedition_output"
+            class="expedition_option"></span>
+        </li>
+      </ul>
+      <table>
+        <tbody>
+          <tr>
+            <td id="address_from_service">Забор груза от адреса, ₽:</td>
+            <td
+              id="address_from_price"
+              style="width: 8em">нет</td>
+          </tr>
+          <tr>
+            <td id="address_to_service">Доставка груза до адреса, ₽:</td>
+            <td id="address_to_price">нет</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td
+              id="shipment_cost_output"
+              class="font-weight--bold">— ₽</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Дополнительные услуги</h3>
+      <table>
+        <tbody>
+          <tr>
+            <td>Палеттирование, ₽:</td>
+            <td
+              id="paletting_output"
+              style="width: 8em">—</td>
+          </tr>
+          <tr>
+            <td>Мягкая упаковка, ₽:</td>
+            <td id="packing_output">—</td>
+          </tr>
+          <tr>
+            <td>Обрешетка, ₽:</td>
+            <td id="lath_output">—</td>
+          </tr>
+          <tr>
+            <td>Страхование груза, ₽:</td>
+            <td id="insurance_output">—</td>
+          </tr>
+          <tr>
+            <td>Возврат документов, ₽:</td>
+            <td id="return_documents_output">—</td>
+          </tr>
+        </tbody>
+      </table>
+      <hr>
+      <!-- Цена -->
+      <div
+        id="total_price"
+        class="color--red font-size--bigger font-weight--bold align_center">
+        — ₽
+      </div>
+      
+      <input
+        type="hidden"
+        name="total_price_hidden_input"
+        id="total_price_hidden_input">
+      
       <div class="form-group">
-        <label class="control-label" for="af_phone">Телефон</label>
+        <a id="reset_form" href="#">Очистить расчет</a> 
+      </div>
+      <div class="form-group">
+        <label class="control-label" for="volume">Имя:</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          class="form-control">
+        <span class="error_name">[[+fi.error.name]]</span>
+      </div>
+      <div class="form-group">
+        <label class="control-label" for="af_phone">Телефон:</label>
         <div class="controls">
           <input
             type="tel"
@@ -197,12 +511,11 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label" for="volume">Email</label>
+        <label class="control-label" for="volume">Email:</label>
         <input
           type="email"
           id="email"
           name="email"
-          value="[[+fi.email]]"
           class="form-control">
         <span class="error_email">[[+fi.error.email]]</span>
       </div>
@@ -210,21 +523,10 @@
         <p>Отправляя заявку, вы соглашаетесь с <a href="[[~47]]" target="_blank">условиями обработки данных</a></p>
       </div>
       <div class="form-group">
-        <div class="controls">
-          <button
-            type="submit"
-            class="btn btn-primary">
-            Оформить заявку</button>
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-modal="close">
-            Отменить</button>
-        </div>
+        <button type="submit" class="btn btn-primary">Оформить заявку</button>
       </div>
     </div>
   </div>
-
 </form>
         
       

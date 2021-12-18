@@ -263,8 +263,8 @@ function initCalculator(dataObj) {
             }
 
             if (addressFromPrice && addressToPrice) {
-                addressFromPrice.innerText = calculateExpeditionCost(dataObj['экспедирование'], calcParams).from + ' ₽'
-                addressToPrice.innerText = calculateExpeditionCost(dataObj['экспедирование'], calcParams).to + ' ₽'
+                addressFromPrice.innerText = calculateExpeditionCost(dataObj['экспедирование'], calcParams).from
+                addressToPrice.innerText = calculateExpeditionCost(dataObj['экспедирование'], calcParams).to
             }
 
             // Расчет стоимости доставки без доп услуг
@@ -278,15 +278,15 @@ function initCalculator(dataObj) {
                     calcParams.volume = calcParams.length * calcParams.width * calcParams.height
                 }
                 cost = calculateShipmentCost(cityToObj, calcParams)
-                interterminalShipmentOutput.innerText = cost.toFixed(2) + ' ₽'
+                interterminalShipmentOutput.innerText = cost.toFixed(2)
                 shipmentCostOutput.innerText = (cost + calculateExpeditionCost(dataObj['экспедирование'], calcParams).from + calculateExpeditionCost(dataObj['экспедирование'], calcParams).to).toFixed(2) + ' ₽'
             }
 
-            if (palettingOutput) palettingOutput.innerText = ((calcParams.paletting ? (calcParams.palettingPrice * calcParams.palletsCount).toFixed(2) : 0)) + ' ₽'
-            if (packingOutput) packingOutput.innerText = (calcParams.softPacking ? (calcParams.softPackingPrice * calcParams.volume).toFixed(2) : 0) + ' ₽'
-            if (lathOutput) lathOutput.innerText = (calcParams.woodenLath ? (calcParams.woodenLathPrice * calcParams.volume).toFixed(2) : 0) + ' ₽'
-            if (insuranceOutput) insuranceOutput.innerText = (calcParams.insurance ? (calcParams.insuranceCost * calcParams.insuranceRate).toFixed(2) : 0) + ' ₽'
-            if (returnDocumentsOutput) returnDocumentsOutput.innerText = (calcParams.returnDocuments ? calcParams.returnDocumentsPrice.toFixed(2) : 0) + ' ₽'
+            if (palettingOutput) palettingOutput.innerText = ((calcParams.paletting ? (calcParams.palettingPrice * calcParams.palletsCount).toFixed(2) : 0))
+            if (packingOutput) packingOutput.innerText = (calcParams.softPacking ? (calcParams.softPackingPrice * calcParams.volume).toFixed(2) : 0)
+            if (lathOutput) lathOutput.innerText = (calcParams.woodenLath ? (calcParams.woodenLathPrice * calcParams.volume).toFixed(2) : 0)
+            if (insuranceOutput) insuranceOutput.innerText = (calcParams.insurance ? (calcParams.insuranceCost * calcParams.insuranceRate).toFixed(2) : 0)
+            if (returnDocumentsOutput) returnDocumentsOutput.innerText = (calcParams.returnDocuments ? calcParams.returnDocumentsPrice.toFixed(2) : 0)
         }
 
         // ФИНАЛЬНЫЙ РАССЧЕТ
@@ -314,7 +314,7 @@ function initCalculator(dataObj) {
     }
 
     document.addEventListener('click', e => { // remove_item
-        if (e.target.className === 'remove_item') {
+        if (e.target.classList.contains('remove_item')) {
             e.preventDefault()
             calcParams.itemsDimensions.splice(e.target.getAttribute('data-remove-id'), 1)
             calculator.dispatchEvent(changeEvent)
@@ -645,18 +645,18 @@ function resetForm() {
     if (weightOutput) weightOutput.innerText = 1
     if (pickupDays) pickupDays.innerText = '—'
     if (deliveryTime) deliveryTime.innerText = '—'
-    if (interterminalShipmentOutput) interterminalShipmentOutput.innerText = '— ₽'
+    if (interterminalShipmentOutput) interterminalShipmentOutput.innerText = '—'
     if (addressFromOutput) addressFromOutput.innerText = '—'
     if (addressFromExpeditionOutput) addressFromExpeditionOutput.innerText = ''
     if (addressToOutput) addressToOutput.innerText = '—'
     if (addressToExpeditionOutput) addressToExpeditionOutput.innerText = ''
-    if (addressFromPrice) addressFromPrice.innerText = '— ₽'
-    if (addressToPrice) addressToPrice.innerText = '— ₽'
-    if (palettingOutput) palettingOutput.innerText = '— ₽'
-    if (packingOutput) packingOutput.innerText = '— ₽'
-    if (lathOutput) lathOutput.innerText = '— ₽'
-    if (insuranceOutput) insuranceOutput.innerText = '— ₽'
-    if (returnDocumentsOutput) returnDocumentsOutput.innerText = '— ₽'
+    if (addressFromPrice) addressFromPrice.innerText = '—'
+    if (addressToPrice) addressToPrice.innerText = '—'
+    if (palettingOutput) palettingOutput.innerText = '—'
+    if (packingOutput) packingOutput.innerText = '—'
+    if (lathOutput) lathOutput.innerText = '—'
+    if (insuranceOutput) insuranceOutput.innerText = '—'
+    if (returnDocumentsOutput) returnDocumentsOutput.innerText = '—'
     if (totalPriceOutput) totalPriceOutput.innerText = '— ₽'
     if (totalPriceHiddenInput) totalPriceHiddenInput.value = ''
     if (shipmentCostOutput) shipmentCostOutput.innerText = '— ₽'

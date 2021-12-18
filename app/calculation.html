@@ -57,18 +57,18 @@
 
 
     <main id="content" class="content" data-fred-rte="">
-      <section class="border border--rounded">
+      <section class=" ">
         <h3 class="color--red">Расчет стоимости</h3>
       
 <form id="calculation">
 
   <div class="row">
-    <section class="col-large-7 col-medium-12">
+    <div class="col-large-7 col-medium-12">
       <div class="row">
         <!-- Откуда -->
         <div class="col-large-6 col-medium-12">
           <div class="form-group">
-            <label class="control-label" for="address_from">Откуда</label>
+            <label class="control-label" for="address_from">Откуда:</label>
             <input
               list="address_from"
               name="address_from"
@@ -96,7 +96,7 @@
             <label for="deliver_to_terminal">Сдать груз на терминал</label>
           </div>
           <div class="form-group">
-            <label class="control-label" for="shipment_terminal">Адрес терминала отправки</label>
+            <label class="control-label" for="shipment_terminal">Адрес терминала отправки:</label>
             <textarea
               type="text"
               id="shipment_terminal_from"
@@ -110,7 +110,7 @@
         <!-- Куда -->
         <div class="col-large-6 col-medium-12">
           <div class="form-group">
-            <label class="control-label" for="address_to">Куда</label>
+            <label class="control-label" for="address_to">Куда:</label>
             <select
               id="address_to"
               name="address_to"
@@ -134,7 +134,7 @@
             <label for="get_at_terminal">Забрать груз на терминале</label>
           </div>
           <div class="form-group">
-            <label class="control-label" for="shipment_terminal">Адрес терминала доставки</label>
+            <label class="control-label" for="shipment_terminal">Адрес терминала доставки:</label>
             <textarea
               type="text"
               id="shipment_terminal_to"
@@ -150,13 +150,13 @@
       <div class="row">
         <div class="form-group col-large-6 col-medium-12">
           <div class="form-group">
-            <label for="" class="control-label">Дни отправки</label>
+            <label for="" class="control-label">Дни отправки:</label>
             <div id="pickup_days" class="form_output">—</div>
           </div>
         </div>
         <div class="form-group col-large-6 col-medium-12">
           <div class="form-group">
-            <label for="" class="control-label">Срок доставки (ориентировочно)</label>
+            <label for="" class="control-label">Срок доставки (ориентировочно):</label>
             <div id="delivery_time" class="form_output">—</div>
           </div>
         </div>
@@ -166,7 +166,7 @@
       <div>
         <h3>Параметры груза</h3>
         <div class="row">
-          <div class="form-group col-large-6 col-medium-12">
+          <div class="form-group col-large-6 col-small-12">
             <input
               type="radio"
               id="weight_or_volume"
@@ -175,7 +175,7 @@
               value="weight_or_volume">
             <label for="weight_or_volume">Указать общий объем/вес</label>
           </div>
-          <div class="form-group col-large-6 col-medium-12">
+          <div class="form-group col-large-6 col-small-12">
             <input
             type="radio"
             id="dimensions"
@@ -190,7 +190,7 @@
         <!-- Объем или вес -->
         <div id="volume_weight_parameters" class="col-large-6 col-medium-12">
           <div class="form-group">
-            <label class="control-label" for="weight">Вес, кг</label>
+            <label class="control-label" for="weight">Вес, кг:</label>
             <input
               type="number"
               min="1"
@@ -200,7 +200,7 @@
               class="form-control">
           </div>
           <div class="form-group">
-            <label class="control-label" for="volume">Объем, м³</label>
+            <label class="control-label" for="volume">Объем, м³:</label>
             <input
               type="number"
               min="0"
@@ -210,11 +210,11 @@
               class="form-control">
           </div>
           <div class="form-group">
-            <label class="control-label" for="items_count_volume_weight">Кол-во мест, шт.</label>
+            <label class="control-label" for="items_count_volume_weight">Кол-во мест, шт.:</label>
             <input type="number" min="1" value="1" step="1" id="items_count_volume_weight" name="items_count_volume_weight" placeholder="" class="form-control">
           </div>
           <div class="form-group">
-            <label class="control-label" for="shipment_description">Характер груза</label>
+            <label class="control-label" for="shipment_description">Характер груза:</label>
             <input type="text" id="shipment_description" name="shipment_description" placeholder="" class="form-control">
           </div>
         </div>
@@ -225,51 +225,48 @@
           
           <template id="dimensions_item_template">
             <div class="form-group-row dimensions-item">
-              <div class="form-group form-group--inline">
-                <label class="control-label" for="length">Длина, м</label>
+              <div class="form-group form-group--small form-group--inline">
+                <label class="control-label" for="length">Длина, м:</label>
                 <input
                   type="number"
                   min="0.1"
                   step="any"
                   data-parameter="length"
                   name="length"
-                  class="form-control"
-                  style="max-width: 4em;">
+                  class="form-control">
               </div>
-              <div class="form-group form-group--inline">
-                <label class="control-label" for="width">Ширина, м</label>
+              <div class="form-group form-group--small form-group--inline">
+                <label class="control-label" for="width">Ширина, м:</label>
                 <input
                   type="number"
                   min="0.1"
                   step="any"
                   data-parameter="width"
                   name="width"
-                  class="form-control"
-                  style="max-width: 4em;">
+                  class="form-control">
               </div>
-              <div class="form-group form-group--inline">
-                <label class="control-label" for="height">Высота, м</label>
+              <div class="form-group form-group--small form-group--inline">
+                <label class="control-label" for="height">Высота, м:</label>
                 <input
                   type="number"
                   min="0.1"
                   step="any"
                   data-parameter="height"
                   name="height"
-                  class="form-control"
-                  style="max-width: 4em">
+                  class="form-control">
               </div>
-              <div class="form-group form-group--inline">
-                <label class="control-label" for="dimensions-volume">Объем, м³</label>
+              <div class="form-group form-group--small form-group--inline">
+                <label class="control-label" for="dimensions-volume">Объем, м³:</label>
                 <input
                 type="number"
                 data-parameter="volume"
                 name="dimensions-volume"
                 class="form-control"
-                style="max-width: 4em"
+                style="max-width: 4.2em"
                 readonly>
               </div>
-              <div class="form-group form-group--inline">
-                <label class="control-label" for="weightDimensions">Вес, кг</label>
+              <div class="form-group form-group--small form-group--inline">
+                <label class="control-label" for="weightDimensions">Вес, кг:</label>
                 <input
                   type="number"
                   min="0.1"
@@ -277,11 +274,10 @@
                   data-parameter="weight"
                   name="weightDimensions"
                   placeholder=""
-                  class="form-control"
-                  style="max-width: 4em">
+                  class="form-control">
               </div>
-              <div class="form-group form-group--inline">
-                <label class="control-label" for="items_count_dimensions">Кол-во мест, шт.</label>
+              <div class="form-group form-group--small form-group--inline">
+                <label class="control-label" for="items_count_dimensions">Кол-во, шт.:</label>
                 <input
                   type="number"
                   min="1"
@@ -289,21 +285,23 @@
                   data-parameter="count"
                   name="items_count_dimensions"
                   placeholder=""
-                  class="form-control"
-                  style="max-width: 4em">
+                  class="form-control">
               </div>
-              <div class="form-group form-group--inline">
-                <a
-                  href="#"
-                  class="remove_item">Удалить</a>
+              <div
+                class="form-group form-group--inline"
+                style="margin-bottom: 1.3em;">
+                <button
+                  type="button"
+                  class="btn btn-primary remove_item">x</button>
               </div>
             </div>
           </template>
 
-          <div>
+          <div class="form-group">
             <a
               href="#"
-              id="add_item">+ Добавить грузовое место</a>
+              id="add_item">
+              + Добавить грузовое место</a>
           </div>
         </div>
       </div>
@@ -361,7 +359,7 @@
             <label for="insurance">Страхование</label>
           </div>
           <div class="form-group col-large-7 col-medium-12">
-            <label class="control-label" for="insurance_cost">Объявленная стоимость груза, ₽</label>
+            <label class="control-label" for="insurance_cost">Объявленная стоимость груза, ₽:</label>
             <input
               class="form-control input--small"
               type="number"
@@ -386,15 +384,17 @@
         </div>
         
       </div>
-    </section>
+    </div>
     
     <!-- Правая колонка -->
-    <section class="col-large-5 col-medium-12 border border--rounded">
+    <div class="col-large-5 col-medium-12 border border--rounded">
       <table>
         <tbody>
           <tr>
             <td>Объем, м³:</td>
-            <td id="volume_output">—</td>
+            <td
+              id="volume_output"
+              style="width: 7em">—</td>
           </tr>
           <tr>
             <td>Вес, кг:</td>
@@ -406,8 +406,10 @@
       <table>
         <tbody>
           <tr>
-            <td>Межтерминальная перевозка:</td>
-            <td id="interterminal_shipment_output">—</td>
+            <td>Межтерминальная перевозка, ₽:</td>
+            <td
+              id="interterminal_shipment_output"
+              style="width: 7em">—</td>
           </tr>
         </tbody>
       </table>
@@ -428,40 +430,46 @@
       <table>
         <tbody>
           <tr>
-            <td id="address_from_service">Забор груза от адреса:</td>
-            <td id="address_from_price">нет</td>
+            <td id="address_from_service">Забор груза от адреса, ₽:</td>
+            <td
+              id="address_from_price"
+              style="width: 7em">нет</td>
           </tr>
           <tr>
-            <td id="address_to_service">Доставка груза до адреса:</td>
+            <td id="address_to_service">Доставка груза до адреса, ₽:</td>
             <td id="address_to_price">нет</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td
+              id="shipment_cost_output"
+              class="font-weight--bold">— ₽</td>
           </tr>
         </tbody>
       </table>
-      <div
-        id="shipment_cost_output"
-        class="align_right">— ₽</div>
-      <hr>
       <h3>Дополнительные услуги</h3>
       <table>
         <tbody>
           <tr>
-            <td>Палеттирование:</td>
-            <td id="paletting_output">—</td>
+            <td>Палеттирование, ₽:</td>
+            <td
+              id="paletting_output"
+              style="width: 7em">—</td>
           </tr>
           <tr>
-            <td>Мягкая упаковка:</td>
+            <td>Мягкая упаковка, ₽:</td>
             <td id="packing_output">—</td>
           </tr>
           <tr>
-            <td>Обрешетка:</td>
+            <td>Обрешетка, ₽:</td>
             <td id="lath_output">—</td>
           </tr>
           <tr>
-            <td>Страхование груза:</td>
+            <td>Страхование груза, ₽:</td>
             <td id="insurance_output">—</td>
           </tr>
           <tr>
-            <td>Возврат документов:</td>
+            <td>Возврат документов, ₽:</td>
             <td id="return_documents_output">—</td>
           </tr>
         </tbody>
@@ -483,7 +491,7 @@
         <a id="reset_form" href="#">Очистить расчет</a> 
       </div>
       <div class="form-group">
-        <label class="control-label" for="volume">Имя</label>
+        <label class="control-label" for="volume">Имя:</label>
         <input
           type="text"
           id="name"
@@ -492,7 +500,7 @@
         <span class="error_name">[[+fi.error.name]]</span>
       </div>
       <div class="form-group">
-        <label class="control-label" for="af_phone">Телефон</label>
+        <label class="control-label" for="af_phone">Телефон:</label>
         <div class="controls">
           <input
             type="tel"
@@ -505,7 +513,7 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label" for="volume">Email</label>
+        <label class="control-label" for="volume">Email:</label>
         <input
           type="email"
           id="email"
@@ -519,7 +527,7 @@
       <div class="form-group">
         <button type="submit" class="btn btn-primary">Оформить заявку</button>
       </div>
-    </section>
+    </div>
   </div>
 </form>
       

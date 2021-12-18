@@ -108,12 +108,23 @@ if (resetFormLink) {
     resetFormLink.addEventListener('click', e => {
         e.preventDefault()
         
-        initCalculator()
+        resetForm()
+        calcParams = JSON.parse(JSON.stringify(calcParamsInitial))
     })
 }
 
+$(document).on('af_complete', (event, response) => {
+    if (response.success) {
+        if (modal) modal.classList.remove('modal--open')
+        resetForm()
+        calcParams = JSON.parse(JSON.stringify(calcParamsInitial))
+    }
+})
+
 function getDataAndstartCalculation() {    
     if (!calculator) return // Если калькулятора нет на странице
+
+    resetForm()
 
     // Получаем данные
     fetch(filePath)
@@ -133,11 +144,6 @@ function getDataAndstartCalculation() {
 // Запускаем калькулятор
 function initCalculator(dataObj) {
     calcParams = JSON.parse(JSON.stringify(calcParamsInitial))
-
-    resetForm()
-
-    if (volumeWeightParametersBlock) volumeWeightParametersBlock.classList.remove('hidden')
-    if (dimensionsParametersBlock) dimensionsParametersBlock.classList.add('hidden')
 
     // Заполняем селект citiesFrom
     populateDatalist(datalistFrom, getCitiesFrom(dataObj))
@@ -276,22 +282,18 @@ function initCalculator(dataObj) {
                 shipmentCostOutput.innerText = (cost + calculateExpeditionCost(dataObj['экспедирование'], calcParams).from + calculateExpeditionCost(dataObj['экспедирование'], calcParams).to).toFixed(2) + ' ₽'
             }
 
-            if (palettingOutput) palettingOutput.innerText = ((calcParams.paletting ? (calcParams.palettingPrice * calcParams.palletsCount).toFixed(2) : 0) || '—') + ' ₽'
-            if (packingOutput) {
-                packingOutput.innerText = (calcParams.softPacking ? (calcParams.softPackingPrice * calcParams.volume).toFixed(2) : '—') + ' ₽'
-            } 
-            if (lathOutput) {
-                lathOutput.innerText = (calcParams.woodenLath ? (calcParams.woodenLathPrice * calcParams.volume).toFixed(2) : '—') + ' ₽'
-            }
-            if (insuranceOutput) insuranceOutput.innerText = (calcParams.insurance ? (calcParams.insuranceCost * calcParams.insuranceRate).toFixed(2) : '—') + ' ₽'
-            if (returnDocumentsOutput) returnDocumentsOutput.innerText = (calcParams.returnDocuments ? calcParams.returnDocumentsPrice.toFixed(2) : '—') + ' ₽'
+            if (palettingOutput) palettingOutput.innerText = ((calcParams.paletting ? (calcParams.palettingPrice * calcParams.palletsCount).toFixed(2) : 0)) + ' ₽'
+            if (packingOutput) packingOutput.innerText = (calcParams.softPacking ? (calcParams.softPackingPrice * calcParams.volume).toFixed(2) : 0) + ' ₽'
+            if (lathOutput) lathOutput.innerText = (calcParams.woodenLath ? (calcParams.woodenLathPrice * calcParams.volume).toFixed(2) : 0) + ' ₽'
+            if (insuranceOutput) insuranceOutput.innerText = (calcParams.insurance ? (calcParams.insuranceCost * calcParams.insuranceRate).toFixed(2) : 0) + ' ₽'
+            if (returnDocumentsOutput) returnDocumentsOutput.innerText = (calcParams.returnDocuments ? calcParams.returnDocumentsPrice.toFixed(2) : 0) + ' ₽'
         }
 
         // ФИНАЛЬНЫЙ РАССЧЕТ
         if (calcParams.cityFrom && calcParams.cityTo) {
             totalPrice = calculateTotalPrice(dataObj, calcParams)
             totalPriceOutput.innerText = `${totalPrice.toFixed(2)} ₽` 
-            totalPriceHiddenInput.value = totalPrice.toFixed(2)
+            if (totalPriceHiddenInput) totalPriceHiddenInput.value = totalPrice.toFixed(2)
         }
     })
 
@@ -335,16 +337,17 @@ function initCalculator(dataObj) {
     // Выбор города получения
     selectTo.addEventListener('change', event => {
         calcParams.cityTo = event.target.value.trim()
+        console.log(expeditionToRadio)
 
         if (!getShipmentTerminal(dataObj, calcParams.cityTo)) { // Не найден терминал для этого города
-            expeditionToRadio[3]?.parentNode.classList.add('hidden')
-            if (shipmentTerminalToInput) shipmentTerminalToInput.parentNode.classList.add('hidden')
-            expeditionToRadio[1].checked = true
+            expeditionToRadio[1].disabled = true
+            if (shipmentTerminalToInput) shipmentTerminalToInput.disabled = true
+            expeditionToRadio[0].checked = true
             calcParams.expeditionTo = true
         } else {
-            expeditionToRadio[3]?.parentNode.classList.remove('hidden')
-            if (shipmentTerminalToInput) shipmentTerminalToInput.parentNode.classList.remove('hidden')
-            calcParams.expeditionTo = (expeditionToRadio[1].checked === true)
+            expeditionToRadio[1].disabled = false
+            if (shipmentTerminalToInput) shipmentTerminalToInput.disabled = false
+            calcParams.expeditionTo = (expeditionToRadio[0].checked === true)
         }
     })
 }
@@ -639,23 +642,26 @@ function getCityObj(dataObj, city) {
 
 function resetForm() {
     calculator.reset()
-    volumeOutput.innerText = 1
-    weightOutput.innerText = 1
-    pickupDays.inneerText = '—'
-    deliveryTime.inneerText = '—'
-    interterminalShipmentOutput.innerText = '— ₽'
-    addressFromOutput.innerText = '—'
-    addressFromExpeditionOutput.innerText = ''
-    addressToOutput.innerText = '—'
-    addressToExpeditionOutput.innerText = ''
-    addressFromPrice.innerText = '— ₽'
-    addressToPrice.innerText = '— ₽'
-    palettingOutput.innerText = '— ₽'
-    packingOutput.innerText = '— ₽'
-    lathOutput.innerText = '— ₽'
-    insuranceOutput.innerText = '— ₽'
-    returnDocumentsOutput.innerText = '— ₽'
-    totalPriceOutput.innerText = '— ₽'
-    totalPriceHiddenInput.value = ''
-    shipmentCostOutput.innerText = '— ₽'
+    if (volumeOutput) volumeOutput.innerText = 1
+    if (weightOutput) weightOutput.innerText = 1
+    if (pickupDays) pickupDays.innerText = '—'
+    if (deliveryTime) deliveryTime.innerText = '—'
+    if (interterminalShipmentOutput) interterminalShipmentOutput.innerText = '— ₽'
+    if (addressFromOutput) addressFromOutput.innerText = '—'
+    if (addressFromExpeditionOutput) addressFromExpeditionOutput.innerText = ''
+    if (addressToOutput) addressToOutput.innerText = '—'
+    if (addressToExpeditionOutput) addressToExpeditionOutput.innerText = ''
+    if (addressFromPrice) addressFromPrice.innerText = '— ₽'
+    if (addressToPrice) addressToPrice.innerText = '— ₽'
+    if (palettingOutput) palettingOutput.innerText = '— ₽'
+    if (packingOutput) packingOutput.innerText = '— ₽'
+    if (lathOutput) lathOutput.innerText = '— ₽'
+    if (insuranceOutput) insuranceOutput.innerText = '— ₽'
+    if (returnDocumentsOutput) returnDocumentsOutput.innerText = '— ₽'
+    if (totalPriceOutput) totalPriceOutput.innerText = '— ₽'
+    if (totalPriceHiddenInput) totalPriceHiddenInput.value = ''
+    if (shipmentCostOutput) shipmentCostOutput.innerText = '— ₽'
+    if (volumeWeightParametersBlock) volumeWeightParametersBlock.classList.remove('hidden')
+    if (dimensionsParametersBlock) dimensionsParametersBlock.classList.add('hidden')
+    if (shipmentTerminalToInput) shipmentTerminalToInput.disabled = false
 }

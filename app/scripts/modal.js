@@ -37,9 +37,3 @@ document.addEventListener('submit', (e) => {
     e.preventDefault()
     // if (modal) modal.classList.remove('modal--open')
 })
-
-$(document).on('af_complete', (e, r) => {
-    if (r.success) {
-        if (modal) modal.classList.remove('modal--open')
-    }
-})

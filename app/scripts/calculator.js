@@ -65,9 +65,9 @@ const lathOutput = document.getElementById('lath_output')
 const insuranceOutput = document.getElementById('insurance_output')
 const returnDocumentsOutput = document.getElementById('return_documents_output')
 
-const resetFormLink = document.getElementById('reset_form')
-const totalPriceOutput = document.getElementById('total_price')
-const totalPriceHiddenInput = document.getElementById('total_price_hidden_input')
+// Параметры для вывода на странице полного калькулятора
+const volumeFinal = document.getElementById('volume_final')
+const weightFinal = document.getElementById('weight_final')
 
 // Параметры для рассчета
 let calcParams
@@ -95,13 +95,13 @@ const calcParamsInitial = {
     returnDocuments: false
 }
 
-let totalPrice = 0 // Возможно, нужно сделать скрытое поле, чтобы отправлять с формой финальную сумму
+const resetFormLink = document.getElementById('reset_form')
+const totalPriceOutput = document.getElementById('total_price')
+const totalPriceHiddenInput = document.getElementById('total_price_hidden_input')
 
-// Параметры для вывода на странице полного калькулятора
-const volumeFinal = document.getElementById('volume_final')
-const weightFinal = document.getElementById('weight_final')
+let totalPrice = 0
 
-getDataAndstartCalculation() //ВХОД
+getDataAndStartCalculation() //ВХОД
 
 // Сброс данных формы
 if (resetFormLink) {
@@ -121,7 +121,7 @@ $(document).on('af_complete', (event, response) => {
     }
 })
 
-function getDataAndstartCalculation() {    
+function getDataAndStartCalculation() {    
     if (!calculator) return // Если калькулятора нет на странице
 
     resetForm()
@@ -337,7 +337,6 @@ function initCalculator(dataObj) {
     // Выбор города получения
     selectTo.addEventListener('change', event => {
         calcParams.cityTo = event.target.value.trim()
-        console.log(expeditionToRadio)
 
         if (!getShipmentTerminal(dataObj, calcParams.cityTo)) { // Не найден терминал для этого города
             expeditionToRadio[1].disabled = true

@@ -109,7 +109,8 @@ if (resetFormLink) {
         e.preventDefault()
         
         resetForm()
-        calcParams = JSON.parse(JSON.stringify(calcParamsInitial))
+        calcParams.cityFrom = undefined
+        calcParams.cityTo = undefined
     })
 }
 
@@ -235,11 +236,7 @@ function initCalculator(dataObj) {
                 if ((calcParams.calculateBy === 'volumeWeight')) { // Вес/объем
                     volumeOutput.innerText = (calcParams.volume * calcParams.itemsCountVolumeWeight).toFixed(4)
                 } else { // Габариты
-                    let totalVolume = 0
-                    calcParams.itemsDimensions.forEach(item => {
-                        totalVolume += item.length * item.width * item.height * item.count
-                    })
-                    volumeOutput.innerText = totalVolume.toFixed(4)
+                    volumeOutput.innerText = calcVolumeAndWeightForMultiple(calcParams).volume.toFixed(4)
                 }
             }
             if (weightOutput) {
@@ -263,8 +260,8 @@ function initCalculator(dataObj) {
             }
 
             if (addressFromPrice && addressToPrice) {
-                addressFromPrice.innerText = calculateExpeditionCost(dataObj['экспедирование'], calcParams).from
-                addressToPrice.innerText = calculateExpeditionCost(dataObj['экспедирование'], calcParams).to
+                addressFromPrice.innerText = calculateExpeditionCost(dataObj['экспедирование'], calcParams).from.toFixed(2)
+                addressToPrice.innerText = calculateExpeditionCost(dataObj['экспедирование'], calcParams).to.toFixed(2)
             }
 
             // Расчет стоимости доставки без доп услуг
@@ -274,19 +271,19 @@ function initCalculator(dataObj) {
                 let cost
 
                 if (calcParams.calculateBy === 'dimensions') {
-                    calcParams.weight = 0
-                    calcParams.volume = calcParams.length * calcParams.width * calcParams.height
+                    // calcParams.weight = 0
+                    // calcParams.volume = calcParams.length * calcParams.width * calcParams.height
                 }
                 cost = calculateShipmentCost(cityToObj, calcParams)
                 interterminalShipmentOutput.innerText = cost.toFixed(2)
                 shipmentCostOutput.innerText = (cost + calculateExpeditionCost(dataObj['экспедирование'], calcParams).from + calculateExpeditionCost(dataObj['экспедирование'], calcParams).to).toFixed(2) + ' ₽'
             }
 
-            if (palettingOutput) palettingOutput.innerText = ((calcParams.paletting ? (calcParams.palettingPrice * calcParams.palletsCount).toFixed(2) : 0))
-            if (packingOutput) packingOutput.innerText = (calcParams.softPacking ? (calcParams.softPackingPrice * calcParams.volume).toFixed(2) : 0)
-            if (lathOutput) lathOutput.innerText = (calcParams.woodenLath ? (calcParams.woodenLathPrice * calcParams.volume).toFixed(2) : 0)
-            if (insuranceOutput) insuranceOutput.innerText = (calcParams.insurance ? (calcParams.insuranceCost * calcParams.insuranceRate).toFixed(2) : 0)
-            if (returnDocumentsOutput) returnDocumentsOutput.innerText = (calcParams.returnDocuments ? calcParams.returnDocumentsPrice.toFixed(2) : 0)
+            if (palettingOutput) palettingOutput.innerText = calcPaletting(calcParams).toFixed(2)
+            if (packingOutput) packingOutput.innerText = calcPacking(calcParams).toFixed(2)
+            if (lathOutput) lathOutput.innerText = calcLath(calcParams).toFixed(2)
+            if (insuranceOutput) insuranceOutput.innerText = calcInsurance(calcParams).toFixed(2)
+            if (returnDocumentsOutput) returnDocumentsOutput.innerText = calcDocuments(calcParams).toFixed(2)
         }
 
         // ФИНАЛЬНЫЙ РАССЧЕТ
@@ -356,35 +353,19 @@ function calculateTotalPrice(dataObj, calcParams) {
     let cityFromObj = dataObj[calcParams.cityFrom]
     let cityToObj
     let extras = 
-        (calcParams.paletting ? calcParams.palettingPrice : 0) * calcParams.palletsCount
-        + (calcParams.insurance ? calcParams.insuranceCost * calcParams.insuranceRate : 0)
-        + (calcParams.returnDocuments ? calcParams.returnDocumentsPrice : 0)
+        calcPaletting(calcParams)
+        + calcInsurance(calcParams)
+        + calcDocuments(calcParams)
+        + calcPacking(calcParams)
+        + calcLath(calcParams)
         + calculateExpeditionCost(dataObj['экспедирование'], calcParams).from
         + calculateExpeditionCost(dataObj['экспедирование'], calcParams).to
         
     cityToObj = getCityObj(cityFromObj, calcParams.cityTo)
-    if (!cityToObj) return console.warn('Город доставки не найден!')
+
+    // console.log('calculateShipmentCost(cityToObj, calcParams) + extras', calculateShipmentCost(cityToObj, calcParams) + extras)
+    return calculateShipmentCost(cityToObj, calcParams) + extras
     
-    if (calcParams.calculateBy === 'volumeWeight') { // Считаем по весу или объему
-        if (calcParams.softPacking) extras += calcParams.softPackingPrice * calcParams.volume
-        if (calcParams.woodenLath) extras += calcParams.woodenLathPrice * calcParams.volume
-        
-        return calculateShipmentCost(cityToObj, calcParams) + extras
-
-    } else { // Считаем по габаритам
-        let weight = 0
-        let volume = 0
-
-        calcParams.itemsDimensions.forEach(item => {
-            weight += item.weight * item.count
-            volume += item.length * item.width * item.height * item.count
-        })
-
-        if (calcParams.softPacking) extras += calcParams.softPackingPrice * volume
-        if (calcParams.woodenLath) extras += calcParams.woodenLathPrice * volume
-
-        return calculateShipmentCost(cityToObj, calcParams) + extras
-    }
 }
 
 // Стоимость доставки без дополнительных услуг и экспедирования
@@ -639,6 +620,61 @@ function getCityObj(dataObj, city) {
     }
 }
 
+function calcPaletting(calcParams) {
+    if (calcParams.paletting) {
+        return (calcParams.palettingPrice * calcParams.palletsCount)
+    } else {
+        return 0
+    }
+}
+
+function calcPacking(calcParams) {
+    if (!calcParams.softPacking) return 0
+
+    if (calcParams.calculateBy === 'volumeWeight') {
+        return (calcParams.softPackingPrice * calcParams.volume)
+    } else {
+        return (calcParams.softPackingPrice * calcVolumeAndWeightForMultiple(calcParams).volume)
+    }
+}
+
+function calcLath(calcParams) {
+    if (!calcParams.woodenLath) return 0
+
+    if (calcParams.calculateBy === 'volumeWeight') {
+        return (calcParams.woodenLathPrice * calcParams.volume)
+    } else {
+        return (calcParams.woodenLathPrice * calcVolumeAndWeightForMultiple(calcParams).volume)
+    }
+}
+
+function calcInsurance(calcParams) {
+    if (calcParams.insurance) {
+        return (calcParams.insuranceCost * calcParams.insuranceRate)
+    } else {
+        return 0
+    }
+}
+
+function calcDocuments(calcParams) {
+    if (calcParams.returnDocuments) {
+        return calcParams.returnDocumentsPrice
+    } else {
+        return 0
+    }
+}
+
+function calcVolumeAndWeightForMultiple(calcParams) {
+    let weight = 0
+    let volume = 0
+
+    calcParams.itemsDimensions.forEach(item => {
+        weight += item.weight * item.count
+        volume += item.length * item.width * item.height * item.count
+    })
+    return {volume, weight}
+}
+
 function resetForm() {
     calculator.reset()
     if (volumeOutput) volumeOutput.innerText = 1
@@ -663,4 +699,6 @@ function resetForm() {
     if (volumeWeightParametersBlock) volumeWeightParametersBlock.classList.remove('hidden')
     if (dimensionsParametersBlock) dimensionsParametersBlock.classList.add('hidden')
     if (shipmentTerminalToInput) shipmentTerminalToInput.disabled = false
+    expeditionFromRadio[1].checked = true
+    expeditionToRadio[1].checked = true
 }

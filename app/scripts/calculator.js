@@ -69,11 +69,15 @@ const returnDocumentsOutput = document.getElementById('return_documents_output')
 const volumeFinal = document.getElementById('volume_final')
 const weightFinal = document.getElementById('weight_final')
 
+const nameInput = document.getElementById('name')
+const phoneInput = document.getElementById('phone')
+const emailInput = document.getElementById('email')
+
 // Параметры для рассчета
 let calcParams
 const calcParamsInitial = {
-    cityFrom: '',
-    cityTo: '',
+    cityFrom: undefined,
+    cityTo: undefined,
     weight: 1,
     volume: .1, 
     length: .1,
@@ -699,6 +703,11 @@ function resetForm() {
     if (volumeWeightParametersBlock) volumeWeightParametersBlock.classList.remove('hidden')
     if (dimensionsParametersBlock) dimensionsParametersBlock.classList.add('hidden')
     if (shipmentTerminalToInput) shipmentTerminalToInput.disabled = false
+    
     expeditionFromRadio[1].checked = true
     expeditionToRadio[1].checked = true
+    
+    if (nameInput) nameInput.value = ''
+    if (phoneInput) phoneInput.value = ''
+    if (emailInput) emailInput.value = ''
 }

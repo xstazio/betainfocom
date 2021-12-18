@@ -1,5 +1,5 @@
 :root {
-    --input_width: 1.2em;
+    --input_width: 18px;
 }
 
 
@@ -34,15 +34,6 @@ form {
             margin-bottom: .5em;
         }
 
-        // &:is([type=text], [type=tel], [type=number], [type=password]) {
-        //     width: 100%;
-        //     height: 2em;
-        //     border: 1px solid rgba($color_blue, .4);
-        //     border-radius: .2em;
-        //     padding: .3em;
-        //     color: $color_blue;
-        // }
-
         &:is([type=checkbox], [type=radio]) {
             // width: var(--input_width);
             // height: var(--input_width);
@@ -73,7 +64,7 @@ form {
                 background-image: url(../images/icons__small.svg);
                 background-repeat: no-repeat;
                 background-size: cover;
-                background-position-x: 73.7%;
+                background-position-x: 74.2%;
                 color: $color_white;
                 text-align: center;
                 // transform: scale(1.3);
@@ -92,7 +83,7 @@ form {
                 background-image: url(../images/icons__small.svg);
                 background-repeat: no-repeat;
                 background-size: cover;
-                background-position-x: 79.1%;
+                background-position-x: 80.2%;
                 display: inline-block;
                 width: var(--input_width);
                 height: var(--input_width);
@@ -102,10 +93,16 @@ form {
 
             &:checked + label::before {
                 background-image: url(../images/icons__small.svg);
-                background-position-x: 47.3%;
+                background-position-x: 47.2%;
                 color: $color_white;
                 text-align: center;
                 // transform: scale(1.3);
+            }
+
+            &[disabled] {
+                & + label, & + label::before {
+                    opacity: .5;
+                }
             }
             
             &:focus + label::before {
@@ -119,12 +116,16 @@ form {
     }
 
     .form-group {
-        margin: 1em 0;
+        margin: .8em 0;
 
         &-row {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content: left;
+            align-items: flex-end;
+        }
+
+        &--small {
+            max-width: 4.3em;
         }
     }
 

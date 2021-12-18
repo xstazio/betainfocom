@@ -91,8 +91,7 @@
               type="radio"
               id="deliver_to_terminal"
               name="expedition_from"
-              value="deliver_to_terminal"
-              checked>
+              value="deliver_to_terminal">
             <label for="deliver_to_terminal">Сдать груз на терминал</label>
           </div>
           <div class="form-group">
@@ -129,8 +128,7 @@
               type="radio"
               id="get_at_terminal"
               name="expedition_to"
-              value="get_at_terminal"
-              checked>
+              value="get_at_terminal">
             <label for="get_at_terminal">Забрать груз на терминале</label>
           </div>
           <div class="form-group">
@@ -289,7 +287,7 @@
               </div>
               <div
                 class="form-group form-group--inline"
-                style="margin-bottom: 1.3em;">
+                style="margin-bottom: 0.7em;">
                 <button
                   type="button"
                   class="btn btn-primary remove_item">x</button>
@@ -308,8 +306,10 @@
       <!-- Упаковка -->
       <div>
         <h3>Упаковка</h3>
-        <div class="row">
-          <div class="form-group col-large-5 col-medium-12">
+        
+        <div class="form-group"
+          style="display: flex; align-items: flex-end;">
+          <div style="flex-grow: 1">
             <input
               type="checkbox"
               id="paletting"
@@ -317,7 +317,8 @@
               value="Да">
             <label for="paletting">Паллетирование</label>
           </div>
-          <div class="form-group col-large-7 col-medium-12">
+        
+          <div style="flex-grow: 1">
             <label class="control-label" for="pallets_count">Кол-во паллет, шт.</label>
             <input
               class="form-control input--small"
@@ -327,8 +328,9 @@
               id="pallets_count"
               name="pallets_count"
               disabled>
-          </div>          
-        </div>
+          </div>
+        </div>          
+      
         <div class="form-group">
           <input
             type="checkbox"
@@ -349,27 +351,31 @@
       <!-- Страхование -->
       <div>
         <h3>Страхование</h3>
-        <div class="row">
-          <div class="form-group col-large-5 col-medium-12">
-            <input
-              type="checkbox"
-              id="insurance"
-              name="insurance"
-              value="Да">
-            <label for="insurance">Страхование</label>
+
+          <div class="form-group"
+            style="display: flex; align-items: flex-end;">
+            <div style="flex-grow: 1">
+              <input
+                type="checkbox"
+                id="insurance"
+                name="insurance"
+                value="Да">
+              <label for="insurance">Страхование</label>
+            </div>
+
+            <div style="flex-grow: 1">
+              <label class="control-label" for="insurance_cost">Объявленная стоимость груза, ₽:</label>
+              <input
+                class="form-control input--small"
+                type="number"
+                min="1"
+                id="insurance_cost"
+                name="insurance_cost"
+                placeholder=""
+                disabled>
+            </div>
           </div>
-          <div class="form-group col-large-7 col-medium-12">
-            <label class="control-label" for="insurance_cost">Объявленная стоимость груза, ₽:</label>
-            <input
-              class="form-control input--small"
-              type="number"
-              min="1"
-              id="insurance_cost"
-              name="insurance_cost"
-              placeholder=""
-              disabled>
-          </div>
-        </div>
+
 
         
         
@@ -394,7 +400,7 @@
             <td>Объем, м³:</td>
             <td
               id="volume_output"
-              style="width: 7em">—</td>
+              style="width: 8em">—</td>
           </tr>
           <tr>
             <td>Вес, кг:</td>
@@ -409,7 +415,7 @@
             <td>Межтерминальная перевозка, ₽:</td>
             <td
               id="interterminal_shipment_output"
-              style="width: 7em">—</td>
+              style="width: 8em">—</td>
           </tr>
         </tbody>
       </table>
@@ -433,7 +439,7 @@
             <td id="address_from_service">Забор груза от адреса, ₽:</td>
             <td
               id="address_from_price"
-              style="width: 7em">нет</td>
+              style="width: 8em">нет</td>
           </tr>
           <tr>
             <td id="address_to_service">Доставка груза до адреса, ₽:</td>
@@ -454,7 +460,7 @@
             <td>Палеттирование, ₽:</td>
             <td
               id="paletting_output"
-              style="width: 7em">—</td>
+              style="width: 8em">—</td>
           </tr>
           <tr>
             <td>Мягкая упаковка, ₽:</td>

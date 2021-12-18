@@ -31,7 +31,7 @@ form {
         
         &:not([type=checkbox]) {
             display: block;
-            margin-bottom: .5em;
+            // margin-bottom: .5em;
         }
 
         &:is([type=checkbox], [type=radio]) {
@@ -93,7 +93,7 @@ form {
 
             &:checked + label::before {
                 background-image: url(../images/icons__small.svg);
-                background-position-x: 47.2%;
+                background-position-x: 47.5%;
                 color: $color_white;
                 text-align: center;
                 // transform: scale(1.3);

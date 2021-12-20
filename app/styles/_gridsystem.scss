@@ -2,7 +2,7 @@
     --gap: 1em;
     display: flex;
     flex-wrap: wrap;
-    gap: var(--gap);
+    column-gap: var(--gap);
 
     & > :is(h1, h2, h3, h4, p) {
         flex: 0 0 100%;
@@ -10,7 +10,6 @@
 
     & > :is(section, div, article) {
         margin: 0;
-        padding: .4em 0;
     }
 }
 

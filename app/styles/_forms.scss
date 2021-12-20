@@ -5,6 +5,23 @@
 form {
     margin: 2em 0;
 
+    .row {
+        column-gap: .3em;
+
+        & > :is(section, div) {
+            padding: 0;
+        }
+
+        & > section:not(:last-child) {
+            margin-bottom: 1em;
+        }
+    }
+
+    table {
+        margin: 0;
+        padding: 0;
+    }
+
     &.col_1 {
         width: 100%;
     }
@@ -40,9 +57,13 @@ form {
 
             & + label {
                 display: inline-block;
-                margin-bottom: 1em;
+                // margin-bottom: 1em;
                 vertical-align: -0.9em;
                 cursor: pointer;
+            }
+
+            &:not(:only-of-type) + label:not(:last-child) {
+                margin-right: 1em;
             }
         }
 
@@ -72,6 +93,10 @@ form {
             &:focus + label::before {
                 outline: $color_blue auto 5px;
             }
+        }
+
+        &[type=number] {
+            max-width: 140px;
         }
 
         &[type=radio] {
@@ -119,7 +144,7 @@ form {
     }
 
     .form-group {
-        margin: .8em 0;
+        margin: 1em 0;
 
         &-row {
             display: flex;

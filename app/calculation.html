@@ -64,7 +64,7 @@
 
   <div class="row">
     <!-- Левая колонка -->
-    <div class="col-large-7 col-medium-12">
+    <section class="col-large-7 col-medium-12">
       <div class="row">
         <!-- Откуда -->
         <div class="col-large-6 col-medium-12">
@@ -147,16 +147,16 @@
 
       <!-- Сроки и дни -->
       <div class="row">
-        <div class="form-group col-large-6 col-medium-12">
+        <div class="col-large-6 col-small-12">
           <div class="form-group">
             <label for="" class="control-label">Дни отправки:</label>
-            <div id="pickup_days" class="form_output">—</div>
+            <span id="pickup_days" class="form_output">—</span>
           </div>
         </div>
-        <div class="form-group col-large-6 col-medium-12">
+        <div class="col-large-6 col-small-12">
           <div class="form-group">
             <label for="" class="control-label">Срок доставки (ориентировочно):</label>
-            <div id="delivery_time" class="form_output">—</div>
+            <span id="delivery_time" class="form_output">—</span>
           </div>
         </div>
       </div>
@@ -165,7 +165,7 @@
       <div>
         <h3>Параметры груза</h3>
         <div class="row">
-          <div class="form-group col-large-6 col-small-12">
+          <div class="col-large-6 col-small-12">
             <input
               type="radio"
               id="weight_or_volume"
@@ -174,12 +174,12 @@
               value="weight_or_volume">
             <label for="weight_or_volume">Указать общий объем/вес</label>
           </div>
-          <div class="form-group col-large-6 col-small-12">
+          <div class="col-large-6 col-small-12">
             <input
-            type="radio"
-            id="dimensions"
-            name="shipment_options"
-            value="dimensions">
+              type="radio"
+              id="dimensions"
+              name="shipment_options"
+              value="dimensions">
             <label for="dimensions">Указать габариты</label>
           </div>
         </div>
@@ -289,7 +289,7 @@
               </div>
               <div
                 class="form-group form-group--inline"
-                style="margin-bottom: 0.7em;">
+                style="margin-bottom: 1em;">
                 <button
                   type="button"
                   class="btn btn-primary remove_item">−</button>
@@ -309,27 +309,32 @@
       <div>
         <h3>Упаковка</h3>
         
-        <div class="form-group"
-          style="display: flex; align-items: flex-end;">
-          <div style="flex-grow: 1">
-            <input
-              type="checkbox"
-              id="paletting"
-              name="paletting"
-              value="Да">
-            <label for="paletting">Паллетирование</label>
+        <div class="row">
+          <div class="col-large-5 col-medium-12">
+            <div class="form-group">
+              <input
+                type="checkbox"
+                id="paletting"
+                name="paletting"
+                value="Да">
+              <label for="paletting">Паллетирование</label>
+            </div>
           </div>
         
-          <div style="flex-grow: 1">
-            <label class="control-label" for="pallets_count">Кол-во паллет, шт.</label>
-            <input
-              class="form-control input--small"
-              type="number"
-              min="1"
-              step="1"
-              id="pallets_count"
-              name="pallets_count"
-              disabled>
+          <div class="col-large-7 col-medium-12">
+            <div
+              class="form-group"
+              style="margin-top: 0.3em">
+              <label class="control-label" for="pallets_count">Кол-во паллет, шт.</label>
+              <input
+                class="form-control input--small"
+                type="number"
+                min="1"
+                step="1"
+                id="pallets_count"
+                name="pallets_count"
+                disabled>
+            </div>
           </div>
         </div>          
       
@@ -354,26 +359,32 @@
       <div>
         <h3>Страхование</h3>
 
-          <div class="form-group"
-            style="display: flex; align-items: flex-end;">
-            <div style="flex-grow: 1">
-              <input
-                type="checkbox"
-                id="insurance"
-                name="insurance"
-                value="Да">
-              <label for="insurance">Страхование</label>
+          <div class="row">
+            <div class="col-large-5 col-medium-12">
+              <div class="form-group">
+                <input
+                  type="checkbox"
+                  id="insurance"
+                  name="insurance"
+                  value="Да">
+                <label for="insurance">Страхование</label>
+              </div>
             </div>
 
-            <div style="flex-grow: 1">
-              <label class="control-label" for="insurance_cost">Объявленная стоимость, ₽:</label>
-              <input
-                class="form-control input--small"
-                type="number"
-                min="1"
-                id="insurance_cost"
-                name="insurance_cost"
-                disabled>
+            <div
+              class="col-large-7 col-medium-12">
+              <div
+                class="form-group"
+                style="margin-top: 0.3em">
+                <label class="control-label" for="insurance_cost">Объявленная стоимость, ₽:</label>
+                <input
+                  class="form-control input--small"
+                  type="number"
+                  min="1"
+                  id="insurance_cost"
+                  name="insurance_cost"
+                  disabled>
+              </div>
             </div>
           </div>
 
@@ -388,10 +399,10 @@
         </div>
         
       </div>
-    </div>
+    </section><!-- Левая колонка -->
     
     <!-- Правая колонка -->
-    <div class="col-large-5 col-medium-12 border border--rounded">
+    <section class="col-large-5 col-medium-12 border border--rounded">
       <table>
         <tbody>
           <tr>
@@ -539,7 +550,7 @@
       <div class="form-group">
         <button type="submit" class="btn btn-primary">Оформить заявку</button>
       </div>
-    </div>
+    </section><!-- Правая колонка -->
   </div>
 </form>
       

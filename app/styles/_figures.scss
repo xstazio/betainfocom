@@ -8,6 +8,10 @@ figure {
     // margin: 2em 0;
     object-fit: contain;
 
+    &.figure--bleed {
+        margin-bottom: 3em;
+    }
+
     &.figure--right.figure--bleed img {
         transform: scale(var(--transform-value));
         transform-origin: top left;

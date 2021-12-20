@@ -51,6 +51,8 @@ const returnDocumentsInput = document.getElementById('return_documents')
 // Вывод итоговых данных
 const volumeOutput = document.getElementById('volume_output')
 const weightOutput = document.getElementById('weight_output')
+const volumeTotalHidden = document.getElementById('volume_total_hidden')
+const weightTotalHidden = document.getElementById('weight_total_hidden')
 const interterminalShipmentOutput = document.getElementById('interterminal_shipment_output')
 const addressFromOutput = document.getElementById('address_from_output')
 const addressFromExpeditionOutput = document.getElementById('address_from_expedition_output')
@@ -166,9 +168,9 @@ function initCalculator(dataObj) {
         calcParams.expeditionTo = expeditionToRadio[0].checked
         calcParams.weight = parseFloat(weightInput.value) || 1
         calcParams.volume = parseFloat(volumeInput.value) || 0.1
-        if (lengthInput) calcParams.length = parseFloat(lengthInput.value) || .1
-        if (widthInput) calcParams.width = parseFloat(widthInput.value) || .1
-        if (heightInput) calcParams.height = parseFloat(heightInput.value) || .1
+        // if (lengthInput) calcParams.length = parseFloat(lengthInput.value) || .1
+        // if (widthInput) calcParams.width = parseFloat(widthInput.value) || .1
+        // if (heightInput) calcParams.height = parseFloat(heightInput.value) || .1
 
         if (shipmentTerminalFromInput && expeditionFromRadio[1]?.checked) {
             shipmentTerminalFromInput.value = getShipmentTerminal(dataObj, calcParams.cityFrom)
@@ -236,18 +238,25 @@ function initCalculator(dataObj) {
         if (returnDocumentsInput) calcParams.returnDocuments = returnDocumentsInput.checked;
 
         // Подсчет подитога
+        let {volume, weight} = calcVolumeAndWeightForMultiple(calcParams)
         if (volumeOutput) {
             if ((calcParams.calculateBy === 'volumeWeight')) { // Вес/объем
-                volumeOutput.innerText = (calcParams.volume * calcParams.itemsCountVolumeWeight).toFixed(4)
+                let output = (calcParams.volume * calcParams.itemsCountVolumeWeight).toFixed(4)
+                volumeOutput.innerText = output
+                volumeTotalHidden.value = output
             } else { // Габариты
-                volumeOutput.innerText = calcVolumeAndWeightForMultiple(calcParams).volume.toFixed(4)
+                volumeOutput.innerText = volume.toFixed(4)
+                volumeTotalHidden.value = volume.toFixed(4)
             }
         }
         if (weightOutput) {
             if (calcParams.calculateBy === 'volumeWeight') { // Вес/объем
-                weightOutput.innerText = (calcParams.weight * calcParams.itemsCountVolumeWeight).toFixed(2)
+                let output = (calcParams.weight * calcParams.itemsCountVolumeWeight).toFixed(2)
+                weightOutput.innerText = output
+                weightTotalHidden.value = output
             } else { // Габариты
-                weightOutput.innerText = calcVolumeAndWeightForMultiple(calcParams).weight.toFixed(2)
+                weightOutput.innerText = weight.toFixed(2)
+                weightTotalHidden.value = weight.toFixed(2)
             }
         }
         if (calcParams.cityFrom && calcParams.cityTo) {
@@ -261,8 +270,10 @@ function initCalculator(dataObj) {
             }
 
             if (addressFromPrice && addressToPrice) {
-                addressFromPrice.innerText = calculateExpeditionCost(dataObj['экспедирование'], calcParams).from.toFixed(2)
-                addressToPrice.innerText = calculateExpeditionCost(dataObj['экспедирование'], calcParams).to.toFixed(2)
+                let {from, to} = calculateExpeditionCost(dataObj['экспедирование'], calcParams)
+                console.log(calculateExpeditionCost(dataObj['экспедирование'], calcParams))
+                addressFromPrice.innerText = from.toFixed(2)
+                addressToPrice.innerText = to.toFixed(2)
             }
 
             // Расчет стоимости доставки без доп услуг
@@ -270,6 +281,7 @@ function initCalculator(dataObj) {
                 let cityFromObj = dataObj[calcParams.cityFrom]
                 let cityToObj = getCityObj(cityFromObj, calcParams.cityTo)
                 let cost
+                let {from, to} = calculateExpeditionCost(dataObj['экспедирование'], calcParams)
 
                 if (calcParams.calculateBy === 'dimensions') {
                     // calcParams.weight = 0
@@ -277,7 +289,7 @@ function initCalculator(dataObj) {
                 }
                 cost = calculateShipmentCost(cityToObj, calcParams)
                 interterminalShipmentOutput.innerText = cost.toFixed(2)
-                shipmentCostOutput.innerText = (cost + calculateExpeditionCost(dataObj['экспедирование'], calcParams).from + calculateExpeditionCost(dataObj['экспедирование'], calcParams).to).toFixed(2) + ' ₽'
+                shipmentCostOutput.innerText = (cost + from + to).toFixed(2) + ' ₽'
             }
 
             if (palettingOutput) palettingOutput.innerText = calcPaletting(calcParams).toFixed(2)
@@ -302,11 +314,10 @@ function initCalculator(dataObj) {
         }
     })
 
-    if (addItemButton) {
+    if (addItemButton) { // add item
         addItemButton.addEventListener('click', (e) => {
             e.preventDefault()
             calcParams.itemsDimensions.push(JSON.parse(JSON.stringify(calcParamsInitial.itemsDimensions[0])))
-            console.log('calcParams.itemsDimensions', calcParams.itemsDimensions)
             calculator.dispatchEvent(changeEvent)
         })
     }
@@ -678,8 +689,10 @@ function calcVolumeAndWeightForMultiple(calcParams) {
 
 function resetForm() {
     calculator.reset()
-    if (volumeOutput) volumeOutput.innerText = 1
-    if (weightOutput) weightOutput.innerText = 1
+    if (volumeOutput) volumeOutput.innerText = (1).toFixed(2)
+    if (weightOutput) weightOutput.innerText = (1).toFixed(2)
+    if (volumeTotalHidden) volumeTotalHidden.value = (1).toFixed(2)
+    if (weightTotalHidden) weightTotalHidden.value = (1).toFixed(2)
     if (pickupDays) pickupDays.innerText = '—'
     if (deliveryTime) deliveryTime.innerText = '—'
     if (interterminalShipmentOutput) interterminalShipmentOutput.innerText = '—'

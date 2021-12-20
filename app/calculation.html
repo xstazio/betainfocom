@@ -63,6 +63,7 @@
 <form id="calculation">
 
   <div class="row">
+    <!-- Левая колонка -->
     <div class="col-large-7 col-medium-12">
       <div class="row">
         <!-- Откуда -->
@@ -256,12 +257,13 @@
               <div class="form-group form-group--small form-group--inline">
                 <label class="control-label" for="dimensions-volume">Объем, м³:</label>
                 <input
-                type="number"
-                data-parameter="volume"
-                name="dimensions-volume"
-                class="form-control"
-                style="max-width: 4.2em"
-                readonly>
+                  type="number"
+                  data-parameter="volume"
+                  name="dimensions-volume"
+                  class="form-control"
+                  style="max-width: 4.2em;"
+                  disabled
+                  readonly>
               </div>
               <div class="form-group form-group--small form-group--inline">
                 <label class="control-label" for="weightDimensions">Вес, кг:</label>
@@ -290,7 +292,7 @@
                 style="margin-bottom: 0.7em;">
                 <button
                   type="button"
-                  class="btn btn-primary remove_item">x</button>
+                  class="btn btn-primary remove_item">−</button>
               </div>
             </div>
           </template>
@@ -364,21 +366,17 @@
             </div>
 
             <div style="flex-grow: 1">
-              <label class="control-label" for="insurance_cost">Объявленная стоимость груза, ₽:</label>
+              <label class="control-label" for="insurance_cost">Объявленная стоимость, ₽:</label>
               <input
                 class="form-control input--small"
                 type="number"
                 min="1"
                 id="insurance_cost"
                 name="insurance_cost"
-                placeholder=""
                 disabled>
             </div>
           </div>
 
-
-        
-        
         <h3>Документы</h3>
         <div class="form-group">
           <input
@@ -408,11 +406,20 @@
           </tr>
         </tbody>
       </table>
+      <input
+        type="hidden"
+        name="volume_total_hidden"
+        id="volume_total_hidden">
+      <input
+        type="hidden"
+        name="weight_total_hidden"
+        id="weight_total_hidden">
+
       <h3>Предварительный расчет</h3>
       <table>
         <tbody>
           <tr>
-            <td>Межтерминальная перевозка, ₽:</td>
+            <td>Межтерминальная <br>перевозка, ₽:</td>
             <td
               id="interterminal_shipment_output"
               style="width: 8em">—</td>
@@ -510,9 +517,8 @@
         <div class="controls">
           <input
             type="tel"
-            id="af_phone"
+            id="phone"
             name="phone"
-            value="[[+fi.phone]]"
             placeholder=""
             class="form-control">
           <span class="error_phone">[[+fi.error.phone]]</span>

@@ -168,9 +168,6 @@ function initCalculator(dataObj) {
         calcParams.expeditionTo = expeditionToRadio[0].checked
         calcParams.weight = parseFloat(weightInput.value) || 1
         calcParams.volume = parseFloat(volumeInput.value) || 0.1
-        // if (lengthInput) calcParams.length = parseFloat(lengthInput.value) || .1
-        // if (widthInput) calcParams.width = parseFloat(widthInput.value) || .1
-        // if (heightInput) calcParams.height = parseFloat(heightInput.value) || .1
 
         if (shipmentTerminalFromInput && expeditionFromRadio[1]?.checked) {
             shipmentTerminalFromInput.value = getShipmentTerminal(dataObj, calcParams.cityFrom)
@@ -241,7 +238,7 @@ function initCalculator(dataObj) {
         let {volume, weight} = calcVolumeAndWeightForMultiple(calcParams)
         if (volumeOutput) {
             if ((calcParams.calculateBy === 'volumeWeight')) { // Вес/объем
-                let output = (calcParams.volume * calcParams.itemsCountVolumeWeight).toFixed(4)
+                let output = (calcParams.volume).toFixed(4)
                 volumeOutput.innerText = output
                 volumeTotalHidden.value = output
             } else { // Габариты
@@ -251,7 +248,7 @@ function initCalculator(dataObj) {
         }
         if (weightOutput) {
             if (calcParams.calculateBy === 'volumeWeight') { // Вес/объем
-                let output = (calcParams.weight * calcParams.itemsCountVolumeWeight).toFixed(2)
+                let output = (calcParams.weight).toFixed(2)
                 weightOutput.innerText = output
                 weightTotalHidden.value = output
             } else { // Габариты
@@ -386,8 +383,8 @@ function calculateShipmentCost(cityToObj, calcParams) {
     let volumePrice = 0
 
     if (calcParams.calculateBy === 'volumeWeight') {
-        weightPrice = parseFloat(calcParams.weight) * getWeightPrice(cityToObj, calcParams) * calcParams.itemsCountVolumeWeight
-        volumePrice = parseFloat(calcParams.volume) * getVolumePrice(cityToObj, calcParams) * calcParams.itemsCountVolumeWeight
+        weightPrice = parseFloat(calcParams.weight) * getWeightPrice(cityToObj, calcParams)
+        volumePrice = parseFloat(calcParams.volume) * getVolumePrice(cityToObj, calcParams)
     } else {
         let weight = 0
         let volume = 0
@@ -563,7 +560,7 @@ function getWeightPrice(cityToObj, calcParams) {
     let weight = 0
 
     if (calcParams.calculateBy === 'volumeWeight') {
-        weight = calcParams.weight * calcParams.itemsCountVolumeWeight
+        weight = calcParams.weight
     } else {
         calcParams.itemsDimensions.forEach(item => {
             weight += item.weight * item.count
@@ -585,7 +582,7 @@ function getVolumePrice(cityToObj, calcParams) {
     let volume = 0
 
     if (calcParams.calculateBy === 'volumeWeight') {
-        volume = calcParams.volume * calcParams.itemsCountVolumeWeight
+        volume = calcParams.volume
     } else {
         calcParams.itemsDimensions.forEach(item => {
             volume += item.length * item.width * item.height * item.count

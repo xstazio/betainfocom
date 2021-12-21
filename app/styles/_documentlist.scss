@@ -23,7 +23,7 @@
             height: var(--height);
             background-repeat: no-repeat;
             background-size: cover;
-            background-position-x: 86.2%;
+            background-position-x: 86%;
             position: absolute;
             right: 0;
             top: -7px;
@@ -99,7 +99,7 @@
                 margin-left: 8px;
             }
     
-            &[href$=".xls"], &[href$=".pdf"], &[href$=".doc"] {
+            &[href$=".xls"], &[href$=".pdf"], &[href$=".doc"], &[href$=".docx"] {
                 border: none;
                 font-size: 0;
                 margin-top: -6px;

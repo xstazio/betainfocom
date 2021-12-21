@@ -120,3 +120,7 @@ hr {
     border-bottom: 1px solid $color_red;
     margin: 2em 0;
 }
+
+a[href^="tel:"] {
+    white-space: nowrap;
+}

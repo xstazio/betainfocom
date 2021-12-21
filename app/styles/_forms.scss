@@ -101,13 +101,11 @@ form {
 
         &[type=radio] {
             & + label::before {
-                // border: 1px solid $color_blue;
-                // border-radius: 50%;
                 content: "";
                 background-image: url(../images/icons__small.svg);
                 background-repeat: no-repeat;
                 background-size: cover;
-                background-position-x: 80.3%;
+                background-position-x: 80.5%;
                 display: inline-block;
                 width: var(--input_width);
                 height: var(--input_width);

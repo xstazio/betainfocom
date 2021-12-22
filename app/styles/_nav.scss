@@ -219,7 +219,6 @@ nav {
   }
 }
 
-
 @include mq(large) {
   #header {
     grid-template-columns: 6em auto auto;

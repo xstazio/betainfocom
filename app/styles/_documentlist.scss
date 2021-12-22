@@ -7,6 +7,12 @@
     border-left: 24px solid $color_mediumgrey;
     padding: 30px !important;
     transition: all .6s ease-in-out;
+    width: auto !important;
+
+    @media screen and (max-width: 520px) {
+        margin-left: -23.8px !important;
+        margin-right: -23.4px !important;
+    }
 
     &__header {
         // color: $color_white;
@@ -14,6 +20,9 @@
         transition: all .6s ease-in-out;
         cursor: pointer;
         position: relative;
+        display: flex;
+        justify-content: space-between;
+        column-gap: 4px;
 
         &::after {
             --height: 40px;
@@ -23,12 +32,12 @@
             height: var(--height);
             background-repeat: no-repeat;
             background-size: cover;
-            background-position-x: 86%;
-            position: absolute;
-            right: 0;
-            top: -7px;
+            background-position-x: 85.6%;
             transform: rotate(0);
             transition: all .5s ease-in-out;
+            flex-shrink: 0;
+            transform-origin: 20px 20px;
+            margin-top: -7.8px;
         }
     }
 

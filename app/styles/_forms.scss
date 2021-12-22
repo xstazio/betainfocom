@@ -47,6 +47,7 @@ form {
         
         &:not([type=checkbox]) {
             display: block;
+            max-width: 450px;
             // margin-bottom: .5em;
         }
 

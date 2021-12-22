@@ -11,6 +11,7 @@
     
     &-6 {
         max-width: 811px;
+
         @media screen and (max-width: 863px) {
             max-width: 652px;
         }
@@ -22,10 +23,13 @@
         }
     }
 
+    @media screen and (max-width: 500px) {
+        column-gap: 5px;
+    }
+
     li {
         list-style: none;
         text-align: center;
-        // max-width: 9em;
         margin: 0;
         flex-basis: 170px;
 

@@ -40,7 +40,13 @@ table {
     }
 
     &.table--wide {
-        width: 100%;
+        width: auto;
+        min-width: 100%;
+
+        @media screen and (max-width: 385px) {
+            margin-left: -20px;
+            margin-right: -20px;
+        }
     }
 
     &.table--inline {

@@ -48,13 +48,18 @@ body {
         font-weight: 700;
         margin: 25px 0;
         line-height: 1em;
+        hyphens: auto;
     }
 
     h1 {
         font-size: 48px;
 
+        @media screen and (max-width: 550px) {
+            font-size: 38px; 
+        }
+
         @media screen and (max-width: 500px) {
-            word-wrap: break-word;
+            // word-wrap: break-word;
         }
     }
 

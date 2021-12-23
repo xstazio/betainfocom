@@ -6,7 +6,9 @@ const changeEvent = new Event('change')
 
 const datalistFromInput = document.getElementById('address_from_input')
 const datalistFrom = document.getElementById('address_from')
-const selectTo = document.getElementById('address_to')
+const datalistToInput = document.getElementById('address_to_input')
+const datalistTo = document.getElementById('address_to')
+// const selectTo = document.getElementById('address_to')
 
 const expeditionFromRadio = document.getElementsByName('expedition_from')
 const expeditionToRadio = document.getElementsByName('expedition_to')
@@ -123,7 +125,9 @@ if (resetFormLink) {
 
 $(document).on('af_complete', (event, response) => {
     if (response.success) {
-        closeModal(modal)
+        let modal = document.querySelector('.modal--open')
+        
+        if (modal) closeModal(modal)
         resetForm()
         calcParams = JSON.parse(JSON.stringify(calcParamsInitial))
     }
@@ -332,16 +336,18 @@ function initCalculator(dataObj) {
         calcParams.cityFrom = event.target.value.trim()
         // console.log('datalistFromInput', datalistFromInput.value)
         
-        populateSelect(selectTo, getCitiesTo(dataObj, calcParams))
+        datalistToInput.value = ''
+        datalistTo.innerHTML = ''
+        populateDatalist(datalistTo, getCitiesTo(dataObj, calcParams))
 
-        calcParams.cityTo = selectTo.options[selectTo.selectedIndex].value
+        calcParams.cityTo = datalistToInput.value
         
-        // Разблокируем selectTo
-        selectTo.disabled = calcParams.cityFrom ? false : true
+        // Разблокируем datalistTo
+        datalistToInput.disabled = calcParams.cityFrom ? false : true
     })
     
     // Выбор города получения
-    selectTo.addEventListener('change', event => {
+    datalistToInput.addEventListener('change', event => {
         calcParams.cityTo = event.target.value.trim()
 
         if (!getShipmentTerminal(dataObj, calcParams.cityTo)) { // Не найден терминал для этого города
@@ -371,6 +377,9 @@ function calculateTotalPrice(dataObj, calcParams) {
         + calculateExpeditionCost(dataObj['экспедирование'], calcParams).to
         
     cityToObj = getCityObj(cityFromObj, calcParams.cityTo)
+    
+    if (!cityFromObj) return console.warn('Город отправки не найден!')
+    if (!cityToObj) return console.warn('Город доставки не найден!')
 
     // console.log('calculateShipmentCost(cityToObj, calcParams) + extras', calculateShipmentCost(cityToObj, calcParams) + extras)
     return calculateShipmentCost(cityToObj, calcParams) + extras
@@ -444,19 +453,19 @@ function getCitiesTo(dataObj, calcParams) {
 }
 
 // Select для городов To
-function populateSelect(select, array) {
-    array.sort()
-    select.length = 0
+// function populateSelect(select, array) {
+//     array.sort()
+//     select.length = 0
 
-    array.forEach(element => {
-        let option = document.createElement('option')
-        let optionText = element
+//     array.forEach(element => {
+//         let option = document.createElement('option')
+//         let optionText = element
         
-        option.text = optionText
-        option.value = optionText
-        select.add(option)
-    })
-}
+//         option.text = optionText
+//         option.value = optionText
+//         select.add(option)
+//     })
+// }
 
 function getShipmentTerminal(dataObj, city) {
     let shipmentTerminal = ''
@@ -479,6 +488,7 @@ function getPicupDaysAndDeliveryTime(dataObj, calcParams) {
     
     cityToObj = getCityObj(cityFromObj, calcParams.cityTo)
 
+    if (!cityFromObj) return console.warn('Город отправки не найден!')
     if (!cityToObj) return console.warn('Город доставки не найден!')
 
     return {pickupDays: cityToObj['Дни недели'], deliveryTime: cityToObj['Время в пути']}

@@ -219,6 +219,15 @@ nav {
   }
 }
 
+@include mq(medium) {
+  #header {
+    grid-template-columns: 6em auto;
+    grid-template-areas:
+      "logo contacts"
+      "nav nav";
+  }
+}
+
 @include mq(large) {
   #header {
     grid-template-columns: 6em auto auto;

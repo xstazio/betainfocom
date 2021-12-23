@@ -52,6 +52,10 @@ body {
 
     h1 {
         font-size: 48px;
+
+        @media screen and (max-width: 500px) {
+            word-wrap: break-word;
+        }
     }
 
     h2 {
@@ -77,6 +81,10 @@ body {
     p, li {
         margin: 0.8em 0;
         line-height: 20.68px;
+    }
+
+    p {
+        hyphens: auto;
     }
 
     ul:not(.factoids) {

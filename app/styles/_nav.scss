@@ -37,7 +37,7 @@
     align-items: center;
     grid-template-columns: auto;
     font-size: $base_font_size;
-    place-self: center;
+    place-self: left;
     column-gap: 1em;
 
     &::before {
@@ -225,7 +225,13 @@ nav {
     grid-template-areas:
       "logo contacts"
       "nav nav";
+
+    .contacts {
+      place-self: center;
+    }
   }
+
+
 }
 
 @include mq(large) {
@@ -286,6 +292,7 @@ nav {
       grid-template-columns: 42px auto;
       // font-size: $base_font_size * .7;
       column-gap: 0em;
+      place-self: center;
   
       &::before {
         grid-row: 1 / 3;

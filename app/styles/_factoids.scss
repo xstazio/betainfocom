@@ -33,7 +33,7 @@
         margin: 0;
         flex-basis: 170px;
 
-        @media screen and (max-width: 863px) {
+        @media screen and (max-width: 864px) {
             max-width: 138px;
         }
 
@@ -57,6 +57,23 @@
 
         @include mq(large) {
             // flex: 0 0 calc(33% - 20px);
+        }
+    }
+
+    a {
+        border: none;
+        font-weight: initial;
+
+        &::before {
+            border: none !important;
+        }
+
+        &:hover, &:active {
+            border: none;
+
+            &::before {
+                border: none !important;
+            }
         }
     }
 }

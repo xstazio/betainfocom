@@ -5,7 +5,7 @@ const modalBody = document.querySelector('.modal__body')
 
 if (modalOpenButton) {
     modalOpenButton.addEventListener('click', e => {
-        if (modal) modal.classList.add('modal--open')
+        openModal(modal)
     })
 }
 
@@ -13,7 +13,7 @@ if (modalOpenButton) {
 if (modalCloseButton && modalCloseButton.length) {
     modalCloseButton.forEach(button => {
         button.addEventListener('click', e => {
-            if (modal) modal.classList.remove('modal--open')
+            closeModal(modal)
         })
     })
 }
@@ -29,11 +29,24 @@ document.addEventListener('click', e => {
         targetElement = targetElement.parentNode;
     } while (targetElement)
 
-    if (modal) modal.classList.remove('modal--open')
-    
+    closeModal(modal)
 })
 
 document.addEventListener('submit', (e) => {
     e.preventDefault()
     // if (modal) modal.classList.remove('modal--open')
 })
+
+function openModal(modal) {
+    if (modal) {
+        modal.classList.remove('modal--close')
+        modal.classList.add('modal--open')
+    }
+}
+
+function closeModal(modal) {
+    if (modal) {
+        modal.classList.remove('modal--open')
+        modal.classList.add('modal--close')
+    }
+}

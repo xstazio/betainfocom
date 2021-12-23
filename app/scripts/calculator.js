@@ -123,7 +123,7 @@ if (resetFormLink) {
 
 $(document).on('af_complete', (event, response) => {
     if (response.success) {
-        if (modal) modal.classList.remove('modal--open')
+        closeModal(modal)
         resetForm()
         calcParams = JSON.parse(JSON.stringify(calcParamsInitial))
     }

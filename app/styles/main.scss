@@ -59,6 +59,19 @@ body {
     background-size: 100% auto;
     background-position: -80% center;
   }
+
+  &.content_flex {
+    .content {
+      display: flex;
+      flex-direction: column;
+
+      @media screen and (max-width: 850px) {
+        section, article, div {
+          order: var(--element-order);
+        }
+      }
+    }
+  }
 }
 
 .container {

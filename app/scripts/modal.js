@@ -48,6 +48,7 @@ document.addEventListener('click', e => {
 
 function openModal(modal) {
     if (modal) {
+        modal.style = '' // Убираем style="display: none"
         modal.classList.remove('hidden')
         modal.classList.remove('modal--close')
         modal.classList.add('modal--open')

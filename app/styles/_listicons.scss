@@ -54,7 +54,7 @@
                 position: absolute;
                 width: 2px;
                 top: 1.1em;
-                bottom: -1.5em;
+                bottom: $margin * -1.1;
                 left: -1.51em;
                 background: $color_blue;
             }

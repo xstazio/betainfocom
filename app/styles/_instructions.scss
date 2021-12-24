@@ -14,6 +14,7 @@
     article {
         // max-width: 15em;
         counter-increment: article-number;
+        margin-bottom: 0;
 
         &::before {
             --width: 1.6em;

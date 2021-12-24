@@ -56,6 +56,7 @@ form {
     .form_output {
         font-weight: bold;
         margin: $margin 0;
+        white-space: nowrap;
     }
 
     table {

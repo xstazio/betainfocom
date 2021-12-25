@@ -12,6 +12,7 @@
     @media screen and (max-width: 520px) {
         margin-left: -23.8px !important;
         margin-right: -23.4px !important;
+        border-left-width: 17px;
     }
 
     &__header {
@@ -49,7 +50,7 @@
     }
 
     &--open {
-        border-left: 24px solid $color_red;
+        border-left-color: $color_red;
 
         .accordeon__list {
             max-height: 500px;

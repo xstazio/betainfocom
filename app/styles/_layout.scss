@@ -1,4 +1,6 @@
 .content {
+    // margin-bottom: $margin;
+    
     section, article {
         margin-bottom: $margin;
         width: 100%;
@@ -17,4 +19,11 @@
             border-radius: 12px;
         }
     }
+}
+
+.container {
+    max-width: 1140px;
+    width: 100%;
+    padding: 0 24px;
+    margin: 0 auto;
 }

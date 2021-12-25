@@ -21,9 +21,18 @@ form {
         margin: $margin 0;
 
         &-row {
-            display: flex;
-            justify-content: left;
-            align-items: flex-end;
+            display: grid;
+            // justify-content: left;
+            // align-items: flex-end;
+
+            & > .form-group {
+                margin: ($margin / 2) 0;
+                align-self: end;
+
+                button {
+                    margin-top: 17.5px;
+                }
+            }
         }
 
         &--small {

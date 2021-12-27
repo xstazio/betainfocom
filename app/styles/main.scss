@@ -51,7 +51,8 @@ body {
   grid-template-columns: 100%;
   color: $color_blue;
   font-family: 'Ubuntu', sans-serif;
-  overflow-x: hidden;
+  overflow: hidden;
+  overflow-y: auto;
 
   &.dark_ellipse {
     background-image: url(../images/dark_ellipse.svg);

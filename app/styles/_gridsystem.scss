@@ -1,12 +1,12 @@
 :root {
-    --gap: 25px;
+    --gap: #{$margin} / 2;
 }
 
 .row {
     display: flex;
     flex-wrap: wrap;
     column-gap: var(--gap);
-    justify-content: flex-start;
+    justify-content: space-between;
 
     & > :is(h1, h2, h3, h4, p) {
         flex: 0 0 100%;
@@ -24,10 +24,10 @@ $columns: 12;
     // padding-right: 1em !important;
 }
 
-@for $i from 1 through $columns {
+@for $i from 1 through ($columns - 1) {
     @media screen and (min-width: 850px) {
         .col-large-#{$i} {
-            flex: 0 0 ((100% / (12 / $i)) - 1.6);
+            flex: 0 0 calc((100% / (12 / #{$i})) - var(--gap));
         }
         .col-large-offset-#{$i} {
             margin-left: 100% / (($columns / $i)) !important;
@@ -35,7 +35,7 @@ $columns: 12;
     }
     @media screen and (min-width: 665px) and (max-width: 849px) {
         .col-medium-#{$i} {
-            flex: 0 0 ((100% / (12 / $i)) - 1.6);
+            flex: 0 0 calc((100% / (12 / #{$i})) - var(--gap));
         }
         .col-medium-offset-#{$i} {
             margin-left: 100% / (($columns / $i)) !important;
@@ -43,7 +43,7 @@ $columns: 12;
     }
     @media screen and (min-width: 400px) and (max-width: 664px) {
         .col-small-#{$i} {
-            flex: 0 0 ((100% / (12 / $i)) - 1.6);
+            flex: 0 0 calc((100% / (12 / #{$i})) - var(--gap));
         }
         .col-small-offset-#{$i} {
             margin-left: 100% / (($columns / $i)) !important;
@@ -51,11 +51,43 @@ $columns: 12;
     }
     @media screen and (min-width: 20px) and (max-width: 399px) {
         .col-xsmall-#{$i} {
-            flex: 0 0 ((100% / (12 / $i)) - 1.6);
+            flex: 0 0 calc((100% / (12 / #{$i})) - var(--gap));
         }
         .col-xsmall-offset-#{$i} {
             margin-left: 100% / (($columns / $i)) !important;
         }
     }
+}
 
+@media screen and (min-width: 850px) {
+    .col-large-#{$columns} {
+        flex: 0 0 100%;
+    }
+    .col-large-offset-#{$columns} {
+        margin-left: 0;
+    }
+}
+@media screen and (min-width: 665px) and (max-width: 849px) {
+    .col-medium-#{$columns} {
+        flex: 0 0 100%;
+    }
+    .col-medium-offset-#{$columns} {
+        margin-left: 0;
+    }
+}
+@media screen and (min-width: 400px) and (max-width: 664px) {
+    .col-small-#{$columns} {
+        flex: 0 0 100%;
+    }
+    .col-small-offset-#{$columns} {
+        margin-left: 0;
+    }
+}
+@media screen and (min-width: 20px) and (max-width: 399px) {
+    .col-xsmall-#{$columns} {
+        flex: 0 0 100%;
+    }
+    .col-xsmall-offset-#{$columns} {
+        margin-left: 0;
+    }
 }

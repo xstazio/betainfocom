@@ -9,8 +9,9 @@ body {
         // border-bottom: 1px solid rgba($color_blue, 0.3);
         background-image: linear-gradient(rgba($color_blue, .3), rgba($color_blue, .3));
         background-repeat: no-repeat;
-        background-position: 0 1em;
-        background-size: 100% 100%;
+        background-position: 0 20px;
+        padding-bottom: 2px;
+        background-size: 100% 1px;
         transition: all 0.2s ease-in-out;
         position: relative;
         color: inherit;
@@ -19,6 +20,7 @@ body {
 
         &:hover, &:focus {
             color: lighten($color_blue, 20%);
+            background-image: linear-gradient(rgba($color_blue, .2), rgba($color_blue, .2));
         }
 
         // &::before {
@@ -41,10 +43,10 @@ body {
             font-weight: inherit;
             color: inherit;
             border-bottom: none;
-            background-size: 0% 100%;
+            background-size: 0% 1px;
 
             &:hover {
-                background-size: 100% 100%;
+                background-size: 100% 1px;
             }
         }
     }

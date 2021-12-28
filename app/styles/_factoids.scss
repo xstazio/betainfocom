@@ -63,10 +63,11 @@
     a {
         border: none;
         font-weight: initial;
+        background-image: none;
 
-        &::before {
-            border: none !important;
-        }
+        // &::before {
+        //     border: none !important;
+        // }
 
         &:hover, &:active {
             border: none;

@@ -6,7 +6,7 @@
     column-gap: 45px;
     row-gap: var(--gap);
     font-size: $base_font_size * .9;
-    margin: ($margin * 2) auto;
+    margin: $margin auto;
     flex-wrap: wrap;
     
     &-6 {

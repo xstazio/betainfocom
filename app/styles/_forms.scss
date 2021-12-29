@@ -58,9 +58,13 @@ form {
         }
     }
 
-    div:not(.form-group-row) > .form-group:last-of-type {
-        margin-bottom: 0 !important;
+    div:not(.form-group-row) > .form-group:first-of-type {
+        margin-top: 0 !important;
     }
+
+    // div:not(.form-group-row) > .form-group:last-of-type {
+    //     margin-bottom: 0 !important;
+    // }
 
     .form_output {
         font-weight: bold;
@@ -89,6 +93,7 @@ form {
 
     label {
         font-size: $base_font_size * .8;
+        display: inline-block;
         // font-weight: 400;
     }
 

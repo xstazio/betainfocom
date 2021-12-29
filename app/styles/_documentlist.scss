@@ -85,6 +85,9 @@
         a {
             display: inline-block;
             align-self: flex-end;
+            background-image: none;
+            padding-bottom: 0;
+            flex-shrink: 0;
         
             &:first-child {
                 margin-left: auto;

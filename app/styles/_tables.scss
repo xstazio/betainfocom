@@ -1,65 +1,70 @@
 table {
-    border-radius: 16px;
-    font-size: $base_font_size * .9;
+  border-radius: 16px;
+  font-size: $base_font_size * 0.9;
+  border: 0;
+  padding: calc(#{margin} / 2) 0;
+  border-spacing: 0;
+  margin: $margin 0;
+  width: 100%;
+
+  &.table--bg {
+    background-color: $color_darkwhite;
+  }
+
+  th,
+  td {
     border: 0;
-    padding: ($margin / 2) 0;
-    border-spacing: 0;
-    margin: $margin 0;
-    width: 100%;
+  }
 
-    &.table--bg {
-        background-color: $color_darkwhite;
+  &.table--border {
+    th,
+    td {
+      border-bottom: 1px solid rgba($color_blue, 0.2);
     }
+  }
 
-    th, td {
-        border: 0;
+  &.table--small {
+    th,
+    td {
+      padding: 0.3em;
     }
+  }
 
-    &.table--border {
-        th, td {
-            border-bottom: 1px solid rgba($color_blue, .2);
-        }
+  th {
+    text-align: left;
+  }
+
+  th,
+  td {
+    padding: 1em;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  &.table--wide {
+    width: auto;
+    min-width: 100%;
+
+    @media screen and (max-width: 385px) {
+      margin-left: -20px;
+      margin-right: -20px;
     }
+  }
 
-    &.table--small {
-        th, td {
-            padding: 0.3em;
-        }
+  &.table--inline {
+    margin: 0;
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  @media screen and (max-width: 720px) {
+    font-size: $base_font_size * 0.7;
+
+    th,
+    td {
+      padding: 1em 0.3em;
     }
-
-    th {
-        text-align: left;
-    }
-
-    th, td {
-        padding: 1em;
-    }
-
-    tr:last-child td {
-        border-bottom: none;
-    }
-
-    &.table--wide {
-        width: auto;
-        min-width: 100%;
-
-        @media screen and (max-width: 385px) {
-            margin-left: -20px;
-            margin-right: -20px;
-        }
-    }
-
-    &.table--inline {
-        margin: 0;
-        display: inline-block;
-        vertical-align: top;
-    }
-
-    @media screen and (max-width: 720px) {
-        font-size: $base_font_size * .7;
-
-        th, td {
-            padding: 1em .3em; 
-        }
-    }
+  }
 }
